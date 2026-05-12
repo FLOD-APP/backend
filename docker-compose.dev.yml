@@ -1,0 +1,14 @@
+services:
+  db:
+    ports:
+      - "5432:5432"
+
+  api:
+    build:
+      context: .
+      target: base
+    command: npx tsx watch src/index.ts
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./src:/app/src:ro
