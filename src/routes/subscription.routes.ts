@@ -23,25 +23,30 @@ export function createSubscriptionRouter(db: Db): Router {
   const collectionService = new CollectionService(db);
 
   // POST /api/v1/subscriptions — R10.AC1
-  router.post('/', requireAuth, validate(createSubscriptionSchema), async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { packageId, branchId, fulfilmentMode, startDate, paymentId, promoCode } = req.body;
+  router.post(
+    '/',
+    requireAuth,
+    validate(createSubscriptionSchema),
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { packageId, branchId, fulfilmentMode, startDate, paymentId, promoCode } = req.body;
 
-      const result = await subscriptionService.create({
-        userId: req.user!.userId,
-        packageId,
-        branchId,
-        fulfilmentMode,
-        startDate,
-        paymentId,
-        promoCode,
-      });
+        const result = await subscriptionService.create({
+          userId: req.user!.userId,
+          packageId,
+          branchId,
+          fulfilmentMode,
+          startDate,
+          paymentId,
+          promoCode,
+        });
 
-      res.status(201).json(result);
-    } catch (err) {
-      next(err);
-    }
-  });
+        res.status(201).json(result);
+      } catch (err) {
+        next(err);
+      }
+    },
+  );
 
   // GET /api/v1/subscriptions/active — R11.AC1
   router.get('/active', requireAuth, async (req: Request, res: Response, next: NextFunction) => {
@@ -66,10 +71,7 @@ export function createSubscriptionRouter(db: Db): Router {
   // GET /api/v1/subscriptions/:id/schedule — R11.AC6
   router.get('/:id/schedule', requireAuth, async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = await subscriptionService.getSchedule(
-        req.params['id'] as string,
-        req.user!.userId
-      );
+      const result = await subscriptionService.getSchedule(req.params['id'] as string, req.user!.userId);
       res.json(result);
     } catch (err) {
       next(err);
@@ -77,29 +79,31 @@ export function createSubscriptionRouter(db: Db): Router {
   });
 
   // POST /api/v1/subscriptions/:id/pause — R11.AC2
-  router.post('/:id/pause', requireAuth, validate(pauseSubscriptionSchema), async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { pauseStart, pauseEnd } = req.body;
+  router.post(
+    '/:id/pause',
+    requireAuth,
+    validate(pauseSubscriptionSchema),
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { pauseStart, pauseEnd } = req.body;
 
-      const result = await subscriptionService.pause(
-        req.params['id'] as string,
-        req.user!.userId,
-        pauseStart,
-        pauseEnd
-      );
-      res.json(result);
-    } catch (err) {
-      next(err);
-    }
-  });
+        const result = await subscriptionService.pause(
+          req.params['id'] as string,
+          req.user!.userId,
+          pauseStart,
+          pauseEnd,
+        );
+        res.json(result);
+      } catch (err) {
+        next(err);
+      }
+    },
+  );
 
   // POST /api/v1/subscriptions/:id/resume — R11.AC4
   router.post('/:id/resume', requireAuth, async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = await subscriptionService.resume(
-        req.params['id'] as string,
-        req.user!.userId
-      );
+      const result = await subscriptionService.resume(req.params['id'] as string, req.user!.userId);
       res.json(result);
     } catch (err) {
       next(err);
@@ -107,39 +111,49 @@ export function createSubscriptionRouter(db: Db): Router {
   });
 
   // POST /api/v1/subscriptions/:id/collect — R12.AC1
-  router.post('/:id/collect', requireAuth, validate(collectMealSchema), async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { dayNumber, mealSlot } = req.body;
+  router.post(
+    '/:id/collect',
+    requireAuth,
+    validate(collectMealSchema),
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { dayNumber, mealSlot } = req.body;
 
-      const result = await collectionService.collectMeal(
-        req.params['id'] as string,
-        req.user!.userId,
-        dayNumber,
-        mealSlot
-      );
-      res.json(result);
-    } catch (err) {
-      next(err);
-    }
-  });
+        const result = await collectionService.collectMeal(
+          req.params['id'] as string,
+          req.user!.userId,
+          dayNumber,
+          mealSlot,
+        );
+        res.json(result);
+      } catch (err) {
+        next(err);
+      }
+    },
+  );
 
   // POST /api/v1/subscriptions/:id/swap — R12.AC5
-  router.post('/:id/swap', requireAuth, validate(swapMealSchema), async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { dayNumber, mealSlot, newProductId } = req.body;
+  router.post(
+    '/:id/swap',
+    requireAuth,
+    validate(swapMealSchema),
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { dayNumber, mealSlot, newProductId } = req.body;
 
-      const result = await collectionService.swapMeal(
-        req.params['id'] as string,
-        req.user!.userId,
-        dayNumber,
-        mealSlot,
-        newProductId
-      );
-      res.json(result);
-    } catch (err) {
-      next(err);
-    }
-  });
+        const result = await collectionService.swapMeal(
+          req.params['id'] as string,
+          req.user!.userId,
+          dayNumber,
+          mealSlot,
+          newProductId,
+        );
+        res.json(result);
+      } catch (err) {
+        next(err);
+      }
+    },
+  );
 
   // GET /api/v1/subscriptions/:id/wallet — R12.AC4
   router.get('/:id/wallet', requireAuth, async (req: Request, res: Response, next: NextFunction) => {
@@ -147,12 +161,7 @@ export function createSubscriptionRouter(db: Db): Router {
       const page = parseInt(req.query['page'] as string) || 1;
       const limit = Math.min(parseInt(req.query['limit'] as string) || 20, 100);
 
-      const result = await walletService.getWallet(
-        req.params['id'] as string,
-        req.user!.userId,
-        page,
-        limit
-      );
+      const result = await walletService.getWallet(req.params['id'] as string, req.user!.userId, page, limit);
       res.json(result);
     } catch (err) {
       next(err);

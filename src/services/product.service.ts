@@ -24,11 +24,7 @@ export class ProductService {
   }
 
   /** R7.AC2-AC5: List products with pricing for a specific tier */
-  async listProducts(filters: {
-    tier: string;
-    categoryId?: string;
-    inSubscription?: boolean;
-  }) {
+  async listProducts(filters: { tier: string; categoryId?: string; inSubscription?: boolean }) {
     const now = sql`CURRENT_DATE`;
 
     // Build the query with joins
@@ -117,8 +113,8 @@ export class ProductService {
           eq(productPrices.productId, id),
           isNull(productPrices.branchId),
           sql`${productPrices.effectiveFrom} <= ${now}`,
-          sql`(${productPrices.effectiveTo} IS NULL OR ${productPrices.effectiveTo} > ${now})`
-        )
+          sql`(${productPrices.effectiveTo} IS NULL OR ${productPrices.effectiveTo} > ${now})`,
+        ),
       );
 
     return { ...product, prices };

@@ -22,7 +22,7 @@ export function createPackageRouter(db: Db): Router {
         throw new AppError(
           'Invalid category. Must be one of: mixed, chicken, snack, sandwich, customer_choice',
           'VALIDATION_ERROR',
-          400
+          400,
         );
       }
 

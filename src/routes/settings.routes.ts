@@ -30,11 +30,7 @@ export function createSettingsRouter(db: Db): Router {
         throw new AppError('Field "value" is required and must be a string', 'VALIDATION_ERROR', 400);
       }
 
-      const setting = await settingsService.update(
-        req.params['key'] as string,
-        value,
-        req.user?.userId
-      );
+      const setting = await settingsService.update(req.params['key'] as string, value, req.user?.userId);
       res.json(setting);
     } catch (err) {
       next(err);

@@ -33,7 +33,7 @@ export function createProductRouter(db: Db): { productRouter: Router; categoryRo
         throw new AppError(
           'Query parameter "tier" is required and must be one of: base, subscription, express_base, express_subscription, app',
           'VALIDATION_ERROR',
-          400
+          400,
         );
       }
 

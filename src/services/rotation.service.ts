@@ -12,11 +12,7 @@ export class RotationService {
   /** R13.AC1: List rotation entries by type (snack or sandwich) */
   async listByType(type: string) {
     if (type !== 'snack' && type !== 'sandwich') {
-      throw new AppError(
-        'Rotation type must be "snack" or "sandwich"',
-        'VALIDATION_ERROR',
-        400
-      );
+      throw new AppError('Rotation type must be "snack" or "sandwich"', 'VALIDATION_ERROR', 400);
     }
 
     return this.db
@@ -38,23 +34,14 @@ export class RotationService {
   /** R13.AC2: Get swap options for a specific rotation day */
   async getSwapOptions(type: string, dayNumber: number) {
     if (type !== 'snack' && type !== 'sandwich') {
-      throw new AppError(
-        'Rotation type must be "snack" or "sandwich"',
-        'VALIDATION_ERROR',
-        400
-      );
+      throw new AppError('Rotation type must be "snack" or "sandwich"', 'VALIDATION_ERROR', 400);
     }
 
     // Find the schedule entry
     const scheduleRows = await this.db
       .select({ id: rotationSchedules.id })
       .from(rotationSchedules)
-      .where(
-        and(
-          eq(rotationSchedules.type, type as 'snack' | 'sandwich'),
-          eq(rotationSchedules.dayNumber, dayNumber)
-        )
-      )
+      .where(and(eq(rotationSchedules.type, type as 'snack' | 'sandwich'), eq(rotationSchedules.dayNumber, dayNumber)))
       .limit(1);
 
     if (scheduleRows.length === 0) {
@@ -81,8 +68,8 @@ export class RotationService {
           eq(productPrices.tier, 'subscription'),
           isNull(productPrices.branchId),
           sql`${productPrices.effectiveFrom} <= ${now}`,
-          sql`(${productPrices.effectiveTo} IS NULL OR ${productPrices.effectiveTo} > ${now})`
-        )
+          sql`(${productPrices.effectiveTo} IS NULL OR ${productPrices.effectiveTo} > ${now})`,
+        ),
       )
       .where(eq(rotationSwapOptions.scheduleId, scheduleId));
   }

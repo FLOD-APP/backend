@@ -14,27 +14,37 @@ export function createPricingRouter(db: Db): Router {
   const pricingService = new PricingService(db);
 
   // POST /api/v1/pricing/calculate — R9.AC2
-  router.post('/calculate', requireAuth, validate(calculatePricingSchema), async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { packageId, promoCode } = req.body;
-      const userId = req.user!.userId;
-      const result = await pricingService.calculateFullPricing(packageId, userId, promoCode);
-      res.json(result);
-    } catch (err) {
-      next(err);
-    }
-  });
+  router.post(
+    '/calculate',
+    requireAuth,
+    validate(calculatePricingSchema),
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { packageId, promoCode } = req.body;
+        const userId = req.user!.userId;
+        const result = await pricingService.calculateFullPricing(packageId, userId, promoCode);
+        res.json(result);
+      } catch (err) {
+        next(err);
+      }
+    },
+  );
 
   // POST /api/v1/pricing/validate-promo — R9.AC7
-  router.post('/validate-promo', requireAuth, validate(validatePromoSchema), async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { code } = req.body;
-      const result = await pricingService.validatePromo(code);
-      res.json(result);
-    } catch (err) {
-      next(err);
-    }
-  });
+  router.post(
+    '/validate-promo',
+    requireAuth,
+    validate(validatePromoSchema),
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { code } = req.body;
+        const result = await pricingService.validatePromo(code);
+        res.json(result);
+      } catch (err) {
+        next(err);
+      }
+    },
+  );
 
   return router;
 }

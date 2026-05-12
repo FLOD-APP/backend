@@ -51,11 +51,7 @@ export class SubscriptionService {
       .limit(1);
 
     if (branchRows.length === 0 || !branchRows[0]!.isActive || !branchRows[0]!.isStage0) {
-      throw new AppError(
-        'Branch must be an active Stage 0 branch',
-        'INVALID_BRANCH',
-        400
-      );
+      throw new AppError('Branch must be an active Stage 0 branch', 'INVALID_BRANCH', 400);
     }
 
     // R10.AC6: Check no existing active subscription at same branch
@@ -66,17 +62,13 @@ export class SubscriptionService {
         and(
           eq(subscriptions.userId, input.userId),
           eq(subscriptions.branchId, input.branchId),
-          eq(subscriptions.status, 'active')
-        )
+          eq(subscriptions.status, 'active'),
+        ),
       )
       .limit(1);
 
     if (activeSubs.length > 0) {
-      throw new AppError(
-        'User already has an active subscription at this branch',
-        'SUBSCRIPTION_CONFLICT',
-        409
-      );
+      throw new AppError('User already has an active subscription at this branch', 'SUBSCRIPTION_CONFLICT', 409);
     }
 
     // Get package details
@@ -100,11 +92,7 @@ export class SubscriptionService {
     const pkg = pkgRows[0]!;
 
     // Calculate pricing (R10.AC1: wallet_balance = amount_paid)
-    const pricing = await this.pricingService.calculateFullPricing(
-      input.packageId,
-      input.userId,
-      input.promoCode
-    );
+    const pricing = await this.pricingService.calculateFullPricing(input.packageId, input.userId, input.promoCode);
 
     // Calculate pause_days_limit from duration
     const pauseDaysLimit = PAUSE_LIMITS[pkg.durationDays] ?? 0;
@@ -164,7 +152,7 @@ export class SubscriptionService {
             mealSlot: meal.slot,
             productId: meal.productId,
             priceInclVat: meal.priceInclVat,
-          }))
+          })),
         );
       }
 
@@ -229,12 +217,7 @@ export class SubscriptionService {
       .from(subscriptions)
       .innerJoin(packages, eq(subscriptions.packageId, packages.id))
       .innerJoin(branches, eq(subscriptions.branchId, branches.id))
-      .where(
-        and(
-          eq(subscriptions.userId, userId),
-          inArray(subscriptions.status, ['active', 'paused'])
-        )
-      )
+      .where(and(eq(subscriptions.userId, userId), inArray(subscriptions.status, ['active', 'paused'])))
       .limit(1);
 
     if (rows.length === 0) {
@@ -290,11 +273,7 @@ export class SubscriptionService {
     const validation = validatePause(input);
 
     if (!validation.valid) {
-      throw new AppError(
-        validation.error!,
-        validation.errorCode!,
-        400
-      );
+      throw new AppError(validation.error!, validation.errorCode!, 400);
     }
 
     // R11.AC5: Extend end_date by calendar days (including Fridays)
@@ -432,10 +411,7 @@ export class SubscriptionService {
   }
 
   /** Generate meal schedule from package distribution + product catalog */
-  private async generateMealSchedule(
-    packageId: string,
-    pkg: { mealsPerDay: number; durationDays: number }
-  ) {
+  private async generateMealSchedule(packageId: string, pkg: { mealsPerDay: number; durationDays: number }) {
     // Get meal distribution
     const distribution = await this.db
       .select({
@@ -486,8 +462,8 @@ export class SubscriptionService {
             eq(productPrices.tier, 'subscription'),
             sql`${productPrices.branchId} IS NULL`,
             sql`${productPrices.effectiveFrom} <= ${now}`,
-            sql`(${productPrices.effectiveTo} IS NULL OR ${productPrices.effectiveTo} > ${now})`
-          )
+            sql`(${productPrices.effectiveTo} IS NULL OR ${productPrices.effectiveTo} > ${now})`,
+          ),
         )
         .limit(1);
 

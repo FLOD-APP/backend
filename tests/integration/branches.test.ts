@@ -5,8 +5,7 @@ import * as schema from '../../src/db/schema.js';
 import { createApp } from '../../src/app.js';
 import { signAccessToken } from '../../src/utils/jwt.js';
 
-const DATABASE_URL =
-  process.env['DATABASE_URL'] ?? 'postgresql://flod:flod_dev_password@localhost:5433/flod_dev';
+const DATABASE_URL = process.env['DATABASE_URL'] ?? 'postgresql://flod:flod_dev_password@localhost:5433/flod_dev';
 const JWT_SECRET = 'test-jwt-secret-at-least-32-chars-long!!';
 const JWT_REFRESH_SECRET = 'test-refresh-secret-at-least-32-chars!!';
 
@@ -41,9 +40,7 @@ afterAll(async () => {
 // ─── R6.AC1: List All Active Branches ─────────────────────────────
 describe('GET /api/v1/branches', () => {
   it('R6.AC1: should return all active branches', async () => {
-    const res = await request(app)
-      .get('/api/v1/branches')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/v1/branches').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
@@ -51,9 +48,7 @@ describe('GET /api/v1/branches', () => {
   });
 
   it('R6.AC1: each branch should include all required fields', async () => {
-    const res = await request(app)
-      .get('/api/v1/branches')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/v1/branches').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     const branch = res.body[0];
@@ -79,9 +74,7 @@ describe('GET /api/v1/branches', () => {
 // ─── R6.AC2: Stage 0 Filter ──────────────────────────────────────
 describe('GET /api/v1/branches?stage0=true', () => {
   it('R6.AC2: should return only Stage 0 branches (Al Rabie and Anas)', async () => {
-    const res = await request(app)
-      .get('/api/v1/branches?stage0=true')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/v1/branches?stage0=true').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
@@ -93,9 +86,7 @@ describe('GET /api/v1/branches?stage0=true', () => {
   });
 
   it('R6.AC2: all Stage 0 branches should have isStage0 = true', async () => {
-    const res = await request(app)
-      .get('/api/v1/branches?stage0=true')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/v1/branches?stage0=true').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     for (const branch of res.body) {
@@ -104,9 +95,7 @@ describe('GET /api/v1/branches?stage0=true', () => {
   });
 
   it('should return all branches when stage0 is not set', async () => {
-    const res = await request(app)
-      .get('/api/v1/branches')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/v1/branches').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     expect(res.body.length).toBe(15);
@@ -124,9 +113,7 @@ describe('GET /api/v1/branches/:id', () => {
   });
 
   it('R6.AC3: should return full details of a single branch', async () => {
-    const res = await request(app)
-      .get(`/api/v1/branches/${branchId}`)
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get(`/api/v1/branches/${branchId}`).set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     expect(res.body.id).toBe(branchId);
@@ -143,18 +130,14 @@ describe('GET /api/v1/branches/:id', () => {
 
   it('R6.AC4: should return 404 for non-existent branch ID', async () => {
     const fakeId = '00000000-0000-0000-0000-000000000000';
-    const res = await request(app)
-      .get(`/api/v1/branches/${fakeId}`)
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get(`/api/v1/branches/${fakeId}`).set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(404);
     expect(res.body.code).toBe('BRANCH_NOT_FOUND');
   });
 
   it('R6.AC4: should return 500 for invalid UUID format', async () => {
-    const res = await request(app)
-      .get('/api/v1/branches/not-a-uuid')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/v1/branches/not-a-uuid').set('Authorization', `Bearer ${token}`);
 
     // Drizzle/postgres will throw a database error for invalid UUID
     expect(res.status).toBeGreaterThanOrEqual(400);

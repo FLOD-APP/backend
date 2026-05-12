@@ -6,8 +6,7 @@ import { PricingService } from '../../src/services/pricing.service.js';
 import { createApp } from '../../src/app.js';
 import { signAccessToken } from '../../src/utils/jwt.js';
 
-const DATABASE_URL =
-  process.env['DATABASE_URL'] ?? 'postgresql://flod:flod_dev_password@localhost:5433/flod_dev';
+const DATABASE_URL = process.env['DATABASE_URL'] ?? 'postgresql://flod:flod_dev_password@localhost:5433/flod_dev';
 const JWT_SECRET = 'test-jwt-secret-at-least-32-chars-long!!';
 const JWT_REFRESH_SECRET = 'test-refresh-secret-at-least-32-chars!!';
 
@@ -19,8 +18,8 @@ let token: string;
 
 // Test data IDs
 let testUserId: string;
-let mixedPackageId: string;   // a main-meals package (discountable)
-let snackPackageId: string;   // a snack package (not discountable)
+let mixedPackageId: string; // a main-meals package (discountable)
+let snackPackageId: string; // a snack package (not discountable)
 let promoRuleId: string;
 let expiredPromoId: string;
 let usedUpPromoId: string;
@@ -151,9 +150,10 @@ describe('R9.AC6: discount rates from system_settings', () => {
   let originalRenewal: string;
 
   beforeAll(async () => {
-    const rows = await sql`SELECT key, value FROM system_settings WHERE key IN ('first_plan_discount_percent', 'renewal_discount_percent')`;
-    originalFirstPlan = (rows.find(r => r['key'] === 'first_plan_discount_percent') as { value: string })['value'];
-    originalRenewal = (rows.find(r => r['key'] === 'renewal_discount_percent') as { value: string })['value'];
+    const rows =
+      await sql`SELECT key, value FROM system_settings WHERE key IN ('first_plan_discount_percent', 'renewal_discount_percent')`;
+    originalFirstPlan = (rows.find((r) => r['key'] === 'first_plan_discount_percent') as { value: string })['value'];
+    originalRenewal = (rows.find((r) => r['key'] === 'renewal_discount_percent') as { value: string })['value'];
   });
 
   afterAll(async () => {
@@ -298,7 +298,7 @@ describe('calculateFullPricing', () => {
 
   it('should throw PACKAGE_NOT_FOUND for invalid package ID', async () => {
     await expect(
-      pricingService.calculateFullPricing('00000000-0000-0000-0000-000000000000', testUserId)
+      pricingService.calculateFullPricing('00000000-0000-0000-0000-000000000000', testUserId),
     ).rejects.toMatchObject({
       code: 'PACKAGE_NOT_FOUND',
       statusCode: 404,
@@ -306,9 +306,7 @@ describe('calculateFullPricing', () => {
   });
 
   it('R9.AC8: promo errors propagate from calculateFullPricing', async () => {
-    await expect(
-      pricingService.calculateFullPricing(mixedPackageId, testUserId, 'NONEXISTENT')
-    ).rejects.toMatchObject({
+    await expect(pricingService.calculateFullPricing(mixedPackageId, testUserId, 'NONEXISTENT')).rejects.toMatchObject({
       code: 'PROMO_NOT_FOUND',
     });
   });
@@ -346,19 +344,14 @@ describe('POST /api/v1/pricing/calculate', () => {
   });
 
   it('should require packageId', async () => {
-    const res = await request(app)
-      .post('/api/v1/pricing/calculate')
-      .set('Authorization', `Bearer ${token}`)
-      .send({});
+    const res = await request(app).post('/api/v1/pricing/calculate').set('Authorization', `Bearer ${token}`).send({});
 
     expect(res.status).toBe(400);
     expect(res.body.code).toBe('VALIDATION_ERROR');
   });
 
   it('should require authentication', async () => {
-    const res = await request(app)
-      .post('/api/v1/pricing/calculate')
-      .send({ packageId: mixedPackageId });
+    const res = await request(app).post('/api/v1/pricing/calculate').send({ packageId: mixedPackageId });
 
     expect(res.status).toBe(401);
   });
@@ -438,9 +431,7 @@ describe('POST /api/v1/pricing/validate-promo', () => {
   });
 
   it('should require authentication', async () => {
-    const res = await request(app)
-      .post('/api/v1/pricing/validate-promo')
-      .send({ code: 'TESTPROMO15' });
+    const res = await request(app).post('/api/v1/pricing/validate-promo').send({ code: 'TESTPROMO15' });
 
     expect(res.status).toBe(401);
   });

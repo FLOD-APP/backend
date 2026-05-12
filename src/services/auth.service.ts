@@ -37,7 +37,10 @@ export class AuthService {
   }
 
   /** R5.AC3/AC4/AC7: Verify OTP, auto-create user, issue tokens */
-  async verifyOtp(phone: string, code: string): Promise<{
+  async verifyOtp(
+    phone: string,
+    code: string,
+  ): Promise<{
     accessToken: string;
     refreshToken: string;
     user: { id: string; phone: string; isNew: boolean };
@@ -47,18 +50,12 @@ export class AuthService {
     const otpRows = await this.db
       .select()
       .from(otpCodes)
-      .where(
-        and(
-          eq(otpCodes.phone, phone),
-          eq(otpCodes.used, false),
-          gt(otpCodes.expiresAt, now)
-        )
-      )
+      .where(and(eq(otpCodes.phone, phone), eq(otpCodes.used, false), gt(otpCodes.expiresAt, now)))
       .orderBy(otpCodes.createdAt)
       .limit(5);
 
     // Try each OTP (most recent first — reversed)
-    let matchedOtp: typeof otpRows[number] | null = null;
+    let matchedOtp: (typeof otpRows)[number] | null = null;
     for (const row of otpRows.reverse()) {
       const isValid = await verifyOtp(code, row.codeHash);
       if (isValid) {
@@ -72,25 +69,15 @@ export class AuthService {
     }
 
     // Mark OTP as used
-    await this.db
-      .update(otpCodes)
-      .set({ used: true })
-      .where(eq(otpCodes.id, matchedOtp.id));
+    await this.db.update(otpCodes).set({ used: true }).where(eq(otpCodes.id, matchedOtp.id));
 
     // R5.AC7: Auto-create user if not exists
     let isNew = false;
-    let userRows = await this.db
-      .select()
-      .from(users)
-      .where(eq(users.phone, phone))
-      .limit(1);
+    let userRows = await this.db.select().from(users).where(eq(users.phone, phone)).limit(1);
 
     if (userRows.length === 0) {
       isNew = true;
-      userRows = await this.db
-        .insert(users)
-        .values({ phone })
-        .returning();
+      userRows = await this.db.insert(users).values({ phone }).returning();
     }
 
     const user = userRows[0]!;
@@ -141,8 +128,8 @@ export class AuthService {
         and(
           eq(refreshTokens.tokenHash, tokenHash),
           eq(refreshTokens.revoked, false),
-          gt(refreshTokens.expiresAt, new Date())
-        )
+          gt(refreshTokens.expiresAt, new Date()),
+        ),
       )
       .limit(1);
 
@@ -151,10 +138,7 @@ export class AuthService {
     }
 
     // Revoke the old token (rotation)
-    await this.db
-      .update(refreshTokens)
-      .set({ revoked: true })
-      .where(eq(refreshTokens.id, storedRows[0]!.id));
+    await this.db.update(refreshTokens).set({ revoked: true }).where(eq(refreshTokens.id, storedRows[0]!.id));
 
     // Issue new pair
     const newAccessToken = signAccessToken({ userId: payload.userId, phone: payload.phone });
@@ -180,21 +164,13 @@ export class AuthService {
     const activeTokens = await this.db
       .select({ id: refreshTokens.id })
       .from(refreshTokens)
-      .where(
-        and(
-          eq(refreshTokens.userId, userId),
-          eq(refreshTokens.revoked, false)
-        )
-      )
+      .where(and(eq(refreshTokens.userId, userId), eq(refreshTokens.revoked, false)))
       .orderBy(refreshTokens.createdAt);
 
     if (activeTokens.length > MAX_REFRESH_TOKENS) {
       const toRevoke = activeTokens.slice(0, activeTokens.length - MAX_REFRESH_TOKENS);
       for (const row of toRevoke) {
-        await this.db
-          .update(refreshTokens)
-          .set({ revoked: true })
-          .where(eq(refreshTokens.id, row.id));
+        await this.db.update(refreshTokens).set({ revoked: true }).where(eq(refreshTokens.id, row.id));
       }
     }
   }

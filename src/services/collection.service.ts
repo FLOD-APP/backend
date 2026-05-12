@@ -1,12 +1,7 @@
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { eq, and, lt, sql } from 'drizzle-orm';
 import type * as schemaTypes from '../db/schema.js';
-import {
-  subscriptions,
-  subscriptionDailyMeals,
-  products,
-  productPrices,
-} from '../db/schema.js';
+import { subscriptions, subscriptionDailyMeals, products, productPrices } from '../db/schema.js';
 import { AppError } from '../utils/errors.js';
 import { WalletService } from './wallet.service.js';
 
@@ -51,8 +46,8 @@ export class CollectionService {
         and(
           eq(subscriptionDailyMeals.subscriptionId, subscriptionId),
           eq(subscriptionDailyMeals.dayNumber, dayNumber),
-          eq(subscriptionDailyMeals.mealSlot, mealSlot)
-        )
+          eq(subscriptionDailyMeals.mealSlot, mealSlot),
+        ),
       )
       .limit(1);
 
@@ -81,8 +76,8 @@ export class CollectionService {
           and(
             eq(subscriptionDailyMeals.subscriptionId, subscriptionId),
             lt(subscriptionDailyMeals.dayNumber, dayNumber),
-            eq(subscriptionDailyMeals.isCollected, false)
-          )
+            eq(subscriptionDailyMeals.isCollected, false),
+          ),
         );
 
       for (const missed of missedMeals) {
@@ -130,13 +125,7 @@ export class CollectionService {
    * R12.AC5: Swap a meal to a different product.
    * R12.AC6: Reject if insufficient balance.
    */
-  async swapMeal(
-    subscriptionId: string,
-    userId: string,
-    dayNumber: number,
-    mealSlot: number,
-    newProductId: string
-  ) {
+  async swapMeal(subscriptionId: string, userId: string, dayNumber: number, mealSlot: number, newProductId: string) {
     // Verify ownership
     const subRows = await this.db
       .select({ id: subscriptions.id, userId: subscriptions.userId })
@@ -164,8 +153,8 @@ export class CollectionService {
         and(
           eq(subscriptionDailyMeals.subscriptionId, subscriptionId),
           eq(subscriptionDailyMeals.dayNumber, dayNumber),
-          eq(subscriptionDailyMeals.mealSlot, mealSlot)
-        )
+          eq(subscriptionDailyMeals.mealSlot, mealSlot),
+        ),
       )
       .limit(1);
 
@@ -194,8 +183,8 @@ export class CollectionService {
           eq(productPrices.tier, 'subscription'),
           sql`${productPrices.branchId} IS NULL`,
           sql`${productPrices.effectiveFrom} <= CURRENT_DATE`,
-          sql`(${productPrices.effectiveTo} IS NULL OR ${productPrices.effectiveTo} > CURRENT_DATE)`
-        )
+          sql`(${productPrices.effectiveTo} IS NULL OR ${productPrices.effectiveTo} > CURRENT_DATE)`,
+        ),
       )
       .limit(1);
 

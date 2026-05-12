@@ -5,8 +5,7 @@ import * as schema from '../../src/db/schema.js';
 import { createApp } from '../../src/app.js';
 import { signAccessToken } from '../../src/utils/jwt.js';
 
-const DATABASE_URL =
-  process.env['DATABASE_URL'] ?? 'postgresql://flod:flod_dev_password@localhost:5433/flod_dev';
+const DATABASE_URL = process.env['DATABASE_URL'] ?? 'postgresql://flod:flod_dev_password@localhost:5433/flod_dev';
 const JWT_SECRET = 'test-jwt-secret-at-least-32-chars-long!!';
 const JWT_REFRESH_SECRET = 'test-refresh-secret-at-least-32-chars!!';
 const TEST_PHONE = '+966500000088';
@@ -50,9 +49,7 @@ afterAll(async () => {
 // ─── R14.AC1: Get Profile ────────────────────────────────────────
 describe('GET /api/v1/users/me', () => {
   it('R14.AC1: should return the authenticated user profile', async () => {
-    const res = await request(app)
-      .get('/api/v1/users/me')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/v1/users/me').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     expect(res.body.id).toBe(userId);
@@ -65,9 +62,7 @@ describe('GET /api/v1/users/me', () => {
 
   it('should return 404 for non-existent user in token', async () => {
     const badToken = signAccessToken({ userId: '00000000-0000-0000-0000-000000000000', phone: '+966500000000' });
-    const res = await request(app)
-      .get('/api/v1/users/me')
-      .set('Authorization', `Bearer ${badToken}`);
+    const res = await request(app).get('/api/v1/users/me').set('Authorization', `Bearer ${badToken}`);
 
     expect(res.status).toBe(404);
     expect(res.body.code).toBe('USER_NOT_FOUND');
@@ -140,9 +135,7 @@ describe('PATCH /api/v1/users/me', () => {
   });
 
   it('should require authentication', async () => {
-    const res = await request(app)
-      .patch('/api/v1/users/me')
-      .send({ name: 'Test' });
+    const res = await request(app).patch('/api/v1/users/me').send({ name: 'Test' });
     expect(res.status).toBe(401);
   });
 });

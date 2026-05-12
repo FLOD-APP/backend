@@ -14,16 +14,16 @@ export interface PauseValidationInput {
   pauseDaysUsed: number;
   pauseDaysLimit: number;
   pauseStart: Date; // requested pause start
-  pauseEnd: Date;   // requested pause end (inclusive)
+  pauseEnd: Date; // requested pause end (inclusive)
 }
 
 export interface PauseValidationResult {
   valid: boolean;
   error?: string;
   errorCode?: string;
-  businessDays?: number;    // pause days counted (Fridays excluded)
-  calendarDays?: number;    // total calendar days in the range
-  extensionDays?: number;   // how many days to extend end_date (R11.AC5: calendar days)
+  businessDays?: number; // pause days counted (Fridays excluded)
+  calendarDays?: number; // total calendar days in the range
+  extensionDays?: number; // how many days to extend end_date (R11.AC5: calendar days)
 }
 
 /** Count Fridays in a date range [start, end] inclusive */
@@ -43,18 +43,14 @@ export function countFridays(start: Date, end: Date): number {
 
 /** Count business days (excluding Fridays) in [start, end] inclusive */
 export function countBusinessDays(start: Date, end: Date): number {
-  const calendarDays = Math.floor(
-    (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
-  ) + 1;
+  const calendarDays = Math.floor((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
   const fridays = countFridays(start, end);
   return calendarDays - fridays;
 }
 
 /** Calculate calendar days in [start, end] inclusive */
 export function calendarDaysInRange(start: Date, end: Date): number {
-  return Math.floor(
-    (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
-  ) + 1;
+  return Math.floor((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
 }
 
 /** Get the pause_days_limit for a given package duration */

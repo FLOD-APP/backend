@@ -28,8 +28,21 @@ describe('Seed Data — Branches', () => {
     const rows = await sql`SELECT foodics_ref FROM branches ORDER BY foodics_ref`;
     const refs = rows.map((r) => r['foodics_ref'] as string);
     expect(refs).toEqual([
-      'B01', 'B02', 'B03', 'B04', 'B05', 'B06', 'B07', 'B08',
-      'B09', 'B10', 'B11', 'B12', 'B16', 'B17', 'B18',
+      'B01',
+      'B02',
+      'B03',
+      'B04',
+      'B05',
+      'B06',
+      'B07',
+      'B08',
+      'B09',
+      'B10',
+      'B11',
+      'B12',
+      'B16',
+      'B17',
+      'B18',
     ]);
   });
 
@@ -84,7 +97,7 @@ describe('Seed Data — Meal Distribution', () => {
   // R3.AC3: Package meal distribution
   it('R3.AC3: should have meal distribution rows', async () => {
     const result = await sql`SELECT count(*)::int AS total FROM package_meal_distribution`;
-    expect((result[0]!['total'] as number)).toBeGreaterThan(0);
+    expect(result[0]!['total'] as number).toBeGreaterThan(0);
   });
 });
 
@@ -107,12 +120,14 @@ describe('Seed Data — Product Categories', () => {
   });
 
   it('R3.AC6: should have both EN and AR names on every category', async () => {
-    const rows = await sql`SELECT name_en, name_ar FROM product_categories WHERE name_en IS NULL OR name_ar IS NULL OR name_en = '' OR name_ar = ''`;
+    const rows =
+      await sql`SELECT name_en, name_ar FROM product_categories WHERE name_en IS NULL OR name_ar IS NULL OR name_en = '' OR name_ar = ''`;
     expect(rows.length).toBe(0);
   });
 
   it('R3.AC6: should include core protein categories', async () => {
-    const rows = await sql`SELECT name_en FROM product_categories WHERE name_en IN ('Chicken', 'Seafood', 'Meats') ORDER BY name_en`;
+    const rows =
+      await sql`SELECT name_en FROM product_categories WHERE name_en IN ('Chicken', 'Seafood', 'Meats') ORDER BY name_en`;
     const names = rows.map((r) => r['name_en'] as string);
     expect(names).toEqual(['Chicken', 'Meats', 'Seafood']);
   });
@@ -122,11 +137,12 @@ describe('Seed Data — Products', () => {
   // R3.AC6: Bilingual product data
   it('R3.AC6: should have at least 145 products seeded (142 active + 3 discontinued)', async () => {
     const result = await sql`SELECT count(*)::int AS total FROM products`;
-    expect((result[0]!['total'] as number)).toBeGreaterThanOrEqual(145);
+    expect(result[0]!['total'] as number).toBeGreaterThanOrEqual(145);
   });
 
   it('R3.AC6: should have both EN and AR names on every product', async () => {
-    const rows = await sql`SELECT id FROM products WHERE name_en IS NULL OR name_ar IS NULL OR name_en = '' OR name_ar = ''`;
+    const rows =
+      await sql`SELECT id FROM products WHERE name_en IS NULL OR name_ar IS NULL OR name_en = '' OR name_ar = ''`;
     expect(rows.length).toBe(0);
   });
 
@@ -216,7 +232,7 @@ describe('Seed Data — Product Prices', () => {
   // R3.AC8: Product prices across 5 tiers
   it('R3.AC8: should have at least 500 product price rows', async () => {
     const result = await sql`SELECT count(*)::int AS total FROM product_prices`;
-    expect((result[0]!['total'] as number)).toBeGreaterThanOrEqual(500);
+    expect(result[0]!['total'] as number).toBeGreaterThanOrEqual(500);
   });
 
   it('R3.AC8: should cover all 5 pricing tiers', async () => {
@@ -304,7 +320,7 @@ describe('Seed Data — Rotation Schedules', () => {
   // R3.AC5: Swap options
   it('R3.AC5: should have swap options for rotation schedules', async () => {
     const result = await sql`SELECT count(*)::int AS total FROM rotation_swap_options`;
-    expect((result[0]!['total'] as number)).toBeGreaterThan(80);
+    expect(result[0]!['total'] as number).toBeGreaterThan(80);
   });
 
   it('R3.AC5: Egg sandwich (day 6 and 12) should have zero swap options (locked)', async () => {
@@ -328,7 +344,7 @@ describe('Seed Data — Rotation Schedules', () => {
       JOIN rotation_swap_options rso ON rso.schedule_id = rs.id
       WHERE rs.type = 'sandwich' AND rs.day_number = 2
     `;
-    expect((rows[0]!['swap_count'] as number)).toBeGreaterThanOrEqual(10);
+    expect(rows[0]!['swap_count'] as number).toBeGreaterThanOrEqual(10);
   });
 });
 

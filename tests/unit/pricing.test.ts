@@ -17,7 +17,7 @@ describe('Pricing Calculations', () => {
       expect(result.discountAmount).toBe(2.09);
       expect(result.subtotalAfterDiscount).toBe(18.78);
       expect(result.vatOnDiscounted).toBe(2.82);
-      expect(result.totalInclVat).toBe(21.60);
+      expect(result.totalInclVat).toBe(21.6);
     });
 
     it('SAR 24 package with 5% renewal discount', () => {
@@ -27,7 +27,7 @@ describe('Pricing Calculations', () => {
       expect(result.discountAmount).toBe(1.04);
       expect(result.subtotalAfterDiscount).toBe(19.83);
       expect(result.vatOnDiscounted).toBe(2.97);
-      expect(result.totalInclVat).toBe(22.80);
+      expect(result.totalInclVat).toBe(22.8);
     });
 
     it('SAR 24 package with 0% discount (no discount)', () => {
@@ -36,7 +36,7 @@ describe('Pricing Calculations', () => {
       expect(result.discountAmount).toBe(0);
       expect(result.subtotalAfterDiscount).toBe(20.87);
       expect(result.vatOnDiscounted).toBe(3.13);
-      expect(result.totalInclVat).toBe(24.00);
+      expect(result.totalInclVat).toBe(24.0);
     });
   });
 

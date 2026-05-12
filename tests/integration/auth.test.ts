@@ -10,8 +10,7 @@ import { requireAuth } from '../../src/middleware/auth.middleware.js';
 import { errorHandler } from '../../src/middleware/error.middleware.js';
 import { logger as appLogger } from '../../src/middleware/logger.middleware.js';
 
-const DATABASE_URL =
-  process.env['DATABASE_URL'] ?? 'postgresql://flod:flod_dev_password@localhost:5433/flod_dev';
+const DATABASE_URL = process.env['DATABASE_URL'] ?? 'postgresql://flod:flod_dev_password@localhost:5433/flod_dev';
 const JWT_SECRET = 'test-jwt-secret-at-least-32-chars-long!!';
 const JWT_REFRESH_SECRET = 'test-refresh-secret-at-least-32-chars!!';
 const TEST_PHONE = '+966500000001';
@@ -56,9 +55,7 @@ describe('POST /api/v1/auth/otp/request', () => {
   });
 
   it('R5.AC1: should return { sent: true } and store a hashed OTP', async () => {
-    const res = await request(app)
-      .post('/api/v1/auth/otp/request')
-      .send({ phone: TEST_PHONE });
+    const res = await request(app).post('/api/v1/auth/otp/request').send({ phone: TEST_PHONE });
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ sent: true });
@@ -83,18 +80,14 @@ describe('POST /api/v1/auth/otp/request', () => {
   });
 
   it('should reject invalid phone format', async () => {
-    const res = await request(app)
-      .post('/api/v1/auth/otp/request')
-      .send({ phone: '1234567890' });
+    const res = await request(app).post('/api/v1/auth/otp/request').send({ phone: '1234567890' });
 
     expect(res.status).toBe(400);
     expect(res.body.code).toBe('VALIDATION_ERROR');
   });
 
   it('should reject missing phone', async () => {
-    const res = await request(app)
-      .post('/api/v1/auth/otp/request')
-      .send({});
+    const res = await request(app).post('/api/v1/auth/otp/request').send({});
 
     expect(res.status).toBe(400);
     expect(res.body.code).toBe('VALIDATION_ERROR');
@@ -108,9 +101,7 @@ describe('POST /api/v1/auth/otp/verify', () => {
   beforeEach(async () => {
     // Request an OTP so we can capture the code from the console log
     // The auth service logs the OTP in V0 mode — we read it from the DB instead
-    const res = await request(app)
-      .post('/api/v1/auth/otp/request')
-      .send({ phone: TEST_PHONE });
+    const res = await request(app).post('/api/v1/auth/otp/request').send({ phone: TEST_PHONE });
     expect(res.status).toBe(200);
 
     // We can't easily read the plain OTP from a hashed store, so we'll
@@ -137,9 +128,7 @@ describe('POST /api/v1/auth/otp/verify', () => {
   });
 
   it('R5.AC3: should return accessToken, refreshToken, and user on valid OTP', async () => {
-    const res = await request(app)
-      .post('/api/v1/auth/otp/verify')
-      .send({ phone: TEST_PHONE, code: validOtp });
+    const res = await request(app).post('/api/v1/auth/otp/verify').send({ phone: TEST_PHONE, code: validOtp });
 
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty('accessToken');
@@ -158,9 +147,7 @@ describe('POST /api/v1/auth/otp/verify', () => {
   });
 
   it('R5.AC4: access token should expire within 1 hour', async () => {
-    const res = await request(app)
-      .post('/api/v1/auth/otp/verify')
-      .send({ phone: TEST_PHONE, code: validOtp });
+    const res = await request(app).post('/api/v1/auth/otp/verify').send({ phone: TEST_PHONE, code: validOtp });
 
     expect(res.status).toBe(200);
     const payload = jwt.verify(res.body.accessToken, JWT_SECRET) as jwt.JwtPayload;
@@ -169,9 +156,7 @@ describe('POST /api/v1/auth/otp/verify', () => {
   });
 
   it('R5.AC4: refresh token should expire in 30 days', async () => {
-    const res = await request(app)
-      .post('/api/v1/auth/otp/verify')
-      .send({ phone: TEST_PHONE, code: validOtp });
+    const res = await request(app).post('/api/v1/auth/otp/verify').send({ phone: TEST_PHONE, code: validOtp });
 
     expect(res.status).toBe(200);
     const payload = jwt.verify(res.body.refreshToken, JWT_REFRESH_SECRET) as jwt.JwtPayload;
@@ -183,9 +168,7 @@ describe('POST /api/v1/auth/otp/verify', () => {
     // Ensure no user exists for this phone
     await sql`DELETE FROM users WHERE phone = ${TEST_PHONE}`;
 
-    const res = await request(app)
-      .post('/api/v1/auth/otp/verify')
-      .send({ phone: TEST_PHONE, code: validOtp });
+    const res = await request(app).post('/api/v1/auth/otp/verify').send({ phone: TEST_PHONE, code: validOtp });
 
     expect(res.status).toBe(200);
     expect(res.body.user.isNew).toBe(true);
@@ -198,9 +181,7 @@ describe('POST /api/v1/auth/otp/verify', () => {
 
   it('R5.AC7: should return isNew: false for existing user', async () => {
     // Create user first via OTP verify
-    const firstRes = await request(app)
-      .post('/api/v1/auth/otp/verify')
-      .send({ phone: TEST_PHONE, code: validOtp });
+    const firstRes = await request(app).post('/api/v1/auth/otp/verify').send({ phone: TEST_PHONE, code: validOtp });
     expect(firstRes.status).toBe(200);
     expect(firstRes.body.user.isNew).toBe(true);
 
@@ -213,9 +194,7 @@ describe('POST /api/v1/auth/otp/verify', () => {
       VALUES (${TEST_PHONE}, ${hash}, ${expiresAt.toISOString()}, false)
     `;
 
-    const secondRes = await request(app)
-      .post('/api/v1/auth/otp/verify')
-      .send({ phone: TEST_PHONE, code: '654321' });
+    const secondRes = await request(app).post('/api/v1/auth/otp/verify').send({ phone: TEST_PHONE, code: '654321' });
 
     expect(secondRes.status).toBe(200);
     expect(secondRes.body.user.isNew).toBe(false);
@@ -223,9 +202,7 @@ describe('POST /api/v1/auth/otp/verify', () => {
   });
 
   it('should reject invalid OTP code', async () => {
-    const res = await request(app)
-      .post('/api/v1/auth/otp/verify')
-      .send({ phone: TEST_PHONE, code: '999999' });
+    const res = await request(app).post('/api/v1/auth/otp/verify').send({ phone: TEST_PHONE, code: '999999' });
 
     expect(res.status).toBe(401);
     expect(res.body.code).toBe('OTP_INVALID');
@@ -242,9 +219,7 @@ describe('POST /api/v1/auth/otp/verify', () => {
       VALUES (${TEST_PHONE}, ${hash}, ${expiredAt.toISOString()}, false)
     `;
 
-    const res = await request(app)
-      .post('/api/v1/auth/otp/verify')
-      .send({ phone: TEST_PHONE, code: '111111' });
+    const res = await request(app).post('/api/v1/auth/otp/verify').send({ phone: TEST_PHONE, code: '111111' });
 
     expect(res.status).toBe(401);
     expect(res.body.code).toBe('OTP_INVALID');
@@ -252,23 +227,17 @@ describe('POST /api/v1/auth/otp/verify', () => {
 
   it('should reject already-used OTP', async () => {
     // First verify should succeed
-    const firstRes = await request(app)
-      .post('/api/v1/auth/otp/verify')
-      .send({ phone: TEST_PHONE, code: validOtp });
+    const firstRes = await request(app).post('/api/v1/auth/otp/verify').send({ phone: TEST_PHONE, code: validOtp });
     expect(firstRes.status).toBe(200);
 
     // Second verify with same code should fail (OTP marked as used)
-    const secondRes = await request(app)
-      .post('/api/v1/auth/otp/verify')
-      .send({ phone: TEST_PHONE, code: validOtp });
+    const secondRes = await request(app).post('/api/v1/auth/otp/verify').send({ phone: TEST_PHONE, code: validOtp });
     expect(secondRes.status).toBe(401);
     expect(secondRes.body.code).toBe('OTP_INVALID');
   });
 
   it('R5.AC3: should store refresh token hash in database', async () => {
-    const res = await request(app)
-      .post('/api/v1/auth/otp/verify')
-      .send({ phone: TEST_PHONE, code: validOtp });
+    const res = await request(app).post('/api/v1/auth/otp/verify').send({ phone: TEST_PHONE, code: validOtp });
 
     expect(res.status).toBe(200);
 
@@ -308,9 +277,7 @@ describe('POST /api/v1/auth/refresh', () => {
       VALUES (${TEST_PHONE_2}, ${hash}, ${expiresAt.toISOString()}, false)
     `;
 
-    const res = await request(app)
-      .post('/api/v1/auth/otp/verify')
-      .send({ phone: TEST_PHONE_2, code: '123456' });
+    const res = await request(app).post('/api/v1/auth/otp/verify').send({ phone: TEST_PHONE_2, code: '123456' });
 
     expect(res.status).toBe(200);
     accessToken = res.body.accessToken;
@@ -325,9 +292,7 @@ describe('POST /api/v1/auth/refresh', () => {
   });
 
   it('R5.AC5: should return new accessToken and refreshToken', async () => {
-    const res = await request(app)
-      .post('/api/v1/auth/refresh')
-      .send({ refreshToken });
+    const res = await request(app).post('/api/v1/auth/refresh').send({ refreshToken });
 
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty('accessToken');
@@ -341,9 +306,7 @@ describe('POST /api/v1/auth/refresh', () => {
   });
 
   it('R5.AC5: should revoke the old refresh token on rotation', async () => {
-    await request(app)
-      .post('/api/v1/auth/refresh')
-      .send({ refreshToken });
+    await request(app).post('/api/v1/auth/refresh').send({ refreshToken });
 
     // The original refresh token's hash should be marked as revoked
     const { createHash } = await import('node:crypto');
@@ -359,24 +322,18 @@ describe('POST /api/v1/auth/refresh', () => {
 
   it('R5.AC6: should reject a revoked refresh token', async () => {
     // First refresh — succeeds and revokes the original
-    const firstRes = await request(app)
-      .post('/api/v1/auth/refresh')
-      .send({ refreshToken });
+    const firstRes = await request(app).post('/api/v1/auth/refresh').send({ refreshToken });
     expect(firstRes.status).toBe(200);
 
     // Second refresh with the same (now revoked) token — should fail
-    const secondRes = await request(app)
-      .post('/api/v1/auth/refresh')
-      .send({ refreshToken });
+    const secondRes = await request(app).post('/api/v1/auth/refresh').send({ refreshToken });
     expect(secondRes.status).toBe(401);
     expect(secondRes.body.code).toBe('REFRESH_TOKEN_INVALID');
   });
 
   it('R5.AC5: rotated refresh token should work for subsequent refreshes', async () => {
     // Rotate once
-    const firstRes = await request(app)
-      .post('/api/v1/auth/refresh')
-      .send({ refreshToken });
+    const firstRes = await request(app).post('/api/v1/auth/refresh').send({ refreshToken });
     expect(firstRes.status).toBe(200);
 
     // Use the new refresh token to rotate again
@@ -389,18 +346,14 @@ describe('POST /api/v1/auth/refresh', () => {
   });
 
   it('should reject an invalid/tampered refresh token', async () => {
-    const res = await request(app)
-      .post('/api/v1/auth/refresh')
-      .send({ refreshToken: 'not-a-valid-jwt' });
+    const res = await request(app).post('/api/v1/auth/refresh').send({ refreshToken: 'not-a-valid-jwt' });
 
     expect(res.status).toBe(401);
     expect(res.body.code).toBe('REFRESH_TOKEN_INVALID');
   });
 
   it('should reject missing refreshToken', async () => {
-    const res = await request(app)
-      .post('/api/v1/auth/refresh')
-      .send({});
+    const res = await request(app).post('/api/v1/auth/refresh').send({});
 
     expect(res.status).toBe(400);
     expect(res.body.code).toBe('VALIDATION_ERROR');
@@ -421,9 +374,7 @@ describe('OTP Rate Limiting', () => {
 
   it('R5.AC8: should allow up to 5 OTP requests per phone', async () => {
     for (let i = 0; i < 5; i++) {
-      const res = await request(app)
-        .post('/api/v1/auth/otp/request')
-        .send({ phone: RATE_LIMIT_PHONE });
+      const res = await request(app).post('/api/v1/auth/otp/request').send({ phone: RATE_LIMIT_PHONE });
       expect(res.status).toBe(200);
     }
   });
@@ -431,15 +382,11 @@ describe('OTP Rate Limiting', () => {
   it('R5.AC9: should return 429 with Retry-After header on 6th request', async () => {
     // Exhaust the 5-request limit
     for (let i = 0; i < 5; i++) {
-      await request(app)
-        .post('/api/v1/auth/otp/request')
-        .send({ phone: RATE_LIMIT_PHONE });
+      await request(app).post('/api/v1/auth/otp/request').send({ phone: RATE_LIMIT_PHONE });
     }
 
     // 6th request should be rate-limited
-    const res = await request(app)
-      .post('/api/v1/auth/otp/request')
-      .send({ phone: RATE_LIMIT_PHONE });
+    const res = await request(app).post('/api/v1/auth/otp/request').send({ phone: RATE_LIMIT_PHONE });
 
     expect(res.status).toBe(429);
     expect(res.body.code).toBe('RATE_LIMIT_EXCEEDED');
@@ -454,15 +401,11 @@ describe('OTP Rate Limiting', () => {
 
     // Exhaust limit for RATE_LIMIT_PHONE
     for (let i = 0; i < 5; i++) {
-      await request(app)
-        .post('/api/v1/auth/otp/request')
-        .send({ phone: RATE_LIMIT_PHONE });
+      await request(app).post('/api/v1/auth/otp/request').send({ phone: RATE_LIMIT_PHONE });
     }
 
     // Other phone should still work
-    const res = await request(app)
-      .post('/api/v1/auth/otp/request')
-      .send({ phone: otherPhone });
+    const res = await request(app).post('/api/v1/auth/otp/request').send({ phone: otherPhone });
     expect(res.status).toBe(200);
 
     // Clean up other phone
@@ -486,9 +429,7 @@ describe('JWT requireAuth middleware', () => {
   });
 
   it('R5.AC8: should reject request with invalid token', async () => {
-    const res = await request(testApp)
-      .get('/api/v1/test-protected')
-      .set('Authorization', 'Bearer invalid.token.here');
+    const res = await request(testApp).get('/api/v1/test-protected').set('Authorization', 'Bearer invalid.token.here');
     expect(res.status).toBe(401);
     expect(res.body.code).toBe('AUTH_INVALID');
   });
@@ -497,9 +438,7 @@ describe('JWT requireAuth middleware', () => {
     const { signAccessToken } = await import('../../src/utils/jwt.js');
 
     const token = signAccessToken({ userId: 'test-user-id', phone: '+966500000001' });
-    const res = await request(testApp)
-      .get('/api/v1/test-protected')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(testApp).get('/api/v1/test-protected').set('Authorization', `Bearer ${token}`);
     expect(res.status).toBe(200);
     expect(res.body.ok).toBe(true);
     expect(res.body.userId).toBe('test-user-id');

@@ -15,20 +15,21 @@ export function createCheckInRouters(db: Db) {
   // Subscription-level routes: POST /api/v1/subscriptions/:id/check-in
   const subscriptionCheckInRouter = Router({ mergeParams: true });
 
-  subscriptionCheckInRouter.post('/', requireAuth, validate(createCheckInSchema), async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { branchId } = req.body;
+  subscriptionCheckInRouter.post(
+    '/',
+    requireAuth,
+    validate(createCheckInSchema),
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { branchId } = req.body;
 
-      const result = await checkInService.checkIn(
-        req.params['id'] as string,
-        req.user!.userId,
-        branchId
-      );
-      res.status(201).json(result);
-    } catch (err) {
-      next(err);
-    }
-  });
+        const result = await checkInService.checkIn(req.params['id'] as string, req.user!.userId, branchId);
+        res.status(201).json(result);
+      } catch (err) {
+        next(err);
+      }
+    },
+  );
 
   // Branch-level route: GET /api/v1/branches/:id/queue
   const branchQueueRouter = Router({ mergeParams: true });
@@ -45,19 +46,21 @@ export function createCheckInRouters(db: Db) {
   // Check-in management: PATCH /api/v1/check-ins/:id
   const checkInRouter = Router();
 
-  checkInRouter.patch('/:id', requireAuth, validate(updateCheckInStatusSchema), async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { status } = req.body;
+  checkInRouter.patch(
+    '/:id',
+    requireAuth,
+    validate(updateCheckInStatusSchema),
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { status } = req.body;
 
-      const result = await checkInService.updateStatus(
-        req.params['id'] as string,
-        status
-      );
-      res.json(result);
-    } catch (err) {
-      next(err);
-    }
-  });
+        const result = await checkInService.updateStatus(req.params['id'] as string, status);
+        res.json(result);
+      } catch (err) {
+        next(err);
+      }
+    },
+  );
 
   return { subscriptionCheckInRouter, branchQueueRouter, checkInRouter };
 }

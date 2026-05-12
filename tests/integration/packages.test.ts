@@ -5,8 +5,7 @@ import * as schema from '../../src/db/schema.js';
 import { createApp } from '../../src/app.js';
 import { signAccessToken } from '../../src/utils/jwt.js';
 
-const DATABASE_URL =
-  process.env['DATABASE_URL'] ?? 'postgresql://flod:flod_dev_password@localhost:5433/flod_dev';
+const DATABASE_URL = process.env['DATABASE_URL'] ?? 'postgresql://flod:flod_dev_password@localhost:5433/flod_dev';
 const JWT_SECRET = 'test-jwt-secret-at-least-32-chars-long!!';
 const JWT_REFRESH_SECRET = 'test-refresh-secret-at-least-32-chars!!';
 
@@ -40,9 +39,7 @@ afterAll(async () => {
 // ─── R8.AC1: List Packages ───────────────────────────────────────
 describe('GET /api/v1/packages', () => {
   it('R8.AC1: should return all active packages', async () => {
-    const res = await request(app)
-      .get('/api/v1/packages')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/v1/packages').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
@@ -51,9 +48,7 @@ describe('GET /api/v1/packages', () => {
   });
 
   it('R8.AC1: each package should include required fields', async () => {
-    const res = await request(app)
-      .get('/api/v1/packages')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/v1/packages').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     const pkg = res.body[0];
@@ -77,9 +72,7 @@ describe('GET /api/v1/packages', () => {
 // ─── R8.AC2: Filter by Category ──────────────────────────────────
 describe('GET /api/v1/packages?category=...', () => {
   it('R8.AC2: should return only mixed packages', async () => {
-    const res = await request(app)
-      .get('/api/v1/packages?category=mixed')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/v1/packages?category=mixed').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     expect(res.body.length).toBe(9); // 3 durations × 3 meals_per_day
@@ -89,9 +82,7 @@ describe('GET /api/v1/packages?category=...', () => {
   });
 
   it('R8.AC2: should return only chicken packages', async () => {
-    const res = await request(app)
-      .get('/api/v1/packages?category=chicken')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/v1/packages?category=chicken').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     expect(res.body.length).toBe(9);
@@ -101,9 +92,7 @@ describe('GET /api/v1/packages?category=...', () => {
   });
 
   it('R8.AC2: should return only snack packages', async () => {
-    const res = await request(app)
-      .get('/api/v1/packages?category=snack')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/v1/packages?category=snack').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     expect(res.body.length).toBe(3); // snack: 1 meal × 3 durations
@@ -113,9 +102,7 @@ describe('GET /api/v1/packages?category=...', () => {
   });
 
   it('should reject invalid category', async () => {
-    const res = await request(app)
-      .get('/api/v1/packages?category=invalid')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/v1/packages?category=invalid').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(400);
     expect(res.body.code).toBe('VALIDATION_ERROR');
@@ -134,9 +121,7 @@ describe('GET /api/v1/packages/:id', () => {
   });
 
   it('R8.AC3: should return package with meal distribution', async () => {
-    const res = await request(app)
-      .get(`/api/v1/packages/${mixedPackageId}`)
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get(`/api/v1/packages/${mixedPackageId}`).set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     expect(res.body.id).toBe(mixedPackageId);
@@ -146,9 +131,7 @@ describe('GET /api/v1/packages/:id', () => {
   });
 
   it('R8.AC3: meal distribution should include proteinType and mealCount', async () => {
-    const res = await request(app)
-      .get(`/api/v1/packages/${mixedPackageId}`)
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get(`/api/v1/packages/${mixedPackageId}`).set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     for (const dist of res.body.mealDistribution) {
@@ -159,23 +142,19 @@ describe('GET /api/v1/packages/:id', () => {
   });
 
   it('R8.AC3: distribution meal counts should sum to totalMeals', async () => {
-    const res = await request(app)
-      .get(`/api/v1/packages/${mixedPackageId}`)
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get(`/api/v1/packages/${mixedPackageId}`).set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     const totalFromDist = res.body.mealDistribution.reduce(
       (sum: number, d: { mealCount: number }) => sum + d.mealCount,
-      0
+      0,
     );
     expect(totalFromDist).toBe(res.body.totalMeals);
   });
 
   it('should return 404 for non-existent package', async () => {
     const fakeId = '00000000-0000-0000-0000-000000000000';
-    const res = await request(app)
-      .get(`/api/v1/packages/${fakeId}`)
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get(`/api/v1/packages/${fakeId}`).set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(404);
     expect(res.body.code).toBe('PACKAGE_NOT_FOUND');
@@ -253,9 +232,7 @@ describe('GET /api/v1/packages/:id/schedule', () => {
 
   it('should return 404 for non-existent package', async () => {
     const fakeId = '00000000-0000-0000-0000-000000000000';
-    const res = await request(app)
-      .get(`/api/v1/packages/${fakeId}/schedule`)
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get(`/api/v1/packages/${fakeId}/schedule`).set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(404);
     expect(res.body.code).toBe('PACKAGE_NOT_FOUND');

@@ -27,11 +27,7 @@ export function otpRateLimit(req: Request, res: Response, next: NextFunction): v
     const oldestValid = entry.timestamps[0]!;
     const retryAfter = Math.ceil((oldestValid + WINDOW_MS - now) / 1000);
     res.set('Retry-After', String(retryAfter));
-    throw new AppError(
-      'Too many OTP requests. Try again later.',
-      'RATE_LIMIT_EXCEEDED',
-      429
-    );
+    throw new AppError('Too many OTP requests. Try again later.', 'RATE_LIMIT_EXCEEDED', 429);
   }
 
   entry.timestamps.push(now);

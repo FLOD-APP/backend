@@ -5,8 +5,7 @@ import * as schema from '../../src/db/schema.js';
 import { createApp } from '../../src/app.js';
 import { signAccessToken } from '../../src/utils/jwt.js';
 
-const DATABASE_URL =
-  process.env['DATABASE_URL'] ?? 'postgresql://flod:flod_dev_password@localhost:5433/flod_dev';
+const DATABASE_URL = process.env['DATABASE_URL'] ?? 'postgresql://flod:flod_dev_password@localhost:5433/flod_dev';
 const JWT_SECRET = 'test-jwt-secret-at-least-32-chars-long!!';
 const JWT_REFRESH_SECRET = 'test-refresh-secret-at-least-32-chars!!';
 
@@ -51,16 +50,13 @@ beforeAll(async () => {
   mixedPackageId = pkgRows[0]!['id'] as string;
 
   // Create a subscription
-  const subRes = await request(app)
-    .post('/api/v1/subscriptions')
-    .set('Authorization', `Bearer ${token}`)
-    .send({
-      packageId: mixedPackageId,
-      branchId: stage0BranchId,
-      fulfilmentMode: 'pickup',
-      startDate: '2026-06-01',
-      paymentId: 'PAY_CHECKIN_001',
-    });
+  const subRes = await request(app).post('/api/v1/subscriptions').set('Authorization', `Bearer ${token}`).send({
+    packageId: mixedPackageId,
+    branchId: stage0BranchId,
+    fulfilmentMode: 'pickup',
+    startDate: '2026-06-01',
+    paymentId: 'PAY_CHECKIN_001',
+  });
   subscriptionId = subRes.body.id;
 });
 
@@ -163,8 +159,7 @@ describe('GET /api/v1/branches/:id/queue', () => {
   });
 
   it('should require authentication', async () => {
-    const res = await request(app)
-      .get(`/api/v1/branches/${stage0BranchId}/queue`);
+    const res = await request(app).get(`/api/v1/branches/${stage0BranchId}/queue`);
 
     expect(res.status).toBe(401);
   });
@@ -238,9 +233,7 @@ describe('PATCH /api/v1/check-ins/:id', () => {
   });
 
   it('should require authentication', async () => {
-    const res = await request(app)
-      .patch(`/api/v1/check-ins/${checkInId}`)
-      .send({ status: 'preparing' });
+    const res = await request(app).patch(`/api/v1/check-ins/${checkInId}`).send({ status: 'preparing' });
 
     expect(res.status).toBe(401);
   });

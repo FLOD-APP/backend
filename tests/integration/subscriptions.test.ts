@@ -5,8 +5,7 @@ import * as schema from '../../src/db/schema.js';
 import { createApp } from '../../src/app.js';
 import { signAccessToken } from '../../src/utils/jwt.js';
 
-const DATABASE_URL =
-  process.env['DATABASE_URL'] ?? 'postgresql://flod:flod_dev_password@localhost:5433/flod_dev';
+const DATABASE_URL = process.env['DATABASE_URL'] ?? 'postgresql://flod:flod_dev_password@localhost:5433/flod_dev';
 const JWT_SECRET = 'test-jwt-secret-at-least-32-chars-long!!';
 const JWT_REFRESH_SECRET = 'test-refresh-secret-at-least-32-chars!!';
 
@@ -114,16 +113,13 @@ describe('POST /api/v1/subscriptions', () => {
   });
 
   it('R10.AC1: creates subscription with status active and correct fields', async () => {
-    const res = await request(app)
-      .post('/api/v1/subscriptions')
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        packageId: mixedPackageId,
-        branchId: stage0BranchId,
-        fulfilmentMode: 'pickup',
-        startDate: '2026-06-01',
-        paymentId: 'PAY_TEST_001',
-      });
+    const res = await request(app).post('/api/v1/subscriptions').set('Authorization', `Bearer ${token}`).send({
+      packageId: mixedPackageId,
+      branchId: stage0BranchId,
+      fulfilmentMode: 'pickup',
+      startDate: '2026-06-01',
+      paymentId: 'PAY_TEST_001',
+    });
 
     expect(res.status).toBe(201);
     expect(res.body.status).toBe('active');
@@ -138,16 +134,13 @@ describe('POST /api/v1/subscriptions', () => {
   });
 
   it('R10.AC1: pause_days_limit based on duration (12→3, 18→6, 24→10)', async () => {
-    const res = await request(app)
-      .post('/api/v1/subscriptions')
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        packageId: mixedPackageId,
-        branchId: stage0BranchId,
-        fulfilmentMode: 'pickup',
-        startDate: '2026-06-01',
-        paymentId: 'PAY_TEST_002',
-      });
+    const res = await request(app).post('/api/v1/subscriptions').set('Authorization', `Bearer ${token}`).send({
+      packageId: mixedPackageId,
+      branchId: stage0BranchId,
+      fulfilmentMode: 'pickup',
+      startDate: '2026-06-01',
+      paymentId: 'PAY_TEST_002',
+    });
 
     expect(res.status).toBe(201);
     // The pause_days_limit should match the package duration
@@ -157,32 +150,26 @@ describe('POST /api/v1/subscriptions', () => {
   });
 
   it('R10.AC1: wallet_balance equals amount paid', async () => {
-    const res = await request(app)
-      .post('/api/v1/subscriptions')
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        packageId: mixedPackageId,
-        branchId: stage0BranchId,
-        fulfilmentMode: 'pickup',
-        startDate: '2026-06-01',
-        paymentId: 'PAY_TEST_003',
-      });
+    const res = await request(app).post('/api/v1/subscriptions').set('Authorization', `Bearer ${token}`).send({
+      packageId: mixedPackageId,
+      branchId: stage0BranchId,
+      fulfilmentMode: 'pickup',
+      startDate: '2026-06-01',
+      paymentId: 'PAY_TEST_003',
+    });
 
     expect(res.status).toBe(201);
     expect(res.body.walletBalance).toBe(res.body.amountPaid);
   });
 
   it('R10.AC2: generates daily meal schedule', async () => {
-    const res = await request(app)
-      .post('/api/v1/subscriptions')
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        packageId: mixedPackageId,
-        branchId: stage0BranchId,
-        fulfilmentMode: 'pickup',
-        startDate: '2026-06-01',
-        paymentId: 'PAY_TEST_004',
-      });
+    const res = await request(app).post('/api/v1/subscriptions').set('Authorization', `Bearer ${token}`).send({
+      packageId: mixedPackageId,
+      branchId: stage0BranchId,
+      fulfilmentMode: 'pickup',
+      startDate: '2026-06-01',
+      paymentId: 'PAY_TEST_004',
+    });
 
     expect(res.status).toBe(201);
     expect(res.body.mealsGenerated).toBeGreaterThan(0);
@@ -196,16 +183,13 @@ describe('POST /api/v1/subscriptions', () => {
   });
 
   it('R10.AC3: creates initial_credit wallet transaction', async () => {
-    const res = await request(app)
-      .post('/api/v1/subscriptions')
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        packageId: mixedPackageId,
-        branchId: stage0BranchId,
-        fulfilmentMode: 'pickup',
-        startDate: '2026-06-01',
-        paymentId: 'PAY_TEST_005',
-      });
+    const res = await request(app).post('/api/v1/subscriptions').set('Authorization', `Bearer ${token}`).send({
+      packageId: mixedPackageId,
+      branchId: stage0BranchId,
+      fulfilmentMode: 'pickup',
+      startDate: '2026-06-01',
+      paymentId: 'PAY_TEST_005',
+    });
 
     expect(res.status).toBe(201);
 
@@ -224,17 +208,14 @@ describe('POST /api/v1/subscriptions', () => {
     const beforeRows = await sqlClient`SELECT current_uses FROM discount_rules WHERE code = 'SUBTEST20'`;
     const usesBefore = beforeRows[0]!['current_uses'] as number;
 
-    const res = await request(app)
-      .post('/api/v1/subscriptions')
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        packageId: mixedPackageId,
-        branchId: stage0BranchId,
-        fulfilmentMode: 'pickup',
-        startDate: '2026-06-01',
-        paymentId: 'PAY_TEST_006',
-        promoCode: 'SUBTEST20',
-      });
+    const res = await request(app).post('/api/v1/subscriptions').set('Authorization', `Bearer ${token}`).send({
+      packageId: mixedPackageId,
+      branchId: stage0BranchId,
+      fulfilmentMode: 'pickup',
+      startDate: '2026-06-01',
+      paymentId: 'PAY_TEST_006',
+      promoCode: 'SUBTEST20',
+    });
 
     expect(res.status).toBe(201);
     expect(res.body.pricing.applicableDiscountType).toBe('promo_code');
@@ -246,32 +227,26 @@ describe('POST /api/v1/subscriptions', () => {
   });
 
   it('R10.AC5: rejects non-Stage-0 branch', async () => {
-    const res = await request(app)
-      .post('/api/v1/subscriptions')
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        packageId: mixedPackageId,
-        branchId: nonStage0BranchId,
-        fulfilmentMode: 'pickup',
-        startDate: '2026-06-01',
-        paymentId: 'PAY_TEST_007',
-      });
+    const res = await request(app).post('/api/v1/subscriptions').set('Authorization', `Bearer ${token}`).send({
+      packageId: mixedPackageId,
+      branchId: nonStage0BranchId,
+      fulfilmentMode: 'pickup',
+      startDate: '2026-06-01',
+      paymentId: 'PAY_TEST_007',
+    });
 
     expect(res.status).toBe(400);
     expect(res.body.code).toBe('INVALID_BRANCH');
   });
 
   it('R10.AC5: rejects nonexistent branch', async () => {
-    const res = await request(app)
-      .post('/api/v1/subscriptions')
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        packageId: mixedPackageId,
-        branchId: '00000000-0000-0000-0000-000000000000',
-        fulfilmentMode: 'pickup',
-        startDate: '2026-06-01',
-        paymentId: 'PAY_TEST_008',
-      });
+    const res = await request(app).post('/api/v1/subscriptions').set('Authorization', `Bearer ${token}`).send({
+      packageId: mixedPackageId,
+      branchId: '00000000-0000-0000-0000-000000000000',
+      fulfilmentMode: 'pickup',
+      startDate: '2026-06-01',
+      paymentId: 'PAY_TEST_008',
+    });
 
     expect(res.status).toBe(400);
     expect(res.body.code).toBe('INVALID_BRANCH');
@@ -279,85 +254,68 @@ describe('POST /api/v1/subscriptions', () => {
 
   it('R10.AC6: rejects duplicate active subscription at same branch', async () => {
     // Create first subscription
-    const res1 = await request(app)
-      .post('/api/v1/subscriptions')
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        packageId: mixedPackageId,
-        branchId: stage0BranchId,
-        fulfilmentMode: 'pickup',
-        startDate: '2026-06-01',
-        paymentId: 'PAY_TEST_009A',
-      });
+    const res1 = await request(app).post('/api/v1/subscriptions').set('Authorization', `Bearer ${token}`).send({
+      packageId: mixedPackageId,
+      branchId: stage0BranchId,
+      fulfilmentMode: 'pickup',
+      startDate: '2026-06-01',
+      paymentId: 'PAY_TEST_009A',
+    });
     expect(res1.status).toBe(201);
 
     // Try second subscription at same branch
-    const res2 = await request(app)
-      .post('/api/v1/subscriptions')
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        packageId: mixedPackageId,
-        branchId: stage0BranchId,
-        fulfilmentMode: 'pickup',
-        startDate: '2026-06-15',
-        paymentId: 'PAY_TEST_009B',
-      });
+    const res2 = await request(app).post('/api/v1/subscriptions').set('Authorization', `Bearer ${token}`).send({
+      packageId: mixedPackageId,
+      branchId: stage0BranchId,
+      fulfilmentMode: 'pickup',
+      startDate: '2026-06-15',
+      paymentId: 'PAY_TEST_009B',
+    });
 
     expect(res2.status).toBe(409);
     expect(res2.body.code).toBe('SUBSCRIPTION_CONFLICT');
   });
 
   it('should reject missing required fields', async () => {
-    const res = await request(app)
-      .post('/api/v1/subscriptions')
-      .set('Authorization', `Bearer ${token}`)
-      .send({});
+    const res = await request(app).post('/api/v1/subscriptions').set('Authorization', `Bearer ${token}`).send({});
 
     expect(res.status).toBe(400);
     expect(res.body.code).toBe('VALIDATION_ERROR');
   });
 
   it('should reject invalid fulfilmentMode', async () => {
-    const res = await request(app)
-      .post('/api/v1/subscriptions')
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        packageId: mixedPackageId,
-        branchId: stage0BranchId,
-        fulfilmentMode: 'drone',
-        startDate: '2026-06-01',
-        paymentId: 'PAY_TEST_010',
-      });
+    const res = await request(app).post('/api/v1/subscriptions').set('Authorization', `Bearer ${token}`).send({
+      packageId: mixedPackageId,
+      branchId: stage0BranchId,
+      fulfilmentMode: 'drone',
+      startDate: '2026-06-01',
+      paymentId: 'PAY_TEST_010',
+    });
 
     expect(res.status).toBe(400);
     expect(res.body.code).toBe('VALIDATION_ERROR');
   });
 
   it('should require authentication', async () => {
-    const res = await request(app)
-      .post('/api/v1/subscriptions')
-      .send({
-        packageId: mixedPackageId,
-        branchId: stage0BranchId,
-        fulfilmentMode: 'pickup',
-        startDate: '2026-06-01',
-        paymentId: 'PAY_TEST_011',
-      });
+    const res = await request(app).post('/api/v1/subscriptions').send({
+      packageId: mixedPackageId,
+      branchId: stage0BranchId,
+      fulfilmentMode: 'pickup',
+      startDate: '2026-06-01',
+      paymentId: 'PAY_TEST_011',
+    });
 
     expect(res.status).toBe(401);
   });
 
   it('R10.AC1: first-plan discount applied for new user', async () => {
-    const res = await request(app)
-      .post('/api/v1/subscriptions')
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        packageId: mixedPackageId,
-        branchId: stage0BranchId,
-        fulfilmentMode: 'pickup',
-        startDate: '2026-06-01',
-        paymentId: 'PAY_TEST_012',
-      });
+    const res = await request(app).post('/api/v1/subscriptions').set('Authorization', `Bearer ${token}`).send({
+      packageId: mixedPackageId,
+      branchId: stage0BranchId,
+      fulfilmentMode: 'pickup',
+      startDate: '2026-06-01',
+      paymentId: 'PAY_TEST_012',
+    });
 
     expect(res.status).toBe(201);
     expect(res.body.pricing.applicableDiscountType).toBe('first_plan');
@@ -367,16 +325,13 @@ describe('POST /api/v1/subscriptions', () => {
 
 // ─── Helper: create a subscription and return its ID ─────────
 async function createTestSubscription(paymentId: string): Promise<string> {
-  const res = await request(app)
-    .post('/api/v1/subscriptions')
-    .set('Authorization', `Bearer ${token}`)
-    .send({
-      packageId: mixedPackageId,
-      branchId: stage0BranchId,
-      fulfilmentMode: 'pickup',
-      startDate: '2026-06-01',
-      paymentId,
-    });
+  const res = await request(app).post('/api/v1/subscriptions').set('Authorization', `Bearer ${token}`).send({
+    packageId: mixedPackageId,
+    branchId: stage0BranchId,
+    fulfilmentMode: 'pickup',
+    startDate: '2026-06-01',
+    paymentId,
+  });
   return res.body.id as string;
 }
 
@@ -389,9 +344,7 @@ describe('GET /api/v1/subscriptions/active', () => {
   it('R11.AC1: returns active subscription with details', async () => {
     await createTestSubscription('PAY_ACTIVE_001');
 
-    const res = await request(app)
-      .get('/api/v1/subscriptions/active')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/v1/subscriptions/active').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     expect(res.body.status).toMatch(/active|paused/);
@@ -404,9 +357,7 @@ describe('GET /api/v1/subscriptions/active', () => {
   });
 
   it('R11.AC1: returns 404 when no active subscription', async () => {
-    const res = await request(app)
-      .get('/api/v1/subscriptions/active')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/v1/subscriptions/active').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(404);
     expect(res.body.code).toBe('SUBSCRIPTION_NOT_FOUND');
@@ -544,9 +495,7 @@ describe('POST /api/v1/subscriptions/:id/resume', () => {
 
   it('rejects resume on already active subscription', async () => {
     // Resume first
-    await request(app)
-      .post(`/api/v1/subscriptions/${subId}/resume`)
-      .set('Authorization', `Bearer ${token}`);
+    await request(app).post(`/api/v1/subscriptions/${subId}/resume`).set('Authorization', `Bearer ${token}`);
 
     // Try resume again
     const res = await request(app)
@@ -558,8 +507,7 @@ describe('POST /api/v1/subscriptions/:id/resume', () => {
   });
 
   it('should require authentication', async () => {
-    const res = await request(app)
-      .post(`/api/v1/subscriptions/${subId}/resume`);
+    const res = await request(app).post(`/api/v1/subscriptions/${subId}/resume`);
 
     expect(res.status).toBe(401);
   });
@@ -605,8 +553,7 @@ describe('GET /api/v1/subscriptions/:id/schedule', () => {
   });
 
   it('should require authentication', async () => {
-    const res = await request(app)
-      .get(`/api/v1/subscriptions/${subId}/schedule`);
+    const res = await request(app).get(`/api/v1/subscriptions/${subId}/schedule`);
 
     expect(res.status).toBe(401);
   });
@@ -623,9 +570,7 @@ describe('GET /api/v1/subscriptions/history', () => {
   });
 
   it('R11.AC7: returns subscription history ordered by created_at desc', async () => {
-    const res = await request(app)
-      .get('/api/v1/subscriptions/history')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/v1/subscriptions/history').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
@@ -650,9 +595,7 @@ describe('GET /api/v1/subscriptions/history', () => {
     const otherUserId = otherUserRows[0]!['id'] as string;
     const otherToken = signAccessToken({ userId: otherUserId, phone: '+966500000076' });
 
-    const res = await request(app)
-      .get('/api/v1/subscriptions/history')
-      .set('Authorization', `Bearer ${otherToken}`);
+    const res = await request(app).get('/api/v1/subscriptions/history').set('Authorization', `Bearer ${otherToken}`);
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual([]);

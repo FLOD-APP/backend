@@ -42,11 +42,7 @@ export class UserService {
     }
 
     // Check user exists
-    const existing = await this.db
-      .select({ id: users.id })
-      .from(users)
-      .where(eq(users.id, userId))
-      .limit(1);
+    const existing = await this.db.select({ id: users.id }).from(users).where(eq(users.id, userId)).limit(1);
 
     if (existing.length === 0) {
       throw new AppError('User not found', 'USER_NOT_FOUND', 404);
@@ -57,18 +53,14 @@ export class UserService {
     if (updates.email !== undefined) setFields['email'] = updates.email;
     if (updates.languagePreference !== undefined) setFields['languagePreference'] = updates.languagePreference;
 
-    const rows = await this.db
-      .update(users)
-      .set(setFields)
-      .where(eq(users.id, userId))
-      .returning({
-        id: users.id,
-        phone: users.phone,
-        name: users.name,
-        email: users.email,
-        languagePreference: users.languagePreference,
-        createdAt: users.createdAt,
-      });
+    const rows = await this.db.update(users).set(setFields).where(eq(users.id, userId)).returning({
+      id: users.id,
+      phone: users.phone,
+      name: users.name,
+      email: users.email,
+      languagePreference: users.languagePreference,
+      createdAt: users.createdAt,
+    });
 
     return rows[0]!;
   }

@@ -24,10 +24,7 @@ export interface PricingBreakdown {
   totalInclVat: number;
 }
 
-export function extractVat(
-  priceInclVat: number,
-  vatRate: number = 0.15
-): { priceExVat: number; vatAmount: number } {
+export function extractVat(priceInclVat: number, vatRate: number = 0.15): { priceExVat: number; vatAmount: number } {
   const priceExVat = round2(priceInclVat / (1 + vatRate));
   const vatAmount = round2(priceInclVat - priceExVat);
   return { priceExVat, vatAmount };
@@ -36,7 +33,7 @@ export function extractVat(
 export function calculatePricing(
   priceInclVat: number,
   discountPercent: number,
-  vatRate: number = 0.15
+  vatRate: number = 0.15,
 ): PricingBreakdown {
   const priceExVat = round2(priceInclVat / (1 + vatRate));
   const discountAmount = round2(priceExVat * (discountPercent / 100));

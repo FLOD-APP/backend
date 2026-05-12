@@ -17,7 +17,7 @@ describe('Pause Rules Utility', () => {
     pauseDaysUsed: 0,
     pauseDaysLimit: 3,
     pauseStart: new Date('2026-06-03'), // Wednesday (>= tomorrow)
-    pauseEnd: new Date('2026-06-05'),   // Friday — 3 calendar days
+    pauseEnd: new Date('2026-06-05'), // Friday — 3 calendar days
   };
 
   describe('getPauseDaysLimit', () => {
@@ -117,7 +117,7 @@ describe('Pause Rules Utility', () => {
     it('R11.AC3: rejects insufficient notice (< 24h)', () => {
       const result = validatePause(
         { ...baseInput, pauseStart: new Date('2026-06-01') }, // same day as now
-        now
+        now,
       );
 
       expect(result.valid).toBe(false);
@@ -132,7 +132,7 @@ describe('Pause Rules Utility', () => {
           pauseStart: new Date('2026-06-03'),
           pauseEnd: new Date('2026-06-04'), // 2 more business days → total 4 > 3
         },
-        now
+        now,
       );
 
       expect(result.valid).toBe(false);
@@ -145,9 +145,9 @@ describe('Pause Rules Utility', () => {
           ...baseInput,
           pauseDaysUsed: 1,
           pauseStart: new Date('2026-06-03'), // Wed
-          pauseEnd: new Date('2026-06-04'),   // Thu — 2 business days, total = 3 = limit
+          pauseEnd: new Date('2026-06-04'), // Thu — 2 business days, total = 3 = limit
         },
-        now
+        now,
       );
 
       expect(result.valid).toBe(true);
@@ -163,9 +163,9 @@ describe('Pause Rules Utility', () => {
           pauseDaysUsed: 0,
           pauseDaysLimit: 10,
           pauseStart: new Date('2026-06-08'), // Monday
-          pauseEnd: new Date('2026-06-14'),   // Sunday
+          pauseEnd: new Date('2026-06-14'), // Sunday
         },
-        now
+        now,
       );
 
       expect(result.valid).toBe(true);
@@ -181,7 +181,7 @@ describe('Pause Rules Utility', () => {
           pauseStart: new Date('2026-06-05'),
           pauseEnd: new Date('2026-06-03'),
         },
-        now
+        now,
       );
 
       expect(result.valid).toBe(false);
@@ -196,9 +196,9 @@ describe('Pause Rules Utility', () => {
           pauseDaysUsed: 5,
           pauseDaysLimit: 6,
           pauseStart: new Date('2026-06-03'), // Wed
-          pauseEnd: new Date('2026-06-03'),   // Wed — 1 business day
+          pauseEnd: new Date('2026-06-03'), // Wed — 1 business day
         },
-        now
+        now,
       );
 
       expect(result.valid).toBe(true);

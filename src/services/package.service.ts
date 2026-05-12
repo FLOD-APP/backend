@@ -1,12 +1,7 @@
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { eq, and, isNull, sql } from 'drizzle-orm';
 import type * as schemaTypes from '../db/schema.js';
-import {
-  packages,
-  packageMealDistribution,
-  products,
-  productPrices,
-} from '../db/schema.js';
+import { packages, packageMealDistribution, products, productPrices } from '../db/schema.js';
 import { AppError } from '../utils/errors.js';
 
 type Db = PostgresJsDatabase<typeof schemaTypes>;
@@ -20,10 +15,7 @@ export class PackageService {
 
     if (filters.category) {
       conditions.push(
-        eq(
-          packages.category,
-          filters.category as 'mixed' | 'chicken' | 'snack' | 'sandwich' | 'customer_choice'
-        )
+        eq(packages.category, filters.category as 'mixed' | 'chicken' | 'snack' | 'sandwich' | 'customer_choice'),
       );
     }
 
@@ -132,8 +124,8 @@ export class PackageService {
             eq(productPrices.tier, 'subscription'),
             isNull(productPrices.branchId),
             sql`${productPrices.effectiveFrom} <= ${now}`,
-            sql`(${productPrices.effectiveTo} IS NULL OR ${productPrices.effectiveTo} > ${now})`
-          )
+            sql`(${productPrices.effectiveTo} IS NULL OR ${productPrices.effectiveTo} > ${now})`,
+          ),
         )
         .limit(1);
 

@@ -14,18 +14,23 @@ export function createAuthRouter(db: Db): Router {
   const authService = new AuthService(db);
 
   // POST /api/v1/auth/otp/request
-  router.post('/otp/request', otpRateLimit, validate(otpRequestSchema), async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const result = await authService.requestOtp(req.body.phone);
+  router.post(
+    '/otp/request',
+    otpRateLimit,
+    validate(otpRequestSchema),
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const result = await authService.requestOtp(req.body.phone);
 
-      // V0: Log OTP to console (no SMS)
-      console.log(`[OTP] ${req.body.phone}: ${result.otp}`);
+        // V0: Log OTP to console (no SMS)
+        console.log(`[OTP] ${req.body.phone}: ${result.otp}`);
 
-      res.json({ sent: result.sent });
-    } catch (err) {
-      next(err);
-    }
-  });
+        res.json({ sent: result.sent });
+      } catch (err) {
+        next(err);
+      }
+    },
+  );
 
   // POST /api/v1/auth/otp/verify
   router.post('/otp/verify', validate(otpVerifySchema), async (req: Request, res: Response, next: NextFunction) => {

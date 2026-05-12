@@ -1,11 +1,7 @@
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { eq, and, asc } from 'drizzle-orm';
 import type * as schemaTypes from '../db/schema.js';
-import {
-  checkIns,
-  subscriptions,
-  users,
-} from '../db/schema.js';
+import { checkIns, subscriptions, users } from '../db/schema.js';
 import { AppError } from '../utils/errors.js';
 
 type Db = PostgresJsDatabase<typeof schemaTypes>;
@@ -30,17 +26,13 @@ export class CheckInService {
         and(
           eq(subscriptions.id, subscriptionId),
           eq(subscriptions.branchId, branchId),
-          eq(subscriptions.status, 'active')
-        )
+          eq(subscriptions.status, 'active'),
+        ),
       )
       .limit(1);
 
     if (subRows.length === 0) {
-      throw new AppError(
-        'No active subscription at this branch',
-        'NO_ACTIVE_SUBSCRIPTION',
-        403
-      );
+      throw new AppError('No active subscription at this branch', 'NO_ACTIVE_SUBSCRIPTION', 403);
     }
 
     if (subRows[0]!.userId !== userId) {
@@ -87,7 +79,7 @@ export class CheckInService {
           eq(checkIns.branchId, branchId),
           // Active = not yet collected
           // In practice: waiting, preparing, ready
-        )
+        ),
       )
       .orderBy(asc(checkIns.checkedInAt));
   }
@@ -95,11 +87,7 @@ export class CheckInService {
   /** R17.AC3: Update check-in status */
   async updateStatus(checkInId: string, status: string) {
     if (!VALID_STATUSES.has(status)) {
-      throw new AppError(
-        'Status must be "preparing", "ready", or "collected"',
-        'VALIDATION_ERROR',
-        400
-      );
+      throw new AppError('Status must be "preparing", "ready", or "collected"', 'VALIDATION_ERROR', 400);
     }
 
     const rows = await this.db

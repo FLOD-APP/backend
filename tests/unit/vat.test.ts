@@ -1,8 +1,4 @@
-import {
-  extractVat,
-  calculatePricing,
-  roundSar,
-} from '../../src/utils/vat.js';
+import { extractVat, calculatePricing, roundSar } from '../../src/utils/vat.js';
 
 // All examples taken from HANDOVER_Pricing_Database_Design.md
 
@@ -17,7 +13,7 @@ describe('VAT Utilities', () => {
 
     it('should handle banker rounding edge cases', () => {
       expect(roundSar(2.005)).toBe(2.01); // standard rounding
-      expect(roundSar(1.995)).toBe(2.00);
+      expect(roundSar(1.995)).toBe(2.0);
     });
   });
 
@@ -61,7 +57,7 @@ describe('VAT Utilities', () => {
       expect(result.discountAmount).toBe(2.09);
       expect(result.subtotalAfterDiscount).toBe(18.78);
       expect(result.vatOnDiscounted).toBe(2.82);
-      expect(result.totalInclVat).toBe(21.60);
+      expect(result.totalInclVat).toBe(21.6);
     });
 
     it('R9.AC5: SAR 24 with 5% renewal discount', () => {
@@ -76,7 +72,7 @@ describe('VAT Utilities', () => {
       expect(result.discountAmount).toBe(1.04);
       expect(result.subtotalAfterDiscount).toBe(19.83);
       expect(result.vatOnDiscounted).toBe(2.97);
-      expect(result.totalInclVat).toBe(22.80);
+      expect(result.totalInclVat).toBe(22.8);
     });
 
     it('R9.AC5: SAR 24 with 0% discount (no discount)', () => {
@@ -86,7 +82,7 @@ describe('VAT Utilities', () => {
       expect(result.discountAmount).toBe(0);
       expect(result.subtotalAfterDiscount).toBe(20.87);
       expect(result.vatOnDiscounted).toBe(3.13);
-      expect(result.totalInclVat).toBe(24.00);
+      expect(result.totalInclVat).toBe(24.0);
     });
 
     it('R9.AC5: SAR 0 price', () => {
@@ -132,10 +128,10 @@ describe('VAT Utilities', () => {
       // vat = 78.26 * 0.15 = 11.74
       // total = 78.26 + 11.74 = 90.00
       expect(result.priceExVat).toBe(86.96);
-      expect(result.discountAmount).toBe(8.70);
+      expect(result.discountAmount).toBe(8.7);
       expect(result.subtotalAfterDiscount).toBe(78.26);
       expect(result.vatOnDiscounted).toBe(11.74);
-      expect(result.totalInclVat).toBe(90.00);
+      expect(result.totalInclVat).toBe(90.0);
     });
   });
 });

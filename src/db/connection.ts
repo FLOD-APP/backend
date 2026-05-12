@@ -35,7 +35,7 @@ export async function connectDb(databaseUrl: string): Promise<{
       const delay = INITIAL_DELAY_MS * Math.pow(2, attempt - 1);
       logger.warn(
         { attempt, maxRetries: MAX_RETRIES, nextRetryMs: delay, error: (err as Error).message },
-        'Database connection failed, retrying'
+        'Database connection failed, retrying',
       );
 
       if (attempt === MAX_RETRIES) {

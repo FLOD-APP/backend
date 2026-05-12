@@ -5,8 +5,7 @@ import * as schema from '../../src/db/schema.js';
 import { createApp } from '../../src/app.js';
 import { signAccessToken } from '../../src/utils/jwt.js';
 
-const DATABASE_URL =
-  process.env['DATABASE_URL'] ?? 'postgresql://flod:flod_dev_password@localhost:5433/flod_dev';
+const DATABASE_URL = process.env['DATABASE_URL'] ?? 'postgresql://flod:flod_dev_password@localhost:5433/flod_dev';
 const JWT_SECRET = 'test-jwt-secret-at-least-32-chars-long!!';
 const JWT_REFRESH_SECRET = 'test-refresh-secret-at-least-32-chars!!';
 
@@ -40,9 +39,7 @@ afterAll(async () => {
 // ─── R16.AC1: List Settings ──────────────────────────────────────
 describe('GET /api/v1/settings', () => {
   it('R16.AC1: should return all system settings', async () => {
-    const res = await request(app)
-      .get('/api/v1/settings')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/v1/settings').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
@@ -50,9 +47,7 @@ describe('GET /api/v1/settings', () => {
   });
 
   it('R16.AC1: each setting should have key, value, description', async () => {
-    const res = await request(app)
-      .get('/api/v1/settings')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/v1/settings').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     const setting = res.body[0];
@@ -62,9 +57,7 @@ describe('GET /api/v1/settings', () => {
   });
 
   it('R16.AC1: should include vat_rate setting', async () => {
-    const res = await request(app)
-      .get('/api/v1/settings')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/v1/settings').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     const vatSetting = res.body.find((s: { key: string }) => s.key === 'vat_rate');
@@ -125,9 +118,7 @@ describe('PATCH /api/v1/settings/:key', () => {
   });
 
   it('should require authentication', async () => {
-    const res = await request(app)
-      .patch(`/api/v1/settings/${TEST_KEY}`)
-      .send({ value: '10' });
+    const res = await request(app).patch(`/api/v1/settings/${TEST_KEY}`).send({ value: '10' });
     expect(res.status).toBe(401);
   });
 });

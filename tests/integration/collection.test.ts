@@ -5,8 +5,7 @@ import * as schema from '../../src/db/schema.js';
 import { createApp } from '../../src/app.js';
 import { signAccessToken } from '../../src/utils/jwt.js';
 
-const DATABASE_URL =
-  process.env['DATABASE_URL'] ?? 'postgresql://flod:flod_dev_password@localhost:5433/flod_dev';
+const DATABASE_URL = process.env['DATABASE_URL'] ?? 'postgresql://flod:flod_dev_password@localhost:5433/flod_dev';
 const JWT_SECRET = 'test-jwt-secret-at-least-32-chars-long!!';
 const JWT_REFRESH_SECRET = 'test-refresh-secret-at-least-32-chars!!';
 
@@ -62,16 +61,13 @@ afterAll(async () => {
 });
 
 async function createSubscription(paymentId: string): Promise<string> {
-  const res = await request(app)
-    .post('/api/v1/subscriptions')
-    .set('Authorization', `Bearer ${token}`)
-    .send({
-      packageId: mixedPackageId,
-      branchId: stage0BranchId,
-      fulfilmentMode: 'pickup',
-      startDate: '2026-06-01',
-      paymentId,
-    });
+  const res = await request(app).post('/api/v1/subscriptions').set('Authorization', `Bearer ${token}`).send({
+    packageId: mixedPackageId,
+    branchId: stage0BranchId,
+    fulfilmentMode: 'pickup',
+    startDate: '2026-06-01',
+    paymentId,
+  });
   return res.body.id as string;
 }
 

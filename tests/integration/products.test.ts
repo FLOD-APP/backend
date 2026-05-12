@@ -5,8 +5,7 @@ import * as schema from '../../src/db/schema.js';
 import { createApp } from '../../src/app.js';
 import { signAccessToken } from '../../src/utils/jwt.js';
 
-const DATABASE_URL =
-  process.env['DATABASE_URL'] ?? 'postgresql://flod:flod_dev_password@localhost:5433/flod_dev';
+const DATABASE_URL = process.env['DATABASE_URL'] ?? 'postgresql://flod:flod_dev_password@localhost:5433/flod_dev';
 const JWT_SECRET = 'test-jwt-secret-at-least-32-chars-long!!';
 const JWT_REFRESH_SECRET = 'test-refresh-secret-at-least-32-chars!!';
 
@@ -40,9 +39,7 @@ afterAll(async () => {
 // ─── R7.AC1: Categories ──────────────────────────────────────────
 describe('GET /api/v1/categories', () => {
   it('R7.AC1: should return all product categories', async () => {
-    const res = await request(app)
-      .get('/api/v1/categories')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/v1/categories').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
@@ -50,9 +47,7 @@ describe('GET /api/v1/categories', () => {
   });
 
   it('R7.AC1: each category should include required fields', async () => {
-    const res = await request(app)
-      .get('/api/v1/categories')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/v1/categories').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     const cat = res.body[0];
@@ -72,9 +67,7 @@ describe('GET /api/v1/categories', () => {
 // ─── R7.AC2: Products with Tier Pricing ──────────────────────────
 describe('GET /api/v1/products?tier=...', () => {
   it('R7.AC2: should return products with prices for base tier', async () => {
-    const res = await request(app)
-      .get('/api/v1/products?tier=base')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/v1/products?tier=base').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
@@ -82,9 +75,7 @@ describe('GET /api/v1/products?tier=...', () => {
   });
 
   it('R7.AC2: each product should include required fields', async () => {
-    const res = await request(app)
-      .get('/api/v1/products?tier=base')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/v1/products?tier=base').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     const product = res.body[0];
@@ -100,12 +91,8 @@ describe('GET /api/v1/products?tier=...', () => {
 
   it('R7.AC5: products without a price for the tier should be omitted', async () => {
     // Subscription tier should not include breakfast items (which only have base+app prices)
-    const baseRes = await request(app)
-      .get('/api/v1/products?tier=base')
-      .set('Authorization', `Bearer ${token}`);
-    const subRes = await request(app)
-      .get('/api/v1/products?tier=subscription')
-      .set('Authorization', `Bearer ${token}`);
+    const baseRes = await request(app).get('/api/v1/products?tier=base').set('Authorization', `Bearer ${token}`);
+    const subRes = await request(app).get('/api/v1/products?tier=subscription').set('Authorization', `Bearer ${token}`);
 
     expect(baseRes.status).toBe(200);
     expect(subRes.status).toBe(200);
@@ -114,18 +101,14 @@ describe('GET /api/v1/products?tier=...', () => {
   });
 
   it('should reject missing tier parameter', async () => {
-    const res = await request(app)
-      .get('/api/v1/products')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/v1/products').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(400);
     expect(res.body.code).toBe('VALIDATION_ERROR');
   });
 
   it('should reject invalid tier value', async () => {
-    const res = await request(app)
-      .get('/api/v1/products?tier=premium')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/v1/products?tier=premium').set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(400);
     expect(res.body.code).toBe('VALIDATION_ERROR');
@@ -159,9 +142,7 @@ describe('GET /api/v1/products?tier=base&category_id=...', () => {
   });
 
   it('R7.AC3: filtered results should be fewer than unfiltered', async () => {
-    const allRes = await request(app)
-      .get('/api/v1/products?tier=base')
-      .set('Authorization', `Bearer ${token}`);
+    const allRes = await request(app).get('/api/v1/products?tier=base').set('Authorization', `Bearer ${token}`);
     const filteredRes = await request(app)
       .get(`/api/v1/products?tier=base&category_id=${chickenCategoryId}`)
       .set('Authorization', `Bearer ${token}`);
@@ -192,9 +173,7 @@ describe('GET /api/v1/products?tier=base&in_subscription=true', () => {
   });
 
   it('R7.AC4: in_subscription filter should return fewer products than unfiltered', async () => {
-    const allRes = await request(app)
-      .get('/api/v1/products?tier=base')
-      .set('Authorization', `Bearer ${token}`);
+    const allRes = await request(app).get('/api/v1/products?tier=base').set('Authorization', `Bearer ${token}`);
     const subRes = await request(app)
       .get('/api/v1/products?tier=base&in_subscription=true')
       .set('Authorization', `Bearer ${token}`);
@@ -220,9 +199,7 @@ describe('GET /api/v1/products/:id', () => {
   });
 
   it('R7.AC6: should return full product detail with all pricing tiers', async () => {
-    const res = await request(app)
-      .get(`/api/v1/products/${productId}`)
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get(`/api/v1/products/${productId}`).set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     expect(res.body.id).toBe(productId);
@@ -238,9 +215,7 @@ describe('GET /api/v1/products/:id', () => {
   });
 
   it('R7.AC6: prices should include tier and priceInclVat', async () => {
-    const res = await request(app)
-      .get(`/api/v1/products/${productId}`)
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get(`/api/v1/products/${productId}`).set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     for (const price of res.body.prices) {
@@ -252,9 +227,7 @@ describe('GET /api/v1/products/:id', () => {
 
   it('should return 404 for non-existent product', async () => {
     const fakeId = '00000000-0000-0000-0000-000000000000';
-    const res = await request(app)
-      .get(`/api/v1/products/${fakeId}`)
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get(`/api/v1/products/${fakeId}`).set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(404);
     expect(res.body.code).toBe('PRODUCT_NOT_FOUND');

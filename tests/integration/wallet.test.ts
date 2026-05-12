@@ -6,8 +6,7 @@ import { createApp } from '../../src/app.js';
 import { signAccessToken } from '../../src/utils/jwt.js';
 import { WalletService } from '../../src/services/wallet.service.js';
 
-const DATABASE_URL =
-  process.env['DATABASE_URL'] ?? 'postgresql://flod:flod_dev_password@localhost:5433/flod_dev';
+const DATABASE_URL = process.env['DATABASE_URL'] ?? 'postgresql://flod:flod_dev_password@localhost:5433/flod_dev';
 const JWT_SECRET = 'test-jwt-secret-at-least-32-chars-long!!';
 const JWT_REFRESH_SECRET = 'test-refresh-secret-at-least-32-chars!!';
 
@@ -54,16 +53,13 @@ beforeAll(async () => {
   mixedPackageId = pkgRows[0]!['id'] as string;
 
   // Create a subscription for wallet testing
-  const subRes = await request(app)
-    .post('/api/v1/subscriptions')
-    .set('Authorization', `Bearer ${token}`)
-    .send({
-      packageId: mixedPackageId,
-      branchId: stage0BranchId,
-      fulfilmentMode: 'pickup',
-      startDate: '2026-06-01',
-      paymentId: 'PAY_WALLET_001',
-    });
+  const subRes = await request(app).post('/api/v1/subscriptions').set('Authorization', `Bearer ${token}`).send({
+    packageId: mixedPackageId,
+    branchId: stage0BranchId,
+    fulfilmentMode: 'pickup',
+    startDate: '2026-06-01',
+    paymentId: 'PAY_WALLET_001',
+  });
   subscriptionId = subRes.body.id;
 });
 
@@ -124,8 +120,7 @@ describe('GET /api/v1/subscriptions/:id/wallet', () => {
   });
 
   it('should require authentication', async () => {
-    const res = await request(app)
-      .get(`/api/v1/subscriptions/${subscriptionId}/wallet`);
+    const res = await request(app).get(`/api/v1/subscriptions/${subscriptionId}/wallet`);
 
     expect(res.status).toBe(401);
   });
@@ -177,7 +172,7 @@ describe('WalletService.transact', () => {
           amount: -(currentBalance + 1), // exceed balance
           description: 'Should fail',
         });
-      })
+      }),
     ).rejects.toMatchObject({
       code: 'INSUFFICIENT_BALANCE',
       statusCode: 400,

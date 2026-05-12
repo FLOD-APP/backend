@@ -1,10 +1,7 @@
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { eq, desc, sql } from 'drizzle-orm';
 import type * as schemaTypes from '../db/schema.js';
-import {
-  subscriptions,
-  walletTransactions,
-} from '../db/schema.js';
+import { subscriptions, walletTransactions } from '../db/schema.js';
 import { AppError } from '../utils/errors.js';
 
 type Db = PostgresJsDatabase<typeof schemaTypes>;
@@ -81,10 +78,13 @@ export class WalletService {
    * Uses FOR UPDATE to prevent race conditions (design: concurrency with FOR UPDATE).
    * Accepts either a Drizzle DB instance or a transaction object.
    */
-  async transact(tx: Pick<Db, 'execute' | 'insert' | 'update'>, input: WalletTransactionInput): Promise<{ newBalance: string }> {
+  async transact(
+    tx: Pick<Db, 'execute' | 'insert' | 'update'>,
+    input: WalletTransactionInput,
+  ): Promise<{ newBalance: string }> {
     // Lock the subscription row for update
     const lockRows = await tx.execute(
-      sql`SELECT wallet_balance FROM subscriptions WHERE id = ${input.subscriptionId}::uuid FOR UPDATE`
+      sql`SELECT wallet_balance FROM subscriptions WHERE id = ${input.subscriptionId}::uuid FOR UPDATE`,
     );
 
     if (lockRows.length === 0) {

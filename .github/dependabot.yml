@@ -1,0 +1,54 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    target-branch: development
+    open-pull-requests-limit: 5
+    groups:
+      express:
+        patterns:
+          - "express"
+          - "cors"
+          - "@types/express"
+          - "@types/cors"
+      drizzle:
+        patterns:
+          - "drizzle-orm"
+          - "drizzle-kit"
+          - "drizzle-zod"
+      testing:
+        patterns:
+          - "jest"
+          - "ts-jest"
+          - "@types/jest"
+          - "supertest"
+          - "@types/supertest"
+      linting:
+        patterns:
+          - "eslint"
+          - "@typescript-eslint/*"
+          - "prettier"
+      auth:
+        patterns:
+          - "bcrypt"
+          - "@types/bcrypt"
+          - "jsonwebtoken"
+          - "@types/jsonwebtoken"
+      observability:
+        patterns:
+          - "pino"
+          - "pino-*"
+    ignore:
+      - dependency-name: "drizzle-orm"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns:
+          - "*"

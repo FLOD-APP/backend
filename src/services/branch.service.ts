@@ -24,7 +24,9 @@ export class BranchService {
   constructor(private db: Db) {}
 
   /** R6.AC1 + R6.AC2: List active branches, optionally filtered by stage0 */
-  async list(filters: { stage0?: boolean } = {}): Promise<typeof BRANCH_FIELDS extends infer F ? Record<string, unknown>[] : never> {
+  async list(
+    filters: { stage0?: boolean } = {},
+  ): Promise<typeof BRANCH_FIELDS extends infer F ? Record<string, unknown>[] : never> {
     const conditions = [eq(branches.isActive, true)];
 
     if (filters.stage0) {

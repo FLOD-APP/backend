@@ -36,17 +36,9 @@ export const rotationTypeEnum = pgEnum('rotation_type', ['snack', 'sandwich']);
 
 export const branchTypeEnum = pgEnum('branch_type', ['main', 'express']);
 
-export const expressClassificationEnum = pgEnum('express_classification', [
-  'buffet',
-  'grab_and_go',
-]);
+export const expressClassificationEnum = pgEnum('express_classification', ['buffet', 'grab_and_go']);
 
-export const discountTypeEnum = pgEnum('discount_type', [
-  'first_plan',
-  'renewal',
-  'promo_code',
-  'seasonal',
-]);
+export const discountTypeEnum = pgEnum('discount_type', ['first_plan', 'renewal', 'promo_code', 'seasonal']);
 
 export const subscriptionStatusEnum = pgEnum('subscription_status', [
   'pending_payment',
@@ -56,10 +48,7 @@ export const subscriptionStatusEnum = pgEnum('subscription_status', [
   'cancelled',
 ]);
 
-export const fulfilmentModeEnum = pgEnum('fulfilment_mode', [
-  'pickup',
-  'delivery',
-]);
+export const fulfilmentModeEnum = pgEnum('fulfilment_mode', ['pickup', 'delivery']);
 
 // ============================================
 // PRODUCTS & PRICING
@@ -112,14 +101,7 @@ export const productPrices = pgTable(
     effectiveTo: date('effective_to'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
-  (table) => [
-    unique('product_prices_unique').on(
-      table.productId,
-      table.tier,
-      table.branchId,
-      table.effectiveFrom
-    ),
-  ]
+  (table) => [unique('product_prices_unique').on(table.productId, table.tier, table.branchId, table.effectiveFrom)],
 );
 
 // ============================================
@@ -142,9 +124,7 @@ export const packages = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
-  (table) => [
-    unique('packages_unique').on(table.category, table.mealsPerDay, table.durationDays),
-  ]
+  (table) => [unique('packages_unique').on(table.category, table.mealsPerDay, table.durationDays)],
 );
 
 export const packageMealDistribution = pgTable(
@@ -157,9 +137,7 @@ export const packageMealDistribution = pgTable(
     proteinType: text('protein_type').notNull(),
     mealCount: integer('meal_count').notNull(),
   },
-  (table) => [
-    unique('package_meal_dist_unique').on(table.packageId, table.proteinType),
-  ]
+  (table) => [unique('package_meal_dist_unique').on(table.packageId, table.proteinType)],
 );
 
 // ============================================
@@ -177,9 +155,7 @@ export const rotationSchedules = pgTable(
       .references(() => products.id),
     priceInclVat: numeric('price_incl_vat', { precision: 8, scale: 2 }).notNull(),
   },
-  (table) => [
-    unique('rotation_schedule_unique').on(table.type, table.dayNumber),
-  ]
+  (table) => [unique('rotation_schedule_unique').on(table.type, table.dayNumber)],
 );
 
 export const rotationSwapOptions = pgTable(
@@ -193,9 +169,7 @@ export const rotationSwapOptions = pgTable(
       .notNull()
       .references(() => products.id),
   },
-  (table) => [
-    unique('rotation_swap_unique').on(table.scheduleId, table.swapProductId),
-  ]
+  (table) => [unique('rotation_swap_unique').on(table.scheduleId, table.swapProductId)],
 );
 
 // ============================================
@@ -256,9 +230,15 @@ export const systemSettings = pgTable('system_settings', {
 
 export const subscriptions = pgTable('subscriptions', {
   id: uuid('id').primaryKey().defaultRandom(),
-  userId: uuid('user_id').notNull().references(() => users.id),
-  packageId: uuid('package_id').notNull().references(() => packages.id),
-  branchId: uuid('branch_id').notNull().references(() => branches.id),
+  userId: uuid('user_id')
+    .notNull()
+    .references(() => users.id),
+  packageId: uuid('package_id')
+    .notNull()
+    .references(() => packages.id),
+  branchId: uuid('branch_id')
+    .notNull()
+    .references(() => branches.id),
   fulfilment: fulfilmentModeEnum('fulfilment').notNull().default('pickup'),
   status: subscriptionStatusEnum('status').notNull().default('pending_payment'),
   startDate: date('start_date').notNull(),
@@ -313,13 +293,7 @@ export const subscriptionDailyMeals = pgTable(
     swappedFromId: uuid('swapped_from_id').references(() => products.id),
     swapPriceDiff: numeric('swap_price_diff', { precision: 8, scale: 2 }).default('0'),
   },
-  (table) => [
-    unique('sub_daily_meals_unique').on(
-      table.subscriptionId,
-      table.dayNumber,
-      table.mealSlot
-    ),
-  ]
+  (table) => [unique('sub_daily_meals_unique').on(table.subscriptionId, table.dayNumber, table.mealSlot)],
 );
 
 // ============================================

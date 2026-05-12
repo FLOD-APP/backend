@@ -31,7 +31,11 @@ async function main() {
     .values([
       { key: 'vat_rate', value: '0.15', description: 'Saudi Arabia VAT rate' },
       { key: 'renewal_discount_percent', value: '5', description: 'Renewal discount percentage' },
-      { key: 'renewal_discount_cutoff_days', value: '30', description: 'Max days since last subscription to qualify for renewal discount' },
+      {
+        key: 'renewal_discount_cutoff_days',
+        value: '30',
+        description: 'Max days since last subscription to qualify for renewal discount',
+      },
       { key: 'first_plan_discount_percent', value: '10', description: 'First subscription discount percentage' },
       { key: 'delivery_fee_per_day', value: '12', description: 'Delivery fee per day in SAR' },
       { key: 'prices_include_vat', value: 'true', description: 'All prices in the system are VAT-inclusive' },
@@ -45,19 +49,88 @@ async function main() {
     .values([
       { foodicsRef: 'B01', nameEn: 'Aljazera (Al Jazeera)', nameAr: 'الجزيرة', type: 'main' as const, isStage0: false },
       { foodicsRef: 'B02', nameEn: 'Rabie (Al Rabie)', nameAr: 'الربيع', type: 'main' as const, isStage0: true },
-      { foodicsRef: 'B03', nameEn: 'Tatweer', nameAr: 'التطوير', type: 'express' as const, expressClassification: 'grab_and_go' as const, isStage0: false },
-      { foodicsRef: 'B04', nameEn: 'MoD (Ministry of Defence)', nameAr: 'وزارة الدفاع', type: 'express' as const, expressClassification: 'grab_and_go' as const, isStage0: false },
+      {
+        foodicsRef: 'B03',
+        nameEn: 'Tatweer',
+        nameAr: 'التطوير',
+        type: 'express' as const,
+        expressClassification: 'grab_and_go' as const,
+        isStage0: false,
+      },
+      {
+        foodicsRef: 'B04',
+        nameEn: 'MoD (Ministry of Defence)',
+        nameAr: 'وزارة الدفاع',
+        type: 'express' as const,
+        expressClassification: 'grab_and_go' as const,
+        isStage0: false,
+      },
       { foodicsRef: 'B05', nameEn: 'Turkey (Turki)', nameAr: 'تركي', type: 'main' as const, isStage0: false },
       { foodicsRef: 'B06', nameEn: 'Osman (Othman)', nameAr: 'عثمان', type: 'main' as const, isStage0: false },
-      { foodicsRef: 'B07', nameEn: 'Riyadh Bank KAFD', nameAr: 'بنك الرياض كافد', type: 'express' as const, expressClassification: 'buffet' as const, isStage0: false },
-      { foodicsRef: 'B08', nameEn: 'Albilad (Bank Albilad)', nameAr: 'بنك البلاد', type: 'express' as const, expressClassification: 'buffet' as const, isStage0: false },
-      { foodicsRef: 'B09', nameEn: 'Anas (Anas Bin Malik)', nameAr: 'أنس بن مالك', type: 'main' as const, isStage0: true },
-      { foodicsRef: 'B10', nameEn: 'Tadawul', nameAr: 'تداول', type: 'express' as const, expressClassification: 'grab_and_go' as const, isStage0: false },
+      {
+        foodicsRef: 'B07',
+        nameEn: 'Riyadh Bank KAFD',
+        nameAr: 'بنك الرياض كافد',
+        type: 'express' as const,
+        expressClassification: 'buffet' as const,
+        isStage0: false,
+      },
+      {
+        foodicsRef: 'B08',
+        nameEn: 'Albilad (Bank Albilad)',
+        nameAr: 'بنك البلاد',
+        type: 'express' as const,
+        expressClassification: 'buffet' as const,
+        isStage0: false,
+      },
+      {
+        foodicsRef: 'B09',
+        nameEn: 'Anas (Anas Bin Malik)',
+        nameAr: 'أنس بن مالك',
+        type: 'main' as const,
+        isStage0: true,
+      },
+      {
+        foodicsRef: 'B10',
+        nameEn: 'Tadawul',
+        nameAr: 'تداول',
+        type: 'express' as const,
+        expressClassification: 'grab_and_go' as const,
+        isStage0: false,
+      },
       { foodicsRef: 'B11', nameEn: 'Quds (Al Quds)', nameAr: 'القدس', type: 'main' as const, isStage0: false },
-      { foodicsRef: 'B12', nameEn: 'Saudi Investment Bank', nameAr: 'البنك السعودي للاستثمار', type: 'express' as const, expressClassification: 'buffet' as const, isStage0: false },
-      { foodicsRef: 'B16', nameEn: 'ZATCA', nameAr: 'هيئة الزكاة', type: 'express' as const, expressClassification: 'grab_and_go' as const, isStage0: false },
-      { foodicsRef: 'B17', nameEn: 'Murabba', nameAr: 'المربع', type: 'express' as const, expressClassification: 'grab_and_go' as const, isStage0: false },
-      { foodicsRef: 'B18', nameEn: 'Expo', nameAr: 'إكسبو', type: 'express' as const, expressClassification: 'grab_and_go' as const, isStage0: false },
+      {
+        foodicsRef: 'B12',
+        nameEn: 'Saudi Investment Bank',
+        nameAr: 'البنك السعودي للاستثمار',
+        type: 'express' as const,
+        expressClassification: 'buffet' as const,
+        isStage0: false,
+      },
+      {
+        foodicsRef: 'B16',
+        nameEn: 'ZATCA',
+        nameAr: 'هيئة الزكاة',
+        type: 'express' as const,
+        expressClassification: 'grab_and_go' as const,
+        isStage0: false,
+      },
+      {
+        foodicsRef: 'B17',
+        nameEn: 'Murabba',
+        nameAr: 'المربع',
+        type: 'express' as const,
+        expressClassification: 'grab_and_go' as const,
+        isStage0: false,
+      },
+      {
+        foodicsRef: 'B18',
+        nameEn: 'Expo',
+        nameAr: 'إكسبو',
+        type: 'express' as const,
+        expressClassification: 'grab_and_go' as const,
+        isStage0: false,
+      },
     ])
     .onConflictDoNothing();
 
@@ -97,33 +170,147 @@ async function main() {
   type ProductRow = typeof products.$inferInsert;
   const productRows: ProductRow[] = [
     // ── Chicken (13) ───────────────────────────────────────
-    { categoryId: catId('Chicken'), sku: 'sk-0147', nameEn: 'Flod Chicken', nameAr: 'فلود دجاج', proteinType: 'chicken' },
-    { categoryId: catId('Chicken'), sku: 'sk-0148', nameEn: 'Sweet & Sour Chicken', nameAr: 'دجاج حامض حلو', proteinType: 'chicken' },
-    { categoryId: catId('Chicken'), sku: 'sk-0150', nameEn: 'Grilled Chicken', nameAr: 'دجاج مشوي', proteinType: 'chicken' },
-    { categoryId: catId('Chicken'), sku: 'sk-0173', nameEn: 'Indian Chicken', nameAr: 'دجاج هندي', proteinType: 'chicken' },
-    { categoryId: catId('Chicken'), sku: 'sk-0338', nameEn: 'Ginger Chicken', nameAr: 'دجاج بالزنجبيل', proteinType: 'chicken' },
-    { categoryId: catId('Chicken'), sku: 'sk-0354', nameEn: 'Green Curry Chicken', nameAr: 'دجاج كاري أخضر', proteinType: 'chicken' },
-    { categoryId: catId('Chicken'), sku: 'sk-0355', nameEn: 'Red Curry Chicken', nameAr: 'دجاج كاري أحمر', proteinType: 'chicken' },
-    { categoryId: catId('Chicken'), sku: 'sk-0386', nameEn: 'Spicy Chicken', nameAr: 'دجاج حار', proteinType: 'chicken' },
-    { categoryId: catId('Chicken'), sku: 'sk-0387', nameEn: 'Barbecue Chicken', nameAr: 'دجاج باربكيو', proteinType: 'chicken' },
-    { categoryId: catId('Chicken'), sku: 'sk-0451', nameEn: 'Chicken Szechuan', nameAr: 'دجاج سيشوان', proteinType: 'chicken' },
-    { categoryId: catId('Chicken'), sku: 'sk-0530', nameEn: 'Szechuan w/ Noodles', nameAr: 'سيشوان مع نودلز', proteinType: 'chicken' },
-    { categoryId: catId('Chicken'), sku: 'sk-0533', nameEn: 'S&S w/ Noodles', nameAr: 'حامض حلو مع نودلز', proteinType: 'chicken' },
-    { categoryId: catId('Chicken'), sku: 'sk-0549', nameEn: 'Chicken Strips Meal', nameAr: 'وجبة ستربس دجاج', proteinType: 'chicken' },
+    {
+      categoryId: catId('Chicken'),
+      sku: 'sk-0147',
+      nameEn: 'Flod Chicken',
+      nameAr: 'فلود دجاج',
+      proteinType: 'chicken',
+    },
+    {
+      categoryId: catId('Chicken'),
+      sku: 'sk-0148',
+      nameEn: 'Sweet & Sour Chicken',
+      nameAr: 'دجاج حامض حلو',
+      proteinType: 'chicken',
+    },
+    {
+      categoryId: catId('Chicken'),
+      sku: 'sk-0150',
+      nameEn: 'Grilled Chicken',
+      nameAr: 'دجاج مشوي',
+      proteinType: 'chicken',
+    },
+    {
+      categoryId: catId('Chicken'),
+      sku: 'sk-0173',
+      nameEn: 'Indian Chicken',
+      nameAr: 'دجاج هندي',
+      proteinType: 'chicken',
+    },
+    {
+      categoryId: catId('Chicken'),
+      sku: 'sk-0338',
+      nameEn: 'Ginger Chicken',
+      nameAr: 'دجاج بالزنجبيل',
+      proteinType: 'chicken',
+    },
+    {
+      categoryId: catId('Chicken'),
+      sku: 'sk-0354',
+      nameEn: 'Green Curry Chicken',
+      nameAr: 'دجاج كاري أخضر',
+      proteinType: 'chicken',
+    },
+    {
+      categoryId: catId('Chicken'),
+      sku: 'sk-0355',
+      nameEn: 'Red Curry Chicken',
+      nameAr: 'دجاج كاري أحمر',
+      proteinType: 'chicken',
+    },
+    {
+      categoryId: catId('Chicken'),
+      sku: 'sk-0386',
+      nameEn: 'Spicy Chicken',
+      nameAr: 'دجاج حار',
+      proteinType: 'chicken',
+    },
+    {
+      categoryId: catId('Chicken'),
+      sku: 'sk-0387',
+      nameEn: 'Barbecue Chicken',
+      nameAr: 'دجاج باربكيو',
+      proteinType: 'chicken',
+    },
+    {
+      categoryId: catId('Chicken'),
+      sku: 'sk-0451',
+      nameEn: 'Chicken Szechuan',
+      nameAr: 'دجاج سيشوان',
+      proteinType: 'chicken',
+    },
+    {
+      categoryId: catId('Chicken'),
+      sku: 'sk-0530',
+      nameEn: 'Szechuan w/ Noodles',
+      nameAr: 'سيشوان مع نودلز',
+      proteinType: 'chicken',
+    },
+    {
+      categoryId: catId('Chicken'),
+      sku: 'sk-0533',
+      nameEn: 'S&S w/ Noodles',
+      nameAr: 'حامض حلو مع نودلز',
+      proteinType: 'chicken',
+    },
+    {
+      categoryId: catId('Chicken'),
+      sku: 'sk-0549',
+      nameEn: 'Chicken Strips Meal',
+      nameAr: 'وجبة ستربس دجاج',
+      proteinType: 'chicken',
+    },
 
     // ── Seafood (4) ────────────────────────────────────────
-    { categoryId: catId('Seafood'), sku: 'sk-0155', nameEn: 'Grilled Salmon', nameAr: 'سلمون مشوي', proteinType: 'salmon' },
-    { categoryId: catId('Seafood'), sku: 'sk-0156', nameEn: 'Salmon Lemon Sauce', nameAr: 'سلمون صوص ليمون', proteinType: 'salmon' },
-    { categoryId: catId('Seafood'), sku: 'sk-0153', nameEn: 'Pesto Shrimp', nameAr: 'ربيان بستو', proteinType: 'shrimp' },
-    { categoryId: catId('Seafood'), sku: 'sk-0154', nameEn: 'Sweet & Sour Fillet', nameAr: 'فيليه حامض حلو', proteinType: 'almond_fish' },
+    {
+      categoryId: catId('Seafood'),
+      sku: 'sk-0155',
+      nameEn: 'Grilled Salmon',
+      nameAr: 'سلمون مشوي',
+      proteinType: 'salmon',
+    },
+    {
+      categoryId: catId('Seafood'),
+      sku: 'sk-0156',
+      nameEn: 'Salmon Lemon Sauce',
+      nameAr: 'سلمون صوص ليمون',
+      proteinType: 'salmon',
+    },
+    {
+      categoryId: catId('Seafood'),
+      sku: 'sk-0153',
+      nameEn: 'Pesto Shrimp',
+      nameAr: 'ربيان بستو',
+      proteinType: 'shrimp',
+    },
+    {
+      categoryId: catId('Seafood'),
+      sku: 'sk-0154',
+      nameEn: 'Sweet & Sour Fillet',
+      nameAr: 'فيليه حامض حلو',
+      proteinType: 'almond_fish',
+    },
 
     // ── Meats (6) ──────────────────────────────────────────
     { categoryId: catId('Meats'), sku: 'sk-0151', nameEn: 'Beef Sizzling', nameAr: 'لحم سيزلينق', proteinType: 'beef' },
     { categoryId: catId('Meats'), sku: 'sk-0152', nameEn: 'Flod Steak', nameAr: 'ستيك فلود', proteinType: 'beef' },
     { categoryId: catId('Meats'), sku: 'sk-0375', nameEn: 'Beef Radish', nameAr: 'لحم بالفجل', proteinType: 'beef' },
     { categoryId: catId('Meats'), sku: 'sk-0377', nameEn: 'Beef Burger', nameAr: 'برقر لحم', proteinType: 'beef' },
-    { categoryId: catId('Meats'), sku: 'sk-0532', nameEn: 'Beef Sizzling w/ Noodles', nameAr: 'لحم سيزلينق مع نودلز', proteinType: 'beef' },
-    { categoryId: catId('Meats'), sku: 'sk-0541', nameEn: 'Flod Chilli Beef', nameAr: 'لحم فلود تشيلي', proteinType: 'beef' },
+    {
+      categoryId: catId('Meats'),
+      sku: 'sk-0532',
+      nameEn: 'Beef Sizzling w/ Noodles',
+      nameAr: 'لحم سيزلينق مع نودلز',
+      proteinType: 'beef',
+    },
+    {
+      categoryId: catId('Meats'),
+      sku: 'sk-0541',
+      nameEn: 'Flod Chilli Beef',
+      nameAr: 'لحم فلود تشيلي',
+      proteinType: 'beef',
+    },
 
     // ── Sandwiches (13) ────────────────────────────────────
     { categoryId: catId('Sandwiches'), sku: 'sk-0358', nameEn: 'Caprese Big', nameAr: 'كابريزي كبير' },
@@ -137,8 +324,18 @@ async function main() {
     { categoryId: catId('Sandwiches'), sku: 'sk-0365', nameEn: 'Egg Sandwich', nameAr: 'ساندوتش بيض' },
     { categoryId: catId('Sandwiches'), sku: 'sk-0366', nameEn: 'Halloumi Sandwich', nameAr: 'ساندوتش حلومي' },
     { categoryId: catId('Sandwiches'), sku: 'sk-0367', nameEn: 'Steak Big', nameAr: 'ستيك كبير' },
-    { categoryId: catId('Sandwiches'), sku: 'sk-0552', nameEn: 'Chicken Strips Sandwich', nameAr: 'ساندوتش ستربس دجاج' },
-    { categoryId: catId('Sandwiches'), sku: 'sk-0553', nameEn: 'Grilled Chicken Sandwich', nameAr: 'ساندوتش دجاج مشوي' },
+    {
+      categoryId: catId('Sandwiches'),
+      sku: 'sk-0552',
+      nameEn: 'Chicken Strips Sandwich',
+      nameAr: 'ساندوتش ستربس دجاج',
+    },
+    {
+      categoryId: catId('Sandwiches'),
+      sku: 'sk-0553',
+      nameEn: 'Grilled Chicken Sandwich',
+      nameAr: 'ساندوتش دجاج مشوي',
+    },
 
     // ── Soups (4) ──────────────────────────────────────────
     { categoryId: catId('Soups'), sku: 'sk-0291', nameEn: 'Harira Soup', nameAr: 'شوربة حريرة' },
@@ -156,7 +353,12 @@ async function main() {
     { categoryId: catId('Juices'), sku: 'sk-0333', nameEn: 'Beetroot Juice 250ml', nameAr: 'عصير شمندر 250 مل' },
     { categoryId: catId('Juices'), sku: 'sk-0334', nameEn: 'Orange Juice 250ml', nameAr: 'عصير برتقال 250 مل' },
     { categoryId: catId('Juices'), sku: 'sk-0335', nameEn: 'Red Apple Juice 250ml', nameAr: 'عصير تفاح أحمر 250 مل' },
-    { categoryId: catId('Juices'), sku: 'sk-0373', nameEn: 'Orange Carrot Juice 250ml', nameAr: 'عصير برتقال جزر 250 مل' },
+    {
+      categoryId: catId('Juices'),
+      sku: 'sk-0373',
+      nameEn: 'Orange Carrot Juice 250ml',
+      nameAr: 'عصير برتقال جزر 250 مل',
+    },
 
     // ── Side Dishes (3) ────────────────────────────────────
     { categoryId: catId('Side Dishes'), sku: 'sk-0340', nameEn: 'Okra', nameAr: 'بامية' },
@@ -227,66 +429,327 @@ async function main() {
     { categoryId: catId('Breakfast'), sku: 'sk-0534', nameEn: 'Roast Beef Crepe', nameAr: 'كريب روست بيف' },
 
     // ── Ramadan (3) ────────────────────────────────────────
-    { categoryId: catId('Ramadan'), sku: 'sk-0321', nameEn: 'Sambosa + Kebba', nameAr: 'سمبوسة + كبة', isActive: false },
+    {
+      categoryId: catId('Ramadan'),
+      sku: 'sk-0321',
+      nameEn: 'Sambosa + Kebba',
+      nameAr: 'سمبوسة + كبة',
+      isActive: false,
+    },
     { categoryId: catId('Ramadan'), sku: 'sk-0389', nameEn: 'Basbosa', nameAr: 'بسبوسة', isActive: false },
-    { categoryId: catId('Ramadan'), sku: 'sk-0450', nameEn: 'Bancota Konafa', nameAr: 'بانكوتا كنافة', isActive: false },
+    {
+      categoryId: catId('Ramadan'),
+      sku: 'sk-0450',
+      nameEn: 'Bancota Konafa',
+      nameAr: 'بانكوتا كنافة',
+      isActive: false,
+    },
 
     // ── Carb 150g (12) — all free ──────────────────────────
-    { categoryId: catId('Carb 150g'), sku: 'sk-0402', nameEn: 'Kabsa Rice 150g', nameAr: 'رز كبسة 150 جم', isFree: true },
-    { categoryId: catId('Carb 150g'), sku: 'sk-0403', nameEn: 'Fried Rice 150g', nameAr: 'رز مقلي 150 جم', isFree: true },
-    { categoryId: catId('Carb 150g'), sku: 'sk-0407', nameEn: 'White Rice 150g', nameAr: 'رز أبيض 150 جم', isFree: true },
-    { categoryId: catId('Carb 150g'), sku: 'sk-0408', nameEn: 'Biryani Rice 150g', nameAr: 'رز برياني 150 جم', isFree: true },
-    { categoryId: catId('Carb 150g'), sku: 'sk-0409', nameEn: 'Sayadia Rice 150g', nameAr: 'رز صيادية 150 جم', isFree: true },
+    {
+      categoryId: catId('Carb 150g'),
+      sku: 'sk-0402',
+      nameEn: 'Kabsa Rice 150g',
+      nameAr: 'رز كبسة 150 جم',
+      isFree: true,
+    },
+    {
+      categoryId: catId('Carb 150g'),
+      sku: 'sk-0403',
+      nameEn: 'Fried Rice 150g',
+      nameAr: 'رز مقلي 150 جم',
+      isFree: true,
+    },
+    {
+      categoryId: catId('Carb 150g'),
+      sku: 'sk-0407',
+      nameEn: 'White Rice 150g',
+      nameAr: 'رز أبيض 150 جم',
+      isFree: true,
+    },
+    {
+      categoryId: catId('Carb 150g'),
+      sku: 'sk-0408',
+      nameEn: 'Biryani Rice 150g',
+      nameAr: 'رز برياني 150 جم',
+      isFree: true,
+    },
+    {
+      categoryId: catId('Carb 150g'),
+      sku: 'sk-0409',
+      nameEn: 'Sayadia Rice 150g',
+      nameAr: 'رز صيادية 150 جم',
+      isFree: true,
+    },
     { categoryId: catId('Carb 150g'), sku: 'sk-0413', nameEn: 'Without Carb', nameAr: 'بدون كارب', isFree: true },
     { categoryId: catId('Carb 150g'), sku: 'sk-0404', nameEn: 'Bourghol 150g', nameAr: 'برغل 150 جم', isFree: true },
-    { categoryId: catId('Carb 150g'), sku: 'sk-0410', nameEn: 'Mash Chors 150g', nameAr: 'هريسة شورس 150 جم', isFree: true },
-    { categoryId: catId('Carb 150g'), sku: 'sk-0411', nameEn: 'Mash Potato 150g', nameAr: 'بطاطس مهروسة 150 جم', isFree: true },
-    { categoryId: catId('Carb 150g'), sku: 'sk-0412', nameEn: 'Sweet Potato 150g', nameAr: 'بطاطس حلوة 150 جم', isFree: true },
-    { categoryId: catId('Carb 150g'), sku: 'sk-0405', nameEn: 'Pink Pasta 150g', nameAr: 'باستا بينك 150 جم', isFree: true },
-    { categoryId: catId('Carb 150g'), sku: 'sk-0406', nameEn: 'Pesto Pasta 150g', nameAr: 'باستا بستو 150 جم', isFree: true },
+    {
+      categoryId: catId('Carb 150g'),
+      sku: 'sk-0410',
+      nameEn: 'Mash Chors 150g',
+      nameAr: 'هريسة شورس 150 جم',
+      isFree: true,
+    },
+    {
+      categoryId: catId('Carb 150g'),
+      sku: 'sk-0411',
+      nameEn: 'Mash Potato 150g',
+      nameAr: 'بطاطس مهروسة 150 جم',
+      isFree: true,
+    },
+    {
+      categoryId: catId('Carb 150g'),
+      sku: 'sk-0412',
+      nameEn: 'Sweet Potato 150g',
+      nameAr: 'بطاطس حلوة 150 جم',
+      isFree: true,
+    },
+    {
+      categoryId: catId('Carb 150g'),
+      sku: 'sk-0405',
+      nameEn: 'Pink Pasta 150g',
+      nameAr: 'باستا بينك 150 جم',
+      isFree: true,
+    },
+    {
+      categoryId: catId('Carb 150g'),
+      sku: 'sk-0406',
+      nameEn: 'Pesto Pasta 150g',
+      nameAr: 'باستا بستو 150 جم',
+      isFree: true,
+    },
 
     // ── Vegetables (3) ─────────────────────────────────────
     { categoryId: catId('Vegetables'), sku: 'sk-0170', nameEn: 'Without Veg', nameAr: 'بدون خضار', isFree: true },
-    { categoryId: catId('Vegetables'), sku: 'sk-0189', nameEn: 'Free Veg 50g', nameAr: 'خضار مجاني 50 جم', isFree: true },
+    {
+      categoryId: catId('Vegetables'),
+      sku: 'sk-0189',
+      nameEn: 'Free Veg 50g',
+      nameAr: 'خضار مجاني 50 جم',
+      isFree: true,
+    },
     { categoryId: catId('Vegetables'), sku: 'sk-0416', nameEn: 'Broccoli', nameAr: 'بروكلي' },
 
     // ── Protein Add-ons 50g (18) ───────────────────────────
-    { categoryId: catId('Protein Add-ons 50g'), sku: 'sk-0526', nameEn: 'S&S Fillet Extra 50g', nameAr: 'فيليه حامض حلو إضافي 50 جم', proteinType: 'almond_fish' },
-    { categoryId: catId('Protein Add-ons 50g'), sku: 'Esk-0182', nameEn: 'Pesto Shrimp Extra 50g', nameAr: 'ربيان بستو إضافي 50 جم', proteinType: 'shrimp' },
-    { categoryId: catId('Protein Add-ons 50g'), sku: 'Esk-0181', nameEn: 'Salmon Lemon Extra 50g', nameAr: 'سلمون ليمون إضافي 50 جم', proteinType: 'salmon' },
-    { categoryId: catId('Protein Add-ons 50g'), sku: 'Esk-0180', nameEn: 'Grilled Salmon Extra 50g', nameAr: 'سلمون مشوي إضافي 50 جم', proteinType: 'salmon' },
-    { categoryId: catId('Protein Add-ons 50g'), sku: 'sk-0463', nameEn: 'Chicken Szechuan Extra 50g', nameAr: 'سيشوان دجاج إضافي 50 جم', proteinType: 'chicken' },
-    { categoryId: catId('Protein Add-ons 50g'), sku: 'Esk-0147', nameEn: 'Flod Chicken Extra 50g', nameAr: 'فلود دجاج إضافي 50 جم', proteinType: 'chicken' },
-    { categoryId: catId('Protein Add-ons 50g'), sku: 'Esk-0148', nameEn: 'S&S Chicken Extra 50g', nameAr: 'دجاج حامض حلو إضافي 50 جم', proteinType: 'chicken' },
-    { categoryId: catId('Protein Add-ons 50g'), sku: 'Esk-0150', nameEn: 'Grilled Chicken Extra 50g', nameAr: 'دجاج مشوي إضافي 50 جم', proteinType: 'chicken' },
-    { categoryId: catId('Protein Add-ons 50g'), sku: 'Esk-0173', nameEn: 'Indian Chicken Extra 50g', nameAr: 'دجاج هندي إضافي 50 جم', proteinType: 'chicken' },
-    { categoryId: catId('Protein Add-ons 50g'), sku: 'Esk-0338', nameEn: 'Ginger Chicken Extra 50g', nameAr: 'دجاج زنجبيل إضافي 50 جم', proteinType: 'chicken' },
-    { categoryId: catId('Protein Add-ons 50g'), sku: 'Esk-0354', nameEn: 'Green Curry Chicken Extra 50g', nameAr: 'كاري أخضر دجاج إضافي 50 جم', proteinType: 'chicken' },
-    { categoryId: catId('Protein Add-ons 50g'), sku: 'Esk-0355', nameEn: 'Red Curry Chicken Extra 50g', nameAr: 'كاري أحمر دجاج إضافي 50 جم', proteinType: 'chicken' },
-    { categoryId: catId('Protein Add-ons 50g'), sku: 'Esk-0386', nameEn: 'Spicy Chicken Extra 50g', nameAr: 'دجاج حار إضافي 50 جم', proteinType: 'chicken' },
-    { categoryId: catId('Protein Add-ons 50g'), sku: 'sk-0543', nameEn: 'Flod Chilli Beef Extra 50g', nameAr: 'لحم تشيلي إضافي 50 جم', proteinType: 'beef' },
-    { categoryId: catId('Protein Add-ons 50g'), sku: 'Esk-0375', nameEn: 'Beef Radish Extra 50g', nameAr: 'لحم فجل إضافي 50 جم', proteinType: 'beef' },
-    { categoryId: catId('Protein Add-ons 50g'), sku: 'Esk-0152', nameEn: 'Flod Steak Extra 50g', nameAr: 'ستيك فلود إضافي 50 جم', proteinType: 'beef' },
-    { categoryId: catId('Protein Add-ons 50g'), sku: 'Esk-0151', nameEn: 'Beef Sizzling Extra 50g', nameAr: 'لحم سيزلينق إضافي 50 جم', proteinType: 'beef' },
-    { categoryId: catId('Protein Add-ons 50g'), sku: 'Esk-0387', nameEn: 'BBQ Chicken Extra 50g', nameAr: 'دجاج باربكيو إضافي 50 جم', proteinType: 'chicken' },
+    {
+      categoryId: catId('Protein Add-ons 50g'),
+      sku: 'sk-0526',
+      nameEn: 'S&S Fillet Extra 50g',
+      nameAr: 'فيليه حامض حلو إضافي 50 جم',
+      proteinType: 'almond_fish',
+    },
+    {
+      categoryId: catId('Protein Add-ons 50g'),
+      sku: 'Esk-0182',
+      nameEn: 'Pesto Shrimp Extra 50g',
+      nameAr: 'ربيان بستو إضافي 50 جم',
+      proteinType: 'shrimp',
+    },
+    {
+      categoryId: catId('Protein Add-ons 50g'),
+      sku: 'Esk-0181',
+      nameEn: 'Salmon Lemon Extra 50g',
+      nameAr: 'سلمون ليمون إضافي 50 جم',
+      proteinType: 'salmon',
+    },
+    {
+      categoryId: catId('Protein Add-ons 50g'),
+      sku: 'Esk-0180',
+      nameEn: 'Grilled Salmon Extra 50g',
+      nameAr: 'سلمون مشوي إضافي 50 جم',
+      proteinType: 'salmon',
+    },
+    {
+      categoryId: catId('Protein Add-ons 50g'),
+      sku: 'sk-0463',
+      nameEn: 'Chicken Szechuan Extra 50g',
+      nameAr: 'سيشوان دجاج إضافي 50 جم',
+      proteinType: 'chicken',
+    },
+    {
+      categoryId: catId('Protein Add-ons 50g'),
+      sku: 'Esk-0147',
+      nameEn: 'Flod Chicken Extra 50g',
+      nameAr: 'فلود دجاج إضافي 50 جم',
+      proteinType: 'chicken',
+    },
+    {
+      categoryId: catId('Protein Add-ons 50g'),
+      sku: 'Esk-0148',
+      nameEn: 'S&S Chicken Extra 50g',
+      nameAr: 'دجاج حامض حلو إضافي 50 جم',
+      proteinType: 'chicken',
+    },
+    {
+      categoryId: catId('Protein Add-ons 50g'),
+      sku: 'Esk-0150',
+      nameEn: 'Grilled Chicken Extra 50g',
+      nameAr: 'دجاج مشوي إضافي 50 جم',
+      proteinType: 'chicken',
+    },
+    {
+      categoryId: catId('Protein Add-ons 50g'),
+      sku: 'Esk-0173',
+      nameEn: 'Indian Chicken Extra 50g',
+      nameAr: 'دجاج هندي إضافي 50 جم',
+      proteinType: 'chicken',
+    },
+    {
+      categoryId: catId('Protein Add-ons 50g'),
+      sku: 'Esk-0338',
+      nameEn: 'Ginger Chicken Extra 50g',
+      nameAr: 'دجاج زنجبيل إضافي 50 جم',
+      proteinType: 'chicken',
+    },
+    {
+      categoryId: catId('Protein Add-ons 50g'),
+      sku: 'Esk-0354',
+      nameEn: 'Green Curry Chicken Extra 50g',
+      nameAr: 'كاري أخضر دجاج إضافي 50 جم',
+      proteinType: 'chicken',
+    },
+    {
+      categoryId: catId('Protein Add-ons 50g'),
+      sku: 'Esk-0355',
+      nameEn: 'Red Curry Chicken Extra 50g',
+      nameAr: 'كاري أحمر دجاج إضافي 50 جم',
+      proteinType: 'chicken',
+    },
+    {
+      categoryId: catId('Protein Add-ons 50g'),
+      sku: 'Esk-0386',
+      nameEn: 'Spicy Chicken Extra 50g',
+      nameAr: 'دجاج حار إضافي 50 جم',
+      proteinType: 'chicken',
+    },
+    {
+      categoryId: catId('Protein Add-ons 50g'),
+      sku: 'sk-0543',
+      nameEn: 'Flod Chilli Beef Extra 50g',
+      nameAr: 'لحم تشيلي إضافي 50 جم',
+      proteinType: 'beef',
+    },
+    {
+      categoryId: catId('Protein Add-ons 50g'),
+      sku: 'Esk-0375',
+      nameEn: 'Beef Radish Extra 50g',
+      nameAr: 'لحم فجل إضافي 50 جم',
+      proteinType: 'beef',
+    },
+    {
+      categoryId: catId('Protein Add-ons 50g'),
+      sku: 'Esk-0152',
+      nameEn: 'Flod Steak Extra 50g',
+      nameAr: 'ستيك فلود إضافي 50 جم',
+      proteinType: 'beef',
+    },
+    {
+      categoryId: catId('Protein Add-ons 50g'),
+      sku: 'Esk-0151',
+      nameEn: 'Beef Sizzling Extra 50g',
+      nameAr: 'لحم سيزلينق إضافي 50 جم',
+      proteinType: 'beef',
+    },
+    {
+      categoryId: catId('Protein Add-ons 50g'),
+      sku: 'Esk-0387',
+      nameEn: 'BBQ Chicken Extra 50g',
+      nameAr: 'دجاج باربكيو إضافي 50 جم',
+      proteinType: 'chicken',
+    },
 
     // ── Carb Add-ons 50g (11) ──────────────────────────────
-    { categoryId: catId('Carb Add-ons 50g'), sku: 'Esk-0407', nameEn: 'White Rice Extra 50g', nameAr: 'رز أبيض إضافي 50 جم' },
-    { categoryId: catId('Carb Add-ons 50g'), sku: 'Esk-0408', nameEn: 'Biryani Rice Extra 50g', nameAr: 'رز برياني إضافي 50 جم' },
-    { categoryId: catId('Carb Add-ons 50g'), sku: 'Esk-0409', nameEn: 'Sayadia Rice Extra 50g', nameAr: 'رز صيادية إضافي 50 جم' },
-    { categoryId: catId('Carb Add-ons 50g'), sku: 'Esk-0402', nameEn: 'Kabsa Rice Extra 50g', nameAr: 'رز كبسة إضافي 50 جم' },
-    { categoryId: catId('Carb Add-ons 50g'), sku: 'Esk-0403', nameEn: 'Fried Rice Extra 50g', nameAr: 'رز مقلي إضافي 50 جم' },
-    { categoryId: catId('Carb Add-ons 50g'), sku: 'Esk-0404', nameEn: 'Bourghol Extra 50g', nameAr: 'برغل إضافي 50 جم' },
-    { categoryId: catId('Carb Add-ons 50g'), sku: 'Esk-0411', nameEn: 'Mash Potato Extra 50g', nameAr: 'بطاطس مهروسة إضافي 50 جم' },
-    { categoryId: catId('Carb Add-ons 50g'), sku: 'Esk-0411h', nameEn: 'Hollandes Potato Extra 50g', nameAr: 'بطاطس هولنديز إضافي 50 جم' },
-    { categoryId: catId('Carb Add-ons 50g'), sku: 'Esk-0405', nameEn: 'Pink Pasta Extra 50g', nameAr: 'باستا بينك إضافي 50 جم' },
-    { categoryId: catId('Carb Add-ons 50g'), sku: 'Esk-0406', nameEn: 'Pesto Pasta Extra 50g', nameAr: 'باستا بستو إضافي 50 جم' },
-    { categoryId: catId('Carb Add-ons 50g'), sku: 'Esk-0410', nameEn: 'Mash Chors Extra 50g', nameAr: 'هريسة شورس إضافي 50 جم' },
+    {
+      categoryId: catId('Carb Add-ons 50g'),
+      sku: 'Esk-0407',
+      nameEn: 'White Rice Extra 50g',
+      nameAr: 'رز أبيض إضافي 50 جم',
+    },
+    {
+      categoryId: catId('Carb Add-ons 50g'),
+      sku: 'Esk-0408',
+      nameEn: 'Biryani Rice Extra 50g',
+      nameAr: 'رز برياني إضافي 50 جم',
+    },
+    {
+      categoryId: catId('Carb Add-ons 50g'),
+      sku: 'Esk-0409',
+      nameEn: 'Sayadia Rice Extra 50g',
+      nameAr: 'رز صيادية إضافي 50 جم',
+    },
+    {
+      categoryId: catId('Carb Add-ons 50g'),
+      sku: 'Esk-0402',
+      nameEn: 'Kabsa Rice Extra 50g',
+      nameAr: 'رز كبسة إضافي 50 جم',
+    },
+    {
+      categoryId: catId('Carb Add-ons 50g'),
+      sku: 'Esk-0403',
+      nameEn: 'Fried Rice Extra 50g',
+      nameAr: 'رز مقلي إضافي 50 جم',
+    },
+    {
+      categoryId: catId('Carb Add-ons 50g'),
+      sku: 'Esk-0404',
+      nameEn: 'Bourghol Extra 50g',
+      nameAr: 'برغل إضافي 50 جم',
+    },
+    {
+      categoryId: catId('Carb Add-ons 50g'),
+      sku: 'Esk-0411',
+      nameEn: 'Mash Potato Extra 50g',
+      nameAr: 'بطاطس مهروسة إضافي 50 جم',
+    },
+    {
+      categoryId: catId('Carb Add-ons 50g'),
+      sku: 'Esk-0411h',
+      nameEn: 'Hollandes Potato Extra 50g',
+      nameAr: 'بطاطس هولنديز إضافي 50 جم',
+    },
+    {
+      categoryId: catId('Carb Add-ons 50g'),
+      sku: 'Esk-0405',
+      nameEn: 'Pink Pasta Extra 50g',
+      nameAr: 'باستا بينك إضافي 50 جم',
+    },
+    {
+      categoryId: catId('Carb Add-ons 50g'),
+      sku: 'Esk-0406',
+      nameEn: 'Pesto Pasta Extra 50g',
+      nameAr: 'باستا بستو إضافي 50 جم',
+    },
+    {
+      categoryId: catId('Carb Add-ons 50g'),
+      sku: 'Esk-0410',
+      nameEn: 'Mash Chors Extra 50g',
+      nameAr: 'هريسة شورس إضافي 50 جم',
+    },
 
     // ── Discontinued items (3) — from menu file cross-reference
-    { categoryId: catId('Chicken'), sku: 'sk-disc-truffle', nameEn: 'Truffle Chicken', nameAr: 'دجاج ترافل', proteinType: 'chicken', isActive: false },
-    { categoryId: catId('Seafood'), sku: 'sk-disc-almond-fish', nameEn: 'Almond Fish', nameAr: 'سمك لوز', proteinType: 'almond_fish', isActive: false },
-    { categoryId: catId('Side Dishes'), sku: 'sk-disc-warq-enab', nameEn: 'Warq Enab', nameAr: 'ورق عنب', isActive: false },
+    {
+      categoryId: catId('Chicken'),
+      sku: 'sk-disc-truffle',
+      nameEn: 'Truffle Chicken',
+      nameAr: 'دجاج ترافل',
+      proteinType: 'chicken',
+      isActive: false,
+    },
+    {
+      categoryId: catId('Seafood'),
+      sku: 'sk-disc-almond-fish',
+      nameEn: 'Almond Fish',
+      nameAr: 'سمك لوز',
+      proteinType: 'almond_fish',
+      isActive: false,
+    },
+    {
+      categoryId: catId('Side Dishes'),
+      sku: 'sk-disc-warq-enab',
+      nameEn: 'Warq Enab',
+      nameAr: 'ورق عنب',
+      isActive: false,
+    },
   ];
   await db.insert(products).values(productRows).onConflictDoNothing();
   console.log(`Seeded ${productRows.length} products`);
@@ -359,7 +822,7 @@ async function main() {
       ['sk-0151', 36, 35, 32.4, 31.5, 41],
       ['sk-0152', 36, 35, 32.4, 31.5, 41],
       ['sk-0375', 36, 35, 32.4, 31.5, 41],
-      ['sk-0377', 36, 36, null, null, 41],      // No express
+      ['sk-0377', 36, 36, null, null, 41], // No express
       ['sk-0532', 42, 42, 38.4, 37.8, 45],
       ['sk-0541', 38, 35, 34.2, 31.5, 43],
     ]),
@@ -434,15 +897,15 @@ async function main() {
     ]),
     // ── Beverages (9) — most have no sub price ──────
     ...priceRows([
-      ['sk-0001', 5, null, 4.5, null, 6],       // Pepsi Diet — use max express price
-      ['sk-0002', 5, null, 4.5, null, 6],       // 7 Up Diet
-      ['sk-0157', 7, 7, 7, null, 9],            // Protein Milk Nada
-      ['sk-0199', 5, null, 4.5, null, 6],       // Cola Light
-      ['sk-0332', 3, null, 3, null, 5],          // Laban
-      ['sk-0353', 7, 7, 7, null, 9],            // Protein Yogurt Nada
-      ['sk-0397', 1, 1, 1, null, 2],            // Water 330ml
-      ['sk-0528', 4, null, 4, null, 6],          // Kinza Lemon
-      ['sk-0529', 4, null, 4, null, 6],          // Kinza Diet Kola
+      ['sk-0001', 5, null, 4.5, null, 6], // Pepsi Diet — use max express price
+      ['sk-0002', 5, null, 4.5, null, 6], // 7 Up Diet
+      ['sk-0157', 7, 7, 7, null, 9], // Protein Milk Nada
+      ['sk-0199', 5, null, 4.5, null, 6], // Cola Light
+      ['sk-0332', 3, null, 3, null, 5], // Laban
+      ['sk-0353', 7, 7, 7, null, 9], // Protein Yogurt Nada
+      ['sk-0397', 1, 1, 1, null, 2], // Water 330ml
+      ['sk-0528', 4, null, 4, null, 6], // Kinza Lemon
+      ['sk-0529', 4, null, 4, null, 6], // Kinza Diet Kola
     ]),
     // ── Breakfast (26) — base + app only ────────────
     ...priceRows([
@@ -467,8 +930,8 @@ async function main() {
       ['sk-0446', 10, null, null, null, 13],
       ['sk-0441', 11, null, null, null, 14],
       ['sk-0441b', 16, null, null, null, 19],
-      ['sk-0442', 32, null, 28.8, null, 35],    // Has express
-      ['sk-0443', 29, null, 26.1, null, 32],    // Has express
+      ['sk-0442', 32, null, 28.8, null, 35], // Has express
+      ['sk-0443', 29, null, 26.1, null, 32], // Has express
       ['sk-0447', 25, null, null, null, 28],
       ['sk-0448', 21, null, null, null, 24],
       ['sk-0534', 29, null, null, null, 32],
@@ -480,9 +943,7 @@ async function main() {
       ['sk-0450', 13, 12, null, null, 16],
     ]),
     // ── Vegetables — only Broccoli has a price ──────
-    ...priceRows([
-      ['sk-0416', 4, 4, 4, 4, 4],
-    ]),
+    ...priceRows([['sk-0416', 4, 4, 4, 4, 4]]),
     // ── Protein Add-ons 50g ─────────────────────────
     ...priceRows([
       ['sk-0526', 12, 12, 10.8, 10.8, 14],
@@ -528,7 +989,8 @@ async function main() {
   ];
 
   // Check if prices already exist (idempotency — unique constraint doesn't handle NULL branchId)
-  const existingPriceCount = await sql`SELECT count(*)::int AS total FROM product_prices WHERE effective_from = ${SEED_EFFECTIVE_DATE}`;
+  const existingPriceCount =
+    await sql`SELECT count(*)::int AS total FROM product_prices WHERE effective_from = ${SEED_EFFECTIVE_DATE}`;
   if ((existingPriceCount[0]!['total'] as number) === 0) {
     // Insert in batches of 100 to avoid hitting Postgres parameter limit
     for (let i = 0; i < allPriceRows.length; i += 100) {
@@ -543,41 +1005,287 @@ async function main() {
   type PkgRow = typeof packages.$inferInsert;
   const pkgRows: PkgRow[] = [
     // 1-Meal Mixed × 3 durations
-    { category: 'mixed', nameEn: '1 Meal Mixed', nameAr: '١ وجبة متنوع', mealsPerDay: 1, durationDays: 12, totalMeals: 12, priceInclVat: '370.00', sortOrder: 1 },
-    { category: 'mixed', nameEn: '1 Meal Mixed', nameAr: '١ وجبة متنوع', mealsPerDay: 1, durationDays: 18, totalMeals: 18, priceInclVat: '552.00', sortOrder: 2 },
-    { category: 'mixed', nameEn: '1 Meal Mixed', nameAr: '١ وجبة متنوع', mealsPerDay: 1, durationDays: 24, totalMeals: 24, priceInclVat: '740.00', sortOrder: 3 },
+    {
+      category: 'mixed',
+      nameEn: '1 Meal Mixed',
+      nameAr: '١ وجبة متنوع',
+      mealsPerDay: 1,
+      durationDays: 12,
+      totalMeals: 12,
+      priceInclVat: '370.00',
+      sortOrder: 1,
+    },
+    {
+      category: 'mixed',
+      nameEn: '1 Meal Mixed',
+      nameAr: '١ وجبة متنوع',
+      mealsPerDay: 1,
+      durationDays: 18,
+      totalMeals: 18,
+      priceInclVat: '552.00',
+      sortOrder: 2,
+    },
+    {
+      category: 'mixed',
+      nameEn: '1 Meal Mixed',
+      nameAr: '١ وجبة متنوع',
+      mealsPerDay: 1,
+      durationDays: 24,
+      totalMeals: 24,
+      priceInclVat: '740.00',
+      sortOrder: 3,
+    },
     // 1-Meal Chicken × 3
-    { category: 'chicken', nameEn: '1 Meal Chicken', nameAr: '١ وجبة دجاج', mealsPerDay: 1, durationDays: 12, totalMeals: 12, priceInclVat: '288.00', sortOrder: 4 },
-    { category: 'chicken', nameEn: '1 Meal Chicken', nameAr: '١ وجبة دجاج', mealsPerDay: 1, durationDays: 18, totalMeals: 18, priceInclVat: '432.00', sortOrder: 5 },
-    { category: 'chicken', nameEn: '1 Meal Chicken', nameAr: '١ وجبة دجاج', mealsPerDay: 1, durationDays: 24, totalMeals: 24, priceInclVat: '576.00', sortOrder: 6 },
+    {
+      category: 'chicken',
+      nameEn: '1 Meal Chicken',
+      nameAr: '١ وجبة دجاج',
+      mealsPerDay: 1,
+      durationDays: 12,
+      totalMeals: 12,
+      priceInclVat: '288.00',
+      sortOrder: 4,
+    },
+    {
+      category: 'chicken',
+      nameEn: '1 Meal Chicken',
+      nameAr: '١ وجبة دجاج',
+      mealsPerDay: 1,
+      durationDays: 18,
+      totalMeals: 18,
+      priceInclVat: '432.00',
+      sortOrder: 5,
+    },
+    {
+      category: 'chicken',
+      nameEn: '1 Meal Chicken',
+      nameAr: '١ وجبة دجاج',
+      mealsPerDay: 1,
+      durationDays: 24,
+      totalMeals: 24,
+      priceInclVat: '576.00',
+      sortOrder: 6,
+    },
     // 2-Meal Mixed × 3
-    { category: 'mixed', nameEn: '2 Meal Mixed', nameAr: '٢ وجبة متنوع', mealsPerDay: 2, durationDays: 12, totalMeals: 24, priceInclVat: '720.00', sortOrder: 7 },
-    { category: 'mixed', nameEn: '2 Meal Mixed', nameAr: '٢ وجبة متنوع', mealsPerDay: 2, durationDays: 18, totalMeals: 36, priceInclVat: '1079.00', sortOrder: 8 },
-    { category: 'mixed', nameEn: '2 Meal Mixed', nameAr: '٢ وجبة متنوع', mealsPerDay: 2, durationDays: 24, totalMeals: 48, priceInclVat: '1440.00', sortOrder: 9 },
+    {
+      category: 'mixed',
+      nameEn: '2 Meal Mixed',
+      nameAr: '٢ وجبة متنوع',
+      mealsPerDay: 2,
+      durationDays: 12,
+      totalMeals: 24,
+      priceInclVat: '720.00',
+      sortOrder: 7,
+    },
+    {
+      category: 'mixed',
+      nameEn: '2 Meal Mixed',
+      nameAr: '٢ وجبة متنوع',
+      mealsPerDay: 2,
+      durationDays: 18,
+      totalMeals: 36,
+      priceInclVat: '1079.00',
+      sortOrder: 8,
+    },
+    {
+      category: 'mixed',
+      nameEn: '2 Meal Mixed',
+      nameAr: '٢ وجبة متنوع',
+      mealsPerDay: 2,
+      durationDays: 24,
+      totalMeals: 48,
+      priceInclVat: '1440.00',
+      sortOrder: 9,
+    },
     // 2-Meal Chicken × 3
-    { category: 'chicken', nameEn: '2 Meal Chicken', nameAr: '٢ وجبة دجاج', mealsPerDay: 2, durationDays: 12, totalMeals: 24, priceInclVat: '576.00', sortOrder: 10 },
-    { category: 'chicken', nameEn: '2 Meal Chicken', nameAr: '٢ وجبة دجاج', mealsPerDay: 2, durationDays: 18, totalMeals: 36, priceInclVat: '864.00', sortOrder: 11 },
-    { category: 'chicken', nameEn: '2 Meal Chicken', nameAr: '٢ وجبة دجاج', mealsPerDay: 2, durationDays: 24, totalMeals: 48, priceInclVat: '1152.00', sortOrder: 12 },
+    {
+      category: 'chicken',
+      nameEn: '2 Meal Chicken',
+      nameAr: '٢ وجبة دجاج',
+      mealsPerDay: 2,
+      durationDays: 12,
+      totalMeals: 24,
+      priceInclVat: '576.00',
+      sortOrder: 10,
+    },
+    {
+      category: 'chicken',
+      nameEn: '2 Meal Chicken',
+      nameAr: '٢ وجبة دجاج',
+      mealsPerDay: 2,
+      durationDays: 18,
+      totalMeals: 36,
+      priceInclVat: '864.00',
+      sortOrder: 11,
+    },
+    {
+      category: 'chicken',
+      nameEn: '2 Meal Chicken',
+      nameAr: '٢ وجبة دجاج',
+      mealsPerDay: 2,
+      durationDays: 24,
+      totalMeals: 48,
+      priceInclVat: '1152.00',
+      sortOrder: 12,
+    },
     // 3-Meal Mixed × 3
-    { category: 'mixed', nameEn: '3 Meal Mixed', nameAr: '٣ وجبة متنوع', mealsPerDay: 3, durationDays: 12, totalMeals: 36, priceInclVat: '1063.00', sortOrder: 13 },
-    { category: 'mixed', nameEn: '3 Meal Mixed', nameAr: '٣ وجبة متنوع', mealsPerDay: 3, durationDays: 18, totalMeals: 54, priceInclVat: '1601.00', sortOrder: 14 },
-    { category: 'mixed', nameEn: '3 Meal Mixed', nameAr: '٣ وجبة متنوع', mealsPerDay: 3, durationDays: 24, totalMeals: 72, priceInclVat: '2126.00', sortOrder: 15 },
+    {
+      category: 'mixed',
+      nameEn: '3 Meal Mixed',
+      nameAr: '٣ وجبة متنوع',
+      mealsPerDay: 3,
+      durationDays: 12,
+      totalMeals: 36,
+      priceInclVat: '1063.00',
+      sortOrder: 13,
+    },
+    {
+      category: 'mixed',
+      nameEn: '3 Meal Mixed',
+      nameAr: '٣ وجبة متنوع',
+      mealsPerDay: 3,
+      durationDays: 18,
+      totalMeals: 54,
+      priceInclVat: '1601.00',
+      sortOrder: 14,
+    },
+    {
+      category: 'mixed',
+      nameEn: '3 Meal Mixed',
+      nameAr: '٣ وجبة متنوع',
+      mealsPerDay: 3,
+      durationDays: 24,
+      totalMeals: 72,
+      priceInclVat: '2126.00',
+      sortOrder: 15,
+    },
     // 3-Meal Chicken × 3
-    { category: 'chicken', nameEn: '3 Meal Chicken', nameAr: '٣ وجبة دجاج', mealsPerDay: 3, durationDays: 12, totalMeals: 36, priceInclVat: '864.00', sortOrder: 16 },
-    { category: 'chicken', nameEn: '3 Meal Chicken', nameAr: '٣ وجبة دجاج', mealsPerDay: 3, durationDays: 18, totalMeals: 54, priceInclVat: '1296.00', sortOrder: 17 },
-    { category: 'chicken', nameEn: '3 Meal Chicken', nameAr: '٣ وجبة دجاج', mealsPerDay: 3, durationDays: 24, totalMeals: 72, priceInclVat: '1728.00', sortOrder: 18 },
+    {
+      category: 'chicken',
+      nameEn: '3 Meal Chicken',
+      nameAr: '٣ وجبة دجاج',
+      mealsPerDay: 3,
+      durationDays: 12,
+      totalMeals: 36,
+      priceInclVat: '864.00',
+      sortOrder: 16,
+    },
+    {
+      category: 'chicken',
+      nameEn: '3 Meal Chicken',
+      nameAr: '٣ وجبة دجاج',
+      mealsPerDay: 3,
+      durationDays: 18,
+      totalMeals: 54,
+      priceInclVat: '1296.00',
+      sortOrder: 17,
+    },
+    {
+      category: 'chicken',
+      nameEn: '3 Meal Chicken',
+      nameAr: '٣ وجبة دجاج',
+      mealsPerDay: 3,
+      durationDays: 24,
+      totalMeals: 72,
+      priceInclVat: '1728.00',
+      sortOrder: 18,
+    },
     // Snack × 3
-    { category: 'snack', nameEn: 'Snack Mixed', nameAr: 'سناك متنوع', mealsPerDay: 1, durationDays: 12, totalMeals: 12, priceInclVat: '158.00', sortOrder: 19 },
-    { category: 'snack', nameEn: 'Snack Mixed', nameAr: 'سناك متنوع', mealsPerDay: 1, durationDays: 18, totalMeals: 18, priceInclVat: '224.00', sortOrder: 20 },
-    { category: 'snack', nameEn: 'Snack Mixed', nameAr: 'سناك متنوع', mealsPerDay: 1, durationDays: 24, totalMeals: 24, priceInclVat: '316.00', sortOrder: 21 },
+    {
+      category: 'snack',
+      nameEn: 'Snack Mixed',
+      nameAr: 'سناك متنوع',
+      mealsPerDay: 1,
+      durationDays: 12,
+      totalMeals: 12,
+      priceInclVat: '158.00',
+      sortOrder: 19,
+    },
+    {
+      category: 'snack',
+      nameEn: 'Snack Mixed',
+      nameAr: 'سناك متنوع',
+      mealsPerDay: 1,
+      durationDays: 18,
+      totalMeals: 18,
+      priceInclVat: '224.00',
+      sortOrder: 20,
+    },
+    {
+      category: 'snack',
+      nameEn: 'Snack Mixed',
+      nameAr: 'سناك متنوع',
+      mealsPerDay: 1,
+      durationDays: 24,
+      totalMeals: 24,
+      priceInclVat: '316.00',
+      sortOrder: 21,
+    },
     // Sandwich × 3
-    { category: 'sandwich', nameEn: 'Sandwich Mixed', nameAr: 'ساندوتش متنوع', mealsPerDay: 1, durationDays: 12, totalMeals: 12, priceInclVat: '240.00', sortOrder: 22 },
-    { category: 'sandwich', nameEn: 'Sandwich Mixed', nameAr: 'ساندوتش متنوع', mealsPerDay: 1, durationDays: 18, totalMeals: 18, priceInclVat: '362.00', sortOrder: 23 },
-    { category: 'sandwich', nameEn: 'Sandwich Mixed', nameAr: 'ساندوتش متنوع', mealsPerDay: 1, durationDays: 24, totalMeals: 24, priceInclVat: '480.00', sortOrder: 24 },
+    {
+      category: 'sandwich',
+      nameEn: 'Sandwich Mixed',
+      nameAr: 'ساندوتش متنوع',
+      mealsPerDay: 1,
+      durationDays: 12,
+      totalMeals: 12,
+      priceInclVat: '240.00',
+      sortOrder: 22,
+    },
+    {
+      category: 'sandwich',
+      nameEn: 'Sandwich Mixed',
+      nameAr: 'ساندوتش متنوع',
+      mealsPerDay: 1,
+      durationDays: 18,
+      totalMeals: 18,
+      priceInclVat: '362.00',
+      sortOrder: 23,
+    },
+    {
+      category: 'sandwich',
+      nameEn: 'Sandwich Mixed',
+      nameAr: 'ساندوتش متنوع',
+      mealsPerDay: 1,
+      durationDays: 24,
+      totalMeals: 24,
+      priceInclVat: '480.00',
+      sortOrder: 24,
+    },
     // Customer Choice × 3 (placeholder pricing — BL-059 needs manual pricing)
-    { category: 'customer_choice', nameEn: 'Customer Choice', nameAr: 'اختيار العميل', mealsPerDay: 1, durationDays: 12, totalMeals: 12, priceInclVat: '0.00', sortOrder: 25, isActive: false },
-    { category: 'customer_choice', nameEn: 'Customer Choice', nameAr: 'اختيار العميل', mealsPerDay: 1, durationDays: 18, totalMeals: 18, priceInclVat: '0.00', sortOrder: 26, isActive: false },
-    { category: 'customer_choice', nameEn: 'Customer Choice', nameAr: 'اختيار العميل', mealsPerDay: 1, durationDays: 24, totalMeals: 24, priceInclVat: '0.00', sortOrder: 27, isActive: false },
+    {
+      category: 'customer_choice',
+      nameEn: 'Customer Choice',
+      nameAr: 'اختيار العميل',
+      mealsPerDay: 1,
+      durationDays: 12,
+      totalMeals: 12,
+      priceInclVat: '0.00',
+      sortOrder: 25,
+      isActive: false,
+    },
+    {
+      category: 'customer_choice',
+      nameEn: 'Customer Choice',
+      nameAr: 'اختيار العميل',
+      mealsPerDay: 1,
+      durationDays: 18,
+      totalMeals: 18,
+      priceInclVat: '0.00',
+      sortOrder: 26,
+      isActive: false,
+    },
+    {
+      category: 'customer_choice',
+      nameEn: 'Customer Choice',
+      nameAr: 'اختيار العميل',
+      mealsPerDay: 1,
+      durationDays: 24,
+      totalMeals: 24,
+      priceInclVat: '0.00',
+      sortOrder: 27,
+      isActive: false,
+    },
   ];
   await db.insert(packages).values(pkgRows).onConflictDoNothing();
 
@@ -587,9 +1295,7 @@ async function main() {
   const pkgs = await sql`SELECT id, category, meals_per_day, duration_days FROM packages`;
 
   function findPkg(cat: string, meals: number, dur: number): string {
-    const row = pkgs.find(
-      (p) => p['category'] === cat && p['meals_per_day'] === meals && p['duration_days'] === dur
-    );
+    const row = pkgs.find((p) => p['category'] === cat && p['meals_per_day'] === meals && p['duration_days'] === dur);
     if (!row) throw new Error(`Package not found: ${cat}/${meals}/${dur}`);
     return row['id'] as string;
   }
@@ -680,7 +1386,12 @@ async function main() {
 
   const discountRows: Array<typeof discountRules.$inferInsert> = [];
   if (!existingTypes.has('first_plan')) {
-    discountRows.push({ type: 'first_plan' as const, discountPercent: '10.00', appliesTo: ['main_meals'], isActive: true });
+    discountRows.push({
+      type: 'first_plan' as const,
+      discountPercent: '10.00',
+      appliesTo: ['main_meals'],
+      isActive: true,
+    });
   }
   if (!existingTypes.has('renewal')) {
     discountRows.push({ type: 'renewal' as const, discountPercent: '5.00', appliesTo: ['main_meals'], isActive: true });
@@ -695,56 +1406,145 @@ async function main() {
   // Snack rotation (12-day cycle) — from handover Section 4
   // Maps product English names to SKUs for rotation items
   const snackSchedule: Array<{ day: number; sku: string; price: string; swapSkus: string[] }> = [
-    { day: 1, sku: 'sk-0293', price: '9.00', swapSkus: ['sk-0319', 'sk-0295'] },                                          // Green Salad → Muffin, Fruit Salad
-    { day: 2, sku: 'sk-0381', price: '15.00', swapSkus: ['sk-0297', 'sk-0294', 'sk-0319', 'sk-0295', 'sk-0370', 'sk-0317', 'sk-0523'] }, // Eclair → Beetroot, Oatmeal, Muffin, Fruit Salad, Masoub, Cheesecake, Creme Brulee
-    { day: 3, sku: 'sk-0297', price: '12.00', swapSkus: ['sk-0293', 'sk-0319', 'sk-0295'] },                              // Beetroot Salad → Green, Muffin, Fruit Salad
-    { day: 4, sku: 'sk-0294', price: '12.00', swapSkus: ['sk-0293', 'sk-0319', 'sk-0295', 'sk-0297'] },                   // Oat Red Berry → Green, Muffin, Fruit, Beetroot
-    { day: 5, sku: 'sk-0319', price: '9.00', swapSkus: ['sk-0293', 'sk-0295'] },                                          // Muffin Cake → Green, Fruit Salad
-    { day: 6, sku: 'sk-0295', price: '9.00', swapSkus: ['sk-0293', 'sk-0319'] },                                          // Fruit Salad → Green, Muffin
-    { day: 7, sku: 'sk-0550', price: '17.00', swapSkus: ['sk-0297', 'sk-0294', 'sk-0319', 'sk-0295', 'sk-0370', 'sk-0317', 'sk-0523', 'sk-0551'] }, // Choco Chips → Beetroot, Oatmeal, Muffin, Fruit, Masoub, Cheesecake, Creme Brulee, Granola
-    { day: 8, sku: 'sk-0370', price: '14.00', swapSkus: ['sk-0319', 'sk-0295', 'sk-0297', 'sk-0294', 'sk-0317', 'sk-0523'] }, // Masoub → Muffin, Fruit, Beetroot, Oatmeal, Cheesecake, Creme Brulee
-    { day: 9, sku: 'sk-0460', price: '18.00', swapSkus: ['sk-0293', 'sk-0295', 'sk-0297', 'sk-0294', 'sk-0319', 'sk-0370', 'sk-0317', 'sk-0523', 'sk-0550', 'sk-0551', 'sk-0381'] }, // Coco Strawberry → ALL
-    { day: 10, sku: 'sk-0317', price: '13.00', swapSkus: ['sk-0293', 'sk-0297', 'sk-0294', 'sk-0319', 'sk-0295', 'sk-0523'] }, // Cheesecake → Green, Beetroot, Oatmeal, Muffin, Fruit, Creme Brulee
-    { day: 11, sku: 'sk-0551', price: '17.00', swapSkus: ['sk-0297', 'sk-0294', 'sk-0319', 'sk-0295', 'sk-0370', 'sk-0317', 'sk-0523'] }, // Home Granola → Beetroot, Oatmeal, Muffin, Fruit, Masoub, Cheesecake, Creme Brulee
-    { day: 12, sku: 'sk-0523', price: '13.00', swapSkus: ['sk-0293', 'sk-0297', 'sk-0294', 'sk-0319', 'sk-0295', 'sk-0317'] }, // Creme Brulee → Green, Beetroot, Oatmeal, Muffin, Fruit, Cheesecake
+    { day: 1, sku: 'sk-0293', price: '9.00', swapSkus: ['sk-0319', 'sk-0295'] }, // Green Salad → Muffin, Fruit Salad
+    {
+      day: 2,
+      sku: 'sk-0381',
+      price: '15.00',
+      swapSkus: ['sk-0297', 'sk-0294', 'sk-0319', 'sk-0295', 'sk-0370', 'sk-0317', 'sk-0523'],
+    }, // Eclair → Beetroot, Oatmeal, Muffin, Fruit Salad, Masoub, Cheesecake, Creme Brulee
+    { day: 3, sku: 'sk-0297', price: '12.00', swapSkus: ['sk-0293', 'sk-0319', 'sk-0295'] }, // Beetroot Salad → Green, Muffin, Fruit Salad
+    { day: 4, sku: 'sk-0294', price: '12.00', swapSkus: ['sk-0293', 'sk-0319', 'sk-0295', 'sk-0297'] }, // Oat Red Berry → Green, Muffin, Fruit, Beetroot
+    { day: 5, sku: 'sk-0319', price: '9.00', swapSkus: ['sk-0293', 'sk-0295'] }, // Muffin Cake → Green, Fruit Salad
+    { day: 6, sku: 'sk-0295', price: '9.00', swapSkus: ['sk-0293', 'sk-0319'] }, // Fruit Salad → Green, Muffin
+    {
+      day: 7,
+      sku: 'sk-0550',
+      price: '17.00',
+      swapSkus: ['sk-0297', 'sk-0294', 'sk-0319', 'sk-0295', 'sk-0370', 'sk-0317', 'sk-0523', 'sk-0551'],
+    }, // Choco Chips → Beetroot, Oatmeal, Muffin, Fruit, Masoub, Cheesecake, Creme Brulee, Granola
+    {
+      day: 8,
+      sku: 'sk-0370',
+      price: '14.00',
+      swapSkus: ['sk-0319', 'sk-0295', 'sk-0297', 'sk-0294', 'sk-0317', 'sk-0523'],
+    }, // Masoub → Muffin, Fruit, Beetroot, Oatmeal, Cheesecake, Creme Brulee
+    {
+      day: 9,
+      sku: 'sk-0460',
+      price: '18.00',
+      swapSkus: [
+        'sk-0293',
+        'sk-0295',
+        'sk-0297',
+        'sk-0294',
+        'sk-0319',
+        'sk-0370',
+        'sk-0317',
+        'sk-0523',
+        'sk-0550',
+        'sk-0551',
+        'sk-0381',
+      ],
+    }, // Coco Strawberry → ALL
+    {
+      day: 10,
+      sku: 'sk-0317',
+      price: '13.00',
+      swapSkus: ['sk-0293', 'sk-0297', 'sk-0294', 'sk-0319', 'sk-0295', 'sk-0523'],
+    }, // Cheesecake → Green, Beetroot, Oatmeal, Muffin, Fruit, Creme Brulee
+    {
+      day: 11,
+      sku: 'sk-0551',
+      price: '17.00',
+      swapSkus: ['sk-0297', 'sk-0294', 'sk-0319', 'sk-0295', 'sk-0370', 'sk-0317', 'sk-0523'],
+    }, // Home Granola → Beetroot, Oatmeal, Muffin, Fruit, Masoub, Cheesecake, Creme Brulee
+    {
+      day: 12,
+      sku: 'sk-0523',
+      price: '13.00',
+      swapSkus: ['sk-0293', 'sk-0297', 'sk-0294', 'sk-0319', 'sk-0295', 'sk-0317'],
+    }, // Creme Brulee → Green, Beetroot, Oatmeal, Muffin, Fruit, Cheesecake
   ];
 
   // Sandwich rotation (12-day cycle) — from handover Section 4
   const sandwichSchedule: Array<{ day: number; sku: string; price: string; swapSkus: string[] }> = [
-    { day: 1, sku: 'sk-0362', price: '16.00', swapSkus: ['sk-0365', 'sk-0361'] },        // Club Small → Egg, Tuna Small
-    { day: 2, sku: 'sk-0367', price: '29.00', swapSkus: ['sk-0358', 'sk-0357', 'sk-0356', 'sk-0359', 'sk-0360', 'sk-0361', 'sk-0362', 'sk-0364', 'sk-0365', 'sk-0366', 'sk-0552', 'sk-0553'] }, // Steak Big → ALL
+    { day: 1, sku: 'sk-0362', price: '16.00', swapSkus: ['sk-0365', 'sk-0361'] }, // Club Small → Egg, Tuna Small
+    {
+      day: 2,
+      sku: 'sk-0367',
+      price: '29.00',
+      swapSkus: [
+        'sk-0358',
+        'sk-0357',
+        'sk-0356',
+        'sk-0359',
+        'sk-0360',
+        'sk-0361',
+        'sk-0362',
+        'sk-0364',
+        'sk-0365',
+        'sk-0366',
+        'sk-0552',
+        'sk-0553',
+      ],
+    }, // Steak Big → ALL
     { day: 3, sku: 'sk-0366', price: '17.00', swapSkus: ['sk-0365', 'sk-0362', 'sk-0361'] }, // Halloumi → Egg, Club Small, Tuna Small
     { day: 4, sku: 'sk-0359', price: '27.00', swapSkus: ['sk-0360', 'sk-0366', 'sk-0362', 'sk-0361', 'sk-0365'] }, // Chicken Pesto Big → Salmon Big, Halloumi, Club Small, Tuna Small, Egg
     { day: 5, sku: 'sk-0364', price: '20.00', swapSkus: ['sk-0362', 'sk-0361', 'sk-0365', 'sk-0366'] }, // Salmon Small → Club Small, Tuna Small, Egg, Halloumi
-    { day: 6, sku: 'sk-0365', price: '13.00', swapSkus: [] },                              // Egg → none (cheapest, locked)
+    { day: 6, sku: 'sk-0365', price: '13.00', swapSkus: [] }, // Egg → none (cheapest, locked)
     { day: 7, sku: 'sk-0366', price: '17.00', swapSkus: ['sk-0365', 'sk-0362', 'sk-0361'] }, // Halloumi → Egg, Club Small, Tuna Small
-    { day: 8, sku: 'sk-0361', price: '16.00', swapSkus: ['sk-0362', 'sk-0365'] },          // Tuna Small → Club Small, Egg
-    { day: 9, sku: 'sk-0362', price: '16.00', swapSkus: ['sk-0365', 'sk-0361'] },          // Club Small → Egg, Tuna Small
+    { day: 8, sku: 'sk-0361', price: '16.00', swapSkus: ['sk-0362', 'sk-0365'] }, // Tuna Small → Club Small, Egg
+    { day: 9, sku: 'sk-0362', price: '16.00', swapSkus: ['sk-0365', 'sk-0361'] }, // Club Small → Egg, Tuna Small
     { day: 10, sku: 'sk-0359', price: '27.00', swapSkus: ['sk-0360', 'sk-0366', 'sk-0362', 'sk-0361', 'sk-0365'] }, // Chicken Pesto Big → Salmon Big, Halloumi, Club Small, Tuna Small, Egg
-    { day: 11, sku: 'sk-0358', price: '29.00', swapSkus: ['sk-0358', 'sk-0357', 'sk-0356', 'sk-0359', 'sk-0360', 'sk-0361', 'sk-0362', 'sk-0364', 'sk-0365', 'sk-0366', 'sk-0552', 'sk-0553'] }, // Caprese Big → ALL
-    { day: 12, sku: 'sk-0365', price: '13.00', swapSkus: [] },                             // Egg → none (locked)
+    {
+      day: 11,
+      sku: 'sk-0358',
+      price: '29.00',
+      swapSkus: [
+        'sk-0358',
+        'sk-0357',
+        'sk-0356',
+        'sk-0359',
+        'sk-0360',
+        'sk-0361',
+        'sk-0362',
+        'sk-0364',
+        'sk-0365',
+        'sk-0366',
+        'sk-0552',
+        'sk-0553',
+      ],
+    }, // Caprese Big → ALL
+    { day: 12, sku: 'sk-0365', price: '13.00', swapSkus: [] }, // Egg → none (locked)
   ];
 
   // Insert snack rotation
   for (const entry of snackSchedule) {
     const pid = prodId(entry.sku);
-    await db.insert(rotationSchedules).values({
-      type: 'snack' as const,
-      dayNumber: entry.day,
-      productId: pid,
-      priceInclVat: entry.price,
-    }).onConflictDoNothing();
+    await db
+      .insert(rotationSchedules)
+      .values({
+        type: 'snack' as const,
+        dayNumber: entry.day,
+        productId: pid,
+        priceInclVat: entry.price,
+      })
+      .onConflictDoNothing();
   }
 
   // Insert sandwich rotation
   for (const entry of sandwichSchedule) {
     const pid = prodId(entry.sku);
-    await db.insert(rotationSchedules).values({
-      type: 'sandwich' as const,
-      dayNumber: entry.day,
-      productId: pid,
-      priceInclVat: entry.price,
-    }).onConflictDoNothing();
+    await db
+      .insert(rotationSchedules)
+      .values({
+        type: 'sandwich' as const,
+        dayNumber: entry.day,
+        productId: pid,
+        priceInclVat: entry.price,
+      })
+      .onConflictDoNothing();
   }
 
   // Look up rotation schedule IDs and insert swap options
@@ -759,20 +1559,26 @@ async function main() {
   for (const entry of snackSchedule) {
     const sid = schedId('snack', entry.day);
     for (const swapSku of entry.swapSkus) {
-      await db.insert(rotationSwapOptions).values({
-        scheduleId: sid,
-        swapProductId: prodId(swapSku),
-      }).onConflictDoNothing();
+      await db
+        .insert(rotationSwapOptions)
+        .values({
+          scheduleId: sid,
+          swapProductId: prodId(swapSku),
+        })
+        .onConflictDoNothing();
       swapCount++;
     }
   }
   for (const entry of sandwichSchedule) {
     const sid = schedId('sandwich', entry.day);
     for (const swapSku of entry.swapSkus) {
-      await db.insert(rotationSwapOptions).values({
-        scheduleId: sid,
-        swapProductId: prodId(swapSku),
-      }).onConflictDoNothing();
+      await db
+        .insert(rotationSwapOptions)
+        .values({
+          scheduleId: sid,
+          swapProductId: prodId(swapSku),
+        })
+        .onConflictDoNothing();
       swapCount++;
     }
   }

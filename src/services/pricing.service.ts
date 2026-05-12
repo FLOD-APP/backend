@@ -1,12 +1,7 @@
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { eq, and, sql, inArray } from 'drizzle-orm';
 import type * as schemaTypes from '../db/schema.js';
-import {
-  packages,
-  subscriptions,
-  discountRules,
-  systemSettings,
-} from '../db/schema.js';
+import { packages, subscriptions, discountRules, systemSettings } from '../db/schema.js';
 import { AppError } from '../utils/errors.js';
 import { calculatePricing } from '../utils/vat.js';
 
@@ -45,12 +40,7 @@ export class PricingService {
     const pastSubs = await this.db
       .select({ id: subscriptions.id })
       .from(subscriptions)
-      .where(
-        and(
-          eq(subscriptions.userId, userId),
-          inArray(subscriptions.status, ['active', 'expired', 'cancelled'])
-        )
-      );
+      .where(and(eq(subscriptions.userId, userId), inArray(subscriptions.status, ['active', 'expired', 'cancelled'])));
 
     // 3. Read discount rates from system_settings (R9.AC6)
     if (pastSubs.length === 0) {
@@ -75,11 +65,7 @@ export class PricingService {
   }
 
   /** R9.AC2: Calculate full pricing for a package + user + optional promo */
-  async calculateFullPricing(
-    packageId: string,
-    userId: string,
-    promoCode?: string
-  ): Promise<FullPricingBreakdown> {
+  async calculateFullPricing(packageId: string, userId: string, promoCode?: string): Promise<FullPricingBreakdown> {
     // Get package price
     const pkgRows = await this.db
       .select({
