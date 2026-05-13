@@ -12,7 +12,6 @@ concurrency:
 
 jobs:
   quality:
-    name: Quality Gates
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -48,7 +47,6 @@ jobs:
           retention-days: 14
 
   integration:
-    name: Integration Tests
     runs-on: ubuntu-latest
     services:
       postgres:
