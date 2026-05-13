@@ -171,7 +171,7 @@ docker compose exec db psql -U flod -d flod_dev -c "SELECT count(*) FROM product
 
 ## Schema Overview
 
-**17 tables, 8 enums.** All primary keys are `uuid` with `defaultRandom()`. All timestamps use `WITH TIME ZONE`.
+**17 tables, 8 enums.** All primary keys are `uuid` with `defaultRandom()`. All timestamps use `WITH TIME ZONE`. The `users` table includes onboarding profile fields (added May 2026).
 
 ### Entity Relationship Summary
 
@@ -371,6 +371,19 @@ system_settings (standalone key-value store)
 | `name` | text | | |
 | `email` | text | | |
 | `language_preference` | text | NOT NULL, default 'ar' | ar or en |
+| `gender` | text | | male or female |
+| `date_of_birth` | date | | ISO format YYYY-MM-DD |
+| `goal` | text | | eat_healthy, lose_weight, gain_weight, build_muscle, maintain_weight |
+| `activity_level` | text | | sedentary, lightly_active, moderately_active, very_active, extra_active |
+| `height_cm` | numeric(5,1) | | User height in centimetres |
+| `weight_kg` | numeric(5,1) | | User weight in kilograms |
+| `target_weight_kg` | numeric(5,1) | | Goal weight (optional, for lose/gain goals) |
+| `allergies` | text[] | | Array: gluten, dairy, nuts, eggs, soy, fish, shellfish, sesame, peanuts |
+| `daily_calories` | integer | | Mifflin-St Jeor TDEE + goal adjustment (calculated client-side) |
+| `protein_grams` | numeric(5,1) | | Daily protein target in grams |
+| `carbs_grams` | numeric(5,1) | | Daily carbs target in grams |
+| `fat_grams` | numeric(5,1) | | Daily fat target in grams |
+| `onboarding_complete` | boolean | NOT NULL, default false | Set true after onboarding submission |
 | `created_at` | timestamptz | NOT NULL, default now | |
 | `updated_at` | timestamptz | NOT NULL, default now | |
 
