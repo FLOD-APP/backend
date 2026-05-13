@@ -92,6 +92,32 @@ describe('POST /api/v1/auth/otp/request', () => {
     expect(res.status).toBe(400);
     expect(res.body.code).toBe('VALIDATION_ERROR');
   });
+
+  it('should return devOtp in development mode', async () => {
+    const originalNodeEnv = process.env['NODE_ENV'];
+    process.env['NODE_ENV'] = 'development';
+
+    const res = await request(app).post('/api/v1/auth/otp/request').send({ phone: TEST_PHONE });
+
+    expect(res.status).toBe(200);
+    expect(res.body.sent).toBe(true);
+    expect(res.body.devOtp).toMatch(/^\d{6}$/);
+
+    process.env['NODE_ENV'] = originalNodeEnv;
+  });
+
+  it('should NOT return devOtp in production mode', async () => {
+    const originalNodeEnv = process.env['NODE_ENV'];
+    process.env['NODE_ENV'] = 'production';
+
+    const res = await request(app).post('/api/v1/auth/otp/request').send({ phone: TEST_PHONE });
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ sent: true });
+    expect(res.body).not.toHaveProperty('devOtp');
+
+    process.env['NODE_ENV'] = originalNodeEnv;
+  });
 });
 
 // ─── R5.AC3 / R5.AC7: OTP Verify ─────────────────────────────────
