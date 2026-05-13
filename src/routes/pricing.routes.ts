@@ -3,7 +3,7 @@ import type { Request, Response, NextFunction } from 'express';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import type * as schemaTypes from '../db/schema.js';
 import { PricingService } from '../services/pricing.service.js';
-import { requireAuth } from '../middleware/auth.middleware.js';
+import { devAuthBypass } from '../middleware/devAuth.middleware.js';
 import { validate } from '../middleware/validate.middleware.js';
 import { calculatePricingSchema, validatePromoSchema } from '../validators/pricing.validators.js';
 
@@ -16,7 +16,7 @@ export function createPricingRouter(db: Db): Router {
   // POST /api/v1/pricing/calculate — R9.AC2
   router.post(
     '/calculate',
-    requireAuth,
+    devAuthBypass,
     validate(calculatePricingSchema),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
@@ -33,7 +33,7 @@ export function createPricingRouter(db: Db): Router {
   // POST /api/v1/pricing/validate-promo — R9.AC7
   router.post(
     '/validate-promo',
-    requireAuth,
+    devAuthBypass,
     validate(validatePromoSchema),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
