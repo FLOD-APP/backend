@@ -33,25 +33,30 @@ export function createApp(deps: AppDeps) {
   // Health check (no /api/v1 prefix — must be accessible without auth)
   app.use(healthRoutes(deps.checkDb, deps.version));
 
-  // API v1 routes
+  // API v1 routes — mounted at both /api/v1 (legacy) and /v1 (FE canonical)
   if (deps.db) {
-    app.use('/api/v1/auth', createAuthRouter(deps.db));
-    app.use('/api/v1/branches', createBranchRouter(deps.db));
+    const mountRoutes = (prefix: string) => {
+      app.use(`${prefix}/auth`, createAuthRouter(deps.db!));
+      app.use(`${prefix}/branches`, createBranchRouter(deps.db!));
 
-    const { productRouter, categoryRouter } = createProductRouter(deps.db);
-    app.use('/api/v1/products', productRouter);
-    app.use('/api/v1/categories', categoryRouter);
-    app.use('/api/v1/packages', createPackageRouter(deps.db));
-    app.use('/api/v1/rotations', createRotationRouter(deps.db));
-    app.use('/api/v1/settings', createSettingsRouter(deps.db));
-    app.use('/api/v1/users', createUserRouter(deps.db));
-    app.use('/api/v1/pricing', createPricingRouter(deps.db));
-    app.use('/api/v1/subscriptions', createSubscriptionRouter(deps.db));
+      const { productRouter, categoryRouter } = createProductRouter(deps.db!);
+      app.use(`${prefix}/products`, productRouter);
+      app.use(`${prefix}/categories`, categoryRouter);
+      app.use(`${prefix}/packages`, createPackageRouter(deps.db!));
+      app.use(`${prefix}/rotations`, createRotationRouter(deps.db!));
+      app.use(`${prefix}/settings`, createSettingsRouter(deps.db!));
+      app.use(`${prefix}/users`, createUserRouter(deps.db!));
+      app.use(`${prefix}/pricing`, createPricingRouter(deps.db!));
+      app.use(`${prefix}/subscriptions`, createSubscriptionRouter(deps.db!));
 
-    const { subscriptionCheckInRouter, branchQueueRouter, checkInRouter } = createCheckInRouters(deps.db);
-    app.use('/api/v1/subscriptions/:id/check-in', subscriptionCheckInRouter);
-    app.use('/api/v1/branches/:id/queue', branchQueueRouter);
-    app.use('/api/v1/check-ins', checkInRouter);
+      const { subscriptionCheckInRouter, branchQueueRouter, checkInRouter } = createCheckInRouters(deps.db!);
+      app.use(`${prefix}/subscriptions/:id/check-in`, subscriptionCheckInRouter);
+      app.use(`${prefix}/branches/:id/queue`, branchQueueRouter);
+      app.use(`${prefix}/check-ins`, checkInRouter);
+    };
+
+    mountRoutes('/api/v1');
+    mountRoutes('/v1');
   }
 
   // Error handler (must be last)

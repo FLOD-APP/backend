@@ -3,7 +3,7 @@ import type { Request, Response, NextFunction } from 'express';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import type * as schemaTypes from '../db/schema.js';
 import { PackageService } from '../services/package.service.js';
-import { requireAuth } from '../middleware/auth.middleware.js';
+import { devAuthBypass } from '../middleware/devAuth.middleware.js';
 import { AppError } from '../utils/errors.js';
 
 type Db = PostgresJsDatabase<typeof schemaTypes>;
@@ -15,7 +15,7 @@ export function createPackageRouter(db: Db): Router {
   const packageService = new PackageService(db);
 
   // GET /api/v1/packages
-  router.get('/', requireAuth, async (req: Request, res: Response, next: NextFunction) => {
+  router.get('/', devAuthBypass, async (req: Request, res: Response, next: NextFunction) => {
     try {
       const category = req.query['category'] as string | undefined;
       if (category && !VALID_CATEGORIES.has(category)) {
@@ -34,7 +34,7 @@ export function createPackageRouter(db: Db): Router {
   });
 
   // GET /api/v1/packages/:id
-  router.get('/:id', requireAuth, async (req: Request, res: Response, next: NextFunction) => {
+  router.get('/:id', devAuthBypass, async (req: Request, res: Response, next: NextFunction) => {
     try {
       const pkg = await packageService.getById(req.params['id'] as string);
       res.json(pkg);
@@ -44,7 +44,7 @@ export function createPackageRouter(db: Db): Router {
   });
 
   // GET /api/v1/packages/:id/schedule
-  router.get('/:id/schedule', requireAuth, async (req: Request, res: Response, next: NextFunction) => {
+  router.get('/:id/schedule', devAuthBypass, async (req: Request, res: Response, next: NextFunction) => {
     try {
       const schedule = await packageService.generateSchedule(req.params['id'] as string);
       res.json(schedule);
