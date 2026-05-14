@@ -15,6 +15,20 @@
       "when": 1778597378619,
       "tag": "0001_good_nocturne",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1778684582738,
+      "tag": "0002_confused_skullbuster",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1778752398849,
+      "tag": "0003_breezy_psylocke",
+      "breakpoints": true
     }
   ]
 }

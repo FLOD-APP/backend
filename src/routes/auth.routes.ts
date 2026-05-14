@@ -22,10 +22,11 @@ export function createAuthRouter(db: Db): Router {
       try {
         const result = await authService.requestOtp(req.body.phone);
 
-        // V0: Log OTP to console (no SMS)
+        // V0: Log OTP to console (no SMS gateway yet)
         console.log(`[OTP] ${req.body.phone}: ${result.otp}`);
 
-        res.json({ sent: result.sent });
+        const isDev = process.env['NODE_ENV'] === 'development';
+        res.json({ sent: result.sent, ...(isDev && { devOtp: result.otp }) });
       } catch (err) {
         next(err);
       }

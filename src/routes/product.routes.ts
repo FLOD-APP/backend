@@ -3,7 +3,7 @@ import type { Request, Response, NextFunction } from 'express';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import type * as schemaTypes from '../db/schema.js';
 import { ProductService } from '../services/product.service.js';
-import { requireAuth } from '../middleware/auth.middleware.js';
+import { devAuthBypass } from '../middleware/devAuth.middleware.js';
 import { AppError } from '../utils/errors.js';
 
 type Db = PostgresJsDatabase<typeof schemaTypes>;
@@ -16,7 +16,7 @@ export function createProductRouter(db: Db): { productRouter: Router; categoryRo
   const productService = new ProductService(db);
 
   // GET /api/v1/categories
-  categoryRouter.get('/', requireAuth, async (_req: Request, res: Response, next: NextFunction) => {
+  categoryRouter.get('/', devAuthBypass, async (_req: Request, res: Response, next: NextFunction) => {
     try {
       const categories = await productService.listCategories();
       res.json(categories);
@@ -26,7 +26,7 @@ export function createProductRouter(db: Db): { productRouter: Router; categoryRo
   });
 
   // GET /api/v1/products
-  productRouter.get('/', requireAuth, async (req: Request, res: Response, next: NextFunction) => {
+  productRouter.get('/', devAuthBypass, async (req: Request, res: Response, next: NextFunction) => {
     try {
       const tier = req.query['tier'] as string | undefined;
       if (!tier || !VALID_TIERS.has(tier)) {
@@ -53,7 +53,7 @@ export function createProductRouter(db: Db): { productRouter: Router; categoryRo
   });
 
   // GET /api/v1/products/:id
-  productRouter.get('/:id', requireAuth, async (req: Request, res: Response, next: NextFunction) => {
+  productRouter.get('/:id', devAuthBypass, async (req: Request, res: Response, next: NextFunction) => {
     try {
       const product = await productService.getById(req.params['id'] as string);
       res.json(product);
