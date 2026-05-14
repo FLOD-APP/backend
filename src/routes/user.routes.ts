@@ -4,6 +4,8 @@ import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import type * as schemaTypes from '../db/schema.js';
 import { UserService } from '../services/user.service.js';
 import { requireAuth } from '../middleware/auth.middleware.js';
+import { validate } from '../middleware/validate.middleware.js';
+import { onboardingSchema } from '../validators/user.validators.js';
 
 type Db = PostgresJsDatabase<typeof schemaTypes>;
 
@@ -40,6 +42,36 @@ export function createUserRouter(db: Db): Router {
       next(err);
     }
   });
+
+  // POST /api/v1/users/me/onboarding — R2.AC1: first-time onboarding submission
+  router.post(
+    '/me/onboarding',
+    requireAuth,
+    validate(onboardingSchema),
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const profile = await userService.saveOnboarding(req.user!.userId, req.body);
+        res.json(profile);
+      } catch (err) {
+        next(err);
+      }
+    },
+  );
+
+  // PUT /api/v1/users/me/onboarding — R4.AC1: update onboarding data
+  router.put(
+    '/me/onboarding',
+    requireAuth,
+    validate(onboardingSchema),
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const profile = await userService.saveOnboarding(req.user!.userId, req.body);
+        res.json(profile);
+      } catch (err) {
+        next(err);
+      }
+    },
+  );
 
   return router;
 }
