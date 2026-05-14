@@ -1,0 +1,648 @@
+{
+  "info": {
+    "_postman_id": "flod-foodics-collection-001",
+    "name": "FLOD × Foodics API v5",
+    "description": "Comprehensive Postman collection for FLOD's Foodics POS API v5 integration.\n\nCovers all endpoints needed for:\n- Branch mapping\n- Product/category discovery\n- Customer management\n- House Account operations\n- Order creation and validation\n- Tax verification\n- Webhook subscriptions\n\n**Rate limit:** 30 requests/minute per token per IP.\n**Auth:** Bearer token via OAuth 2.0.\n\nMaintained by FLOD dev team. See flod_backend/DOCS/ for integration docs.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{access_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [],
+  "item": [
+    {
+      "name": "Settings",
+      "description": "Verify Foodics account configuration — especially tax_inclusive_pricing.",
+      "item": [
+        {
+          "name": "GET Settings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/settings",
+              "host": ["{{base_url}}"],
+              "path": ["settings"]
+            },
+            "description": "Verify tax_inclusive_pricing=true and currency=SAR. This must match FLOD's VAT-inclusive model."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Currency is SAR', () => {",
+                  "  const data = pm.response.json();",
+                  "  pm.expect(data.currency || data.data?.currency).to.eql('SAR');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Branches",
+      "description": "Map Foodics branch UUIDs to FLOD's B01–B18 references.",
+      "item": [
+        {
+          "name": "GET Branches (list all)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/branches?include=",
+              "host": ["{{base_url}}"],
+              "path": ["branches"],
+              "query": [
+                {
+                  "key": "include",
+                  "value": "",
+                  "description": "Optional: sections, users, devices"
+                }
+              ]
+            },
+            "description": "List all branches. Match 'name' field to FLOD branch names (Al Rabie, Almalqa, etc.) to populate branches.foodics_branch_id."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has data array', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.data).to.be.an('array');",
+                  "});",
+                  "// Auto-set first branch_id",
+                  "const data = pm.response.json().data;",
+                  "if (data && data.length > 0) {",
+                  "  pm.environment.set('branch_id', data[0].id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET Branch by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/branches/{{branch_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["branches", "{{branch_id}}"]
+            },
+            "description": "Get a single branch by UUID."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has id field', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.data.id).to.be.a('string');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "description": "Map Foodics product UUIDs to FLOD products by name/SKU.",
+      "item": [
+        {
+          "name": "GET Products (list all)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products?include=category&filter[is_active]=1",
+              "host": ["{{base_url}}"],
+              "path": ["products"],
+              "query": [
+                {
+                  "key": "include",
+                  "value": "category",
+                  "description": "Include category data"
+                },
+                {
+                  "key": "filter[is_active]",
+                  "value": "1",
+                  "description": "Only active products"
+                }
+              ]
+            },
+            "description": "List all active products. Match to FLOD products by name to populate products.foodics_product_id."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has product data', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.data).to.be.an('array');",
+                  "});",
+                  "const data = pm.response.json().data;",
+                  "if (data && data.length > 0) {",
+                  "  pm.environment.set('product_id', data[0].id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET Product by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products/{{product_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["products", "{{product_id}}"]
+            },
+            "description": "Get a single product by UUID."
+          }
+        },
+        {
+          "name": "GET Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/categories",
+              "host": ["{{base_url}}"],
+              "path": ["categories"]
+            },
+            "description": "List all product categories."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Modifiers",
+      "description": "Discover modifier options for carb, sauce, and vegetable choices.",
+      "item": [
+        {
+          "name": "GET Modifier Options",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/modifier_options?include=modifier",
+              "host": ["{{base_url}}"],
+              "path": ["modifier_options"],
+              "query": [
+                {
+                  "key": "include",
+                  "value": "modifier",
+                  "description": "Include parent modifier group"
+                }
+              ]
+            },
+            "description": "List all modifier options. Map carb/sauce/vegetable options (SAR 0) to FLOD meal customizations."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const data = pm.response.json().data;",
+                  "if (data && data.length > 0) {",
+                  "  pm.environment.set('modifier_option_id', data[0].id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET Modifiers (groups)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/modifiers",
+              "host": ["{{base_url}}"],
+              "path": ["modifiers"]
+            },
+            "description": "List all modifier groups (e.g. 'Choose Carb', 'Choose Sauce')."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Customers",
+      "description": "Map FLOD users to Foodics customers for House Account integration.",
+      "item": [
+        {
+          "name": "GET Customers (list)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/customers?filter[phone]={{customer_phone}}",
+              "host": ["{{base_url}}"],
+              "path": ["customers"],
+              "query": [
+                {
+                  "key": "filter[phone]",
+                  "value": "{{customer_phone}}",
+                  "description": "Filter by phone number"
+                }
+              ]
+            },
+            "description": "Search for existing customers by phone. Use to check if FLOD user already exists in Foodics."
+          }
+        },
+        {
+          "name": "GET Customer by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/customers/{{customer_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["customers", "{{customer_id}}"]
+            },
+            "description": "Get customer details including house_account_balance."
+          }
+        },
+        {
+          "name": "POST Create Customer",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"FLOD Test Subscriber\",\n  \"phone\": \"500000000\",\n  \"dial_code\": \"+966\",\n  \"email\": \"test@flod-sa.com\",\n  \"gender\": 1,\n  \"notes\": \"FLOD app subscriber — auto-created\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/customers",
+              "host": ["{{base_url}}"],
+              "path": ["customers"]
+            },
+            "description": "Create a new Foodics customer for a FLOD subscriber. Store returned id as users.foodics_customer_id."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 or 201', () => {",
+                  "  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "const data = pm.response.json().data;",
+                  "if (data && data.id) {",
+                  "  pm.environment.set('customer_id', data.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "House Accounts",
+      "description": "Credit/debit customer house accounts for subscription wallet sync.",
+      "item": [
+        {
+          "name": "GET House Accounts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/house_accounts",
+              "host": ["{{base_url}}"],
+              "path": ["house_accounts"]
+            },
+            "description": "List all house accounts. Each customer has one."
+          }
+        },
+        {
+          "name": "POST House Account Transaction (credit)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": \"{{customer_id}}\",\n  \"amount\": \"1440.00000\",\n  \"type\": 1,\n  \"notes\": \"FLOD subscription credit — Mixed 3-meal 24-day package\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/house_account_transactions",
+              "host": ["{{base_url}}"],
+              "path": ["house_account_transactions"]
+            },
+            "description": "Credit a customer's house account when a FLOD subscription is created.\n\ntype: 1 = credit, 2 = debit\namount: VAT-inclusive total paid for subscription"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 or 201', () => {",
+                  "  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST House Account Transaction (debit)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": \"{{customer_id}}\",\n  \"amount\": \"24.00000\",\n  \"type\": 2,\n  \"notes\": \"FLOD meal deduction — Chicken meal day 1\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/house_account_transactions",
+              "host": ["{{base_url}}"],
+              "path": ["house_account_transactions"]
+            },
+            "description": "Debit a customer's house account when a meal is collected.\n\ntype: 2 = debit\namount: VAT-inclusive meal price (e.g. SAR 24 for chicken)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "description": "Core order creation — syncs FLOD meal collections to Foodics POS.",
+      "item": [
+        {
+          "name": "POST Orders Calculator (pre-validate)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"branch_id\": \"{{branch_id}}\",\n  \"products\": [\n    {\n      \"product_id\": \"{{product_id}}\",\n      \"quantity\": 1\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/orders_calculator",
+              "host": ["{{base_url}}"],
+              "path": ["orders_calculator"]
+            },
+            "description": "Pre-validate an order without creating it. Returns calculated totals including tax.\n\nUse this to verify price alignment between FLOD and Foodics before going live."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has total_price', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.total_price || body.data?.total_price).to.exist;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST Create Order (chicken meal)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"branch_id\": \"{{branch_id}}\",\n  \"type\": 3,\n  \"customer_id\": \"{{customer_id}}\",\n  \"products\": [\n    {\n      \"product_id\": \"{{product_id}}\",\n      \"quantity\": 1,\n      \"unit_price\": \"24.00000\"\n    }\n  ],\n  \"payments\": [\n    {\n      \"payment_method_id\": \"{{payment_method_id}}\",\n      \"amount\": \"24.00000\"\n    }\n  ],\n  \"reference\": \"FLOD-test-meal-001\",\n  \"notes\": \"FLOD subscription meal collection\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/orders",
+              "host": ["{{base_url}}"],
+              "path": ["orders"]
+            },
+            "description": "Create a Foodics order when a FLOD subscriber collects a meal.\n\ntype: 3 = pickup\npayment: House Account (type 7)\nreference: FLOD meal ID for traceability\n\nThis is the PRIMARY integration point."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 or 201', () => {",
+                  "  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "const data = pm.response.json().data;",
+                  "if (data && data.id) {",
+                  "  pm.environment.set('order_id', data.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET Order by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/orders/{{order_id}}?include=products,payments",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "{{order_id}}"],
+              "query": [
+                {
+                  "key": "include",
+                  "value": "products,payments",
+                  "description": "Include order lines and payments"
+                }
+              ]
+            },
+            "description": "Verify an order was created correctly. Check status, totals, and tax breakdown."
+          }
+        },
+        {
+          "name": "GET Orders (list by branch/date)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/orders?filter[branch_id]={{branch_id}}&filter[business_date]=2026-05-14&include=products,payments",
+              "host": ["{{base_url}}"],
+              "path": ["orders"],
+              "query": [
+                {
+                  "key": "filter[branch_id]",
+                  "value": "{{branch_id}}",
+                  "description": "Filter by branch"
+                },
+                {
+                  "key": "filter[business_date]",
+                  "value": "2026-05-14",
+                  "description": "Filter by business date"
+                },
+                {
+                  "key": "include",
+                  "value": "products,payments"
+                }
+              ]
+            },
+            "description": "List orders for a branch on a specific date. Use for reconciliation (FLOD daily collections vs Foodics orders)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Payment Methods",
+      "description": "Discover House Account payment method ID (type 7).",
+      "item": [
+        {
+          "name": "GET Payment Methods",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/payment_methods",
+              "host": ["{{base_url}}"],
+              "path": ["payment_methods"]
+            },
+            "description": "List all payment methods. Find the one with type=7 (House Account) and store its ID as FOODICS_PAYMENT_METHOD_ID."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const data = pm.response.json().data;",
+                  "if (data) {",
+                  "  const houseAccount = data.find(pm => pm.type === 7);",
+                  "  if (houseAccount) {",
+                  "    pm.environment.set('payment_method_id', houseAccount.id);",
+                  "    console.log('House Account payment method ID:', houseAccount.id);",
+                  "  }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Taxes",
+      "description": "Verify 15% VAT configuration.",
+      "item": [
+        {
+          "name": "GET Taxes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/taxes",
+              "host": ["{{base_url}}"],
+              "path": ["taxes"]
+            },
+            "description": "Verify the 15% VAT tax is configured with is_inclusive=true."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const data = pm.response.json().data;",
+                  "if (data) {",
+                  "  const vat = data.find(t => parseFloat(t.rate) === 15);",
+                  "  if (vat) {",
+                  "    pm.environment.set('tax_id', vat.id);",
+                  "    console.log('VAT tax ID:', vat.id, 'inclusive:', vat.is_inclusive);",
+                  "  }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Webhooks",
+      "description": "Subscribe to order status change events.",
+      "item": [
+        {
+          "name": "POST Create Webhook Subscription",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"url\": \"https://api.flod-sa.com/v1/webhooks/foodics\",\n  \"event\": \"order.created\",\n  \"is_active\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/webhook_subscriptions",
+              "host": ["{{base_url}}"],
+              "path": ["webhook_subscriptions"]
+            },
+            "description": "Subscribe to Foodics webhooks for order events. Events: order.created, order.updated, order.closed"
+          }
+        }
+      ]
+    }
+  ]
+}
