@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const goalEnum = z.enum(['eat_healthy', 'lose_weight', 'gain_weight', 'build_muscle', 'maintain_weight']);
+export const goalEnum = z.enum(['eat_healthy', 'lose_weight', 'gain_weight', 'build_muscle', 'maintain_weight']);
 const genderEnum = z.enum(['male', 'female']);
 const activityLevelEnum = z.enum(['sedentary', 'lightly_active', 'moderately_active', 'very_active', 'extra_active']);
 const allergyEnum = z.enum(['gluten', 'dairy', 'nuts', 'eggs', 'soy', 'fish', 'shellfish', 'sesame', 'peanuts']);
@@ -23,3 +23,7 @@ export const onboardingSchema = z.object({
 });
 
 export type OnboardingInput = z.infer<typeof onboardingSchema>;
+
+export const whyMatrixQuerySchema = z.object({
+  goal: goalEnum,
+});

@@ -1,3 +1,5 @@
+/// <reference types="jest" />
+
 import { onboardingSchema } from '../../src/validators/user.validators.js';
 
 describe('onboardingSchema', () => {

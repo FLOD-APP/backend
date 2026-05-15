@@ -1,3 +1,5 @@
+/// <reference types="jest" />
+
 import { buildFoodicsOrder, validateFoodicsMappings } from '../../../src/services/foodics/foodics-order.builder.js';
 import type { FlodMealCollectionInput } from '../../../src/services/foodics/foodics.types.js';
 

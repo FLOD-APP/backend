@@ -12,6 +12,7 @@ import {
   rotationSwapOptions,
   discountRules,
   systemSettings,
+  goalWhyMatrix,
 } from './schema.js';
 
 async function main() {
@@ -1583,6 +1584,20 @@ async function main() {
     }
   }
   console.log(`Seeded 24 rotation schedules, ${swapCount} swap options`);
+
+  // ── Goal→Why Matrix ──────────────────────────────────
+  console.log('Seeding goal_why_matrix...');
+  await db
+    .insert(goalWhyMatrix)
+    .values([
+      { goal: 'eat_healthy', topReasons: ['eat_healthier', 'track_calories'], lockedReasons: [] },
+      { goal: 'lose_weight', topReasons: ['lose_weight', 'track_calories'], lockedReasons: [] },
+      { goal: 'build_muscle', topReasons: ['build_muscle', 'eat_healthier'], lockedReasons: [] },
+      { goal: 'maintain_weight', topReasons: ['track_calories', 'eat_healthier'], lockedReasons: [] },
+      { goal: 'gain_weight', topReasons: ['track_calories', 'build_muscle'], lockedReasons: ['lose_weight'] },
+    ])
+    .onConflictDoNothing();
+  console.log('Seeded 5 goal→why matrix rows');
 
   console.log('Seed complete.');
   await sql.end();

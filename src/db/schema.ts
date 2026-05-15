@@ -373,6 +373,18 @@ export const checkIns = pgTable('check_ins', {
 });
 
 // ============================================
+// ONBOARDING: GOAL→WHY MATRIX
+// ============================================
+
+export const goalWhyMatrix = pgTable('goal_why_matrix', {
+  goal: text('goal').primaryKey(),
+  topReasons: jsonb('top_reasons').notNull().default([]),
+  lockedReasons: jsonb('locked_reasons').notNull().default([]),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
+// ============================================
 // FOODICS SYNC LOG
 // ============================================
 
