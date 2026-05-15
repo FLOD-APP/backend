@@ -10,6 +10,8 @@ import {
   date,
   time,
   unique,
+  index,
+  jsonb,
 } from 'drizzle-orm/pg-core';
 
 // ============================================
@@ -50,6 +52,8 @@ export const subscriptionStatusEnum = pgEnum('subscription_status', [
 
 export const fulfilmentModeEnum = pgEnum('fulfilment_mode', ['pickup', 'delivery']);
 
+export const foodicsSyncStatusEnum = pgEnum('foodics_sync_status', ['pending', 'synced', 'failed', 'retrying']);
+
 // ============================================
 // PRODUCTS & PRICING
 // ============================================
@@ -82,6 +86,7 @@ export const products = pgTable('products', {
   isActive: boolean('is_active').notNull().default(true),
   isFree: boolean('is_free').notNull().default(false),
   proteinType: text('protein_type'), // chicken, beef, salmon, shrimp, almond_fish, NULL
+  foodicsProductId: text('foodics_product_id'), // Foodics API product UUID
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
 });
@@ -179,6 +184,7 @@ export const rotationSwapOptions = pgTable(
 export const branches = pgTable('branches', {
   id: uuid('id').primaryKey().defaultRandom(),
   foodicsRef: text('foodics_ref').unique().notNull(),
+  foodicsBranchId: text('foodics_branch_id'), // Foodics API branch UUID (supplements B01-B18 refs)
   nameEn: text('name_en').notNull(),
   nameAr: text('name_ar').notNull(),
   type: branchTypeEnum('type').notNull(),
@@ -292,6 +298,10 @@ export const subscriptionDailyMeals = pgTable(
     isSwapped: boolean('is_swapped').notNull().default(false),
     swappedFromId: uuid('swapped_from_id').references(() => products.id),
     swapPriceDiff: numeric('swap_price_diff', { precision: 8, scale: 2 }).default('0'),
+    // Foodics sync tracking
+    foodicsOrderId: text('foodics_order_id'),
+    foodicsSyncedAt: timestamp('foodics_synced_at', { withTimezone: true }),
+    foodicsSyncStatus: foodicsSyncStatusEnum('foodics_sync_status'),
   },
   (table) => [unique('sub_daily_meals_unique').on(table.subscriptionId, table.dayNumber, table.mealSlot)],
 );
@@ -306,6 +316,7 @@ export const users = pgTable('users', {
   name: text('name'),
   email: text('email'),
   languagePreference: text('language_preference').notNull().default('ar'),
+  foodicsCustomerId: text('foodics_customer_id'), // Foodics API customer UUID
   // Onboarding fields
   gender: text('gender'),
   dateOfBirth: date('date_of_birth'),
@@ -315,6 +326,7 @@ export const users = pgTable('users', {
   weightKg: numeric('weight_kg', { precision: 5, scale: 1 }),
   targetWeightKg: numeric('target_weight_kg', { precision: 5, scale: 1 }),
   allergies: text('allergies').array(),
+  whyReasons: text('why_reasons').array(),
   dailyCalories: integer('daily_calories'),
   proteinGrams: numeric('protein_grams', { precision: 5, scale: 1 }),
   carbsGrams: numeric('carbs_grams', { precision: 5, scale: 1 }),
@@ -359,3 +371,29 @@ export const checkIns = pgTable('check_ins', {
   checkedInAt: timestamp('checked_in_at', { withTimezone: true }).notNull().defaultNow(),
   statusUpdatedAt: timestamp('status_updated_at', { withTimezone: true }).notNull().defaultNow(),
 });
+
+// ============================================
+// FOODICS SYNC LOG
+// ============================================
+
+export const foodicsSyncLog = pgTable(
+  'foodics_sync_log',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    mealId: uuid('meal_id')
+      .notNull()
+      .references(() => subscriptionDailyMeals.id),
+    status: foodicsSyncStatusEnum('status').notNull().default('pending'),
+    foodicsOrderId: text('foodics_order_id'),
+    attempt: integer('attempt').notNull().default(1),
+    errorMessage: text('error_message'),
+    requestPayload: jsonb('request_payload'),
+    nextRetryAt: timestamp('next_retry_at', { withTimezone: true }),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    index('foodics_sync_log_status_retry_idx').on(table.status, table.nextRetryAt),
+    index('foodics_sync_log_meal_idx').on(table.mealId),
+  ],
+);
