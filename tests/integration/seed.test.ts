@@ -1,3 +1,5 @@
+/// <reference types="jest" />
+
 import postgres from 'postgres';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import { count, eq } from 'drizzle-orm';

@@ -1,3 +1,5 @@
+/// <reference types="jest" />
+
 import request from 'supertest';
 import express, { type Request, type Response } from 'express';
 import postgres from 'postgres';

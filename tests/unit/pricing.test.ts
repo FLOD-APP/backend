@@ -1,3 +1,5 @@
+/// <reference types="jest" />
+
 import { calculatePricing } from '../../src/utils/vat.js';
 
 /**
