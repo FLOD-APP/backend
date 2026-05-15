@@ -326,6 +326,7 @@ export const users = pgTable('users', {
   weightKg: numeric('weight_kg', { precision: 5, scale: 1 }),
   targetWeightKg: numeric('target_weight_kg', { precision: 5, scale: 1 }),
   allergies: text('allergies').array(),
+  whyReasons: text('why_reasons').array(),
   dailyCalories: integer('daily_calories'),
   proteinGrams: numeric('protein_grams', { precision: 5, scale: 1 }),
   carbsGrams: numeric('carbs_grams', { precision: 5, scale: 1 }),
