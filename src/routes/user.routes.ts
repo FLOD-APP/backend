@@ -3,15 +3,18 @@ import type { Request, Response, NextFunction } from 'express';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import type * as schemaTypes from '../db/schema.js';
 import { UserService } from '../services/user.service.js';
+import { WhyMatrixService } from '../services/why-matrix.service.js';
 import { requireAuth } from '../middleware/auth.middleware.js';
 import { validate } from '../middleware/validate.middleware.js';
-import { onboardingSchema } from '../validators/user.validators.js';
+import { AppError } from '../utils/errors.js';
+import { onboardingSchema, whyMatrixQuerySchema } from '../validators/user.validators.js';
 
 type Db = PostgresJsDatabase<typeof schemaTypes>;
 
 export function createUserRouter(db: Db): Router {
   const router = Router();
   const userService = new UserService(db);
+  const whyMatrixService = new WhyMatrixService(db);
 
   // GET /api/v1/users/me
   router.get('/me', requireAuth, async (req: Request, res: Response, next: NextFunction) => {
@@ -72,6 +75,21 @@ export function createUserRouter(db: Db): Router {
       }
     },
   );
+
+  // GET /api/v1/users/me/onboarding/why-matrix — R2.AC1: fetch goal→why matrix
+  router.get('/me/onboarding/why-matrix', requireAuth, async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const parsed = whyMatrixQuerySchema.safeParse(req.query);
+      if (!parsed.success) {
+        next(new AppError('Invalid or missing goal parameter', 'INVALID_GOAL', 400, parsed.error.issues));
+        return;
+      }
+      const matrix = await whyMatrixService.getForGoal(parsed.data.goal);
+      res.json(matrix);
+    } catch (err) {
+      next(err);
+    }
+  });
 
   return router;
 }

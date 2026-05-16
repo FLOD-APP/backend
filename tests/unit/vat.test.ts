@@ -1,3 +1,5 @@
+/// <reference types="jest" />
+
 import { extractVat, calculatePricing, roundSar } from '../../src/utils/vat.js';
 
 // All examples taken from HANDOVER_Pricing_Database_Design.md

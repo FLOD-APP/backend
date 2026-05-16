@@ -327,6 +327,10 @@ export const users = pgTable('users', {
   targetWeightKg: numeric('target_weight_kg', { precision: 5, scale: 1 }),
   allergies: text('allergies').array(),
   whyReasons: text('why_reasons').array(),
+  // Hydration onboarding fields
+  waterGoalMl: integer('water_goal_ml').default(2000),
+  hydrationReminderInterval: text('hydration_reminder_interval').default('2h'),
+  beveragePreferences: jsonb('beverage_preferences'),
   dailyCalories: integer('daily_calories'),
   proteinGrams: numeric('protein_grams', { precision: 5, scale: 1 }),
   carbsGrams: numeric('carbs_grams', { precision: 5, scale: 1 }),
@@ -370,6 +374,18 @@ export const checkIns = pgTable('check_ins', {
   status: text('status').notNull().default('waiting'),
   checkedInAt: timestamp('checked_in_at', { withTimezone: true }).notNull().defaultNow(),
   statusUpdatedAt: timestamp('status_updated_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
+// ============================================
+// ONBOARDING: GOAL→WHY MATRIX
+// ============================================
+
+export const goalWhyMatrix = pgTable('goal_why_matrix', {
+  goal: text('goal').primaryKey(),
+  topReasons: jsonb('top_reasons').notNull().default([]),
+  lockedReasons: jsonb('locked_reasons').notNull().default([]),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
 });
 
 // ============================================

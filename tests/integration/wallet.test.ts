@@ -1,3 +1,5 @@
+/// <reference types="jest" />
+
 import request from 'supertest';
 import postgres from 'postgres';
 import { drizzle } from 'drizzle-orm/postgres-js';

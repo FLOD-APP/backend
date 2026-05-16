@@ -1,3 +1,5 @@
+/// <reference types="jest" />
+
 import { generateOtp, hashOtp, verifyOtp } from '../../src/utils/otp';
 import { signAccessToken, signRefreshToken, verifyAccessToken, verifyRefreshToken } from '../../src/utils/jwt';
 import { otpRequestSchema, otpVerifySchema, refreshSchema } from '../../src/validators/auth.validators';
