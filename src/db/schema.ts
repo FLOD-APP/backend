@@ -327,6 +327,10 @@ export const users = pgTable('users', {
   targetWeightKg: numeric('target_weight_kg', { precision: 5, scale: 1 }),
   allergies: text('allergies').array(),
   whyReasons: text('why_reasons').array(),
+  // Hydration onboarding fields
+  waterGoalMl: integer('water_goal_ml').default(2000),
+  hydrationReminderInterval: text('hydration_reminder_interval').default('2h'),
+  beveragePreferences: jsonb('beverage_preferences'),
   dailyCalories: integer('daily_calories'),
   proteinGrams: numeric('protein_grams', { precision: 5, scale: 1 }),
   carbsGrams: numeric('carbs_grams', { precision: 5, scale: 1 }),
