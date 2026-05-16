@@ -1,9 +1,9 @@
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
-import { eq } from 'drizzle-orm';
+import { eq, and, sql } from 'drizzle-orm';
 import type * as schemaTypes from '../db/schema.js';
-import { users } from '../db/schema.js';
+import { users, dailySteps } from '../db/schema.js';
 import { AppError } from '../utils/errors.js';
-import type { OnboardingInput } from '../validators/user.validators.js';
+import type { OnboardingInput, StepSyncInput } from '../validators/user.validators.js';
 
 type Db = PostgresJsDatabase<typeof schemaTypes>;
 
@@ -24,6 +24,12 @@ const profileColumns = {
   targetWeightKg: users.targetWeightKg,
   allergies: users.allergies,
   whyReasons: users.whyReasons,
+  waterGoalMl: users.waterGoalMl,
+  hydrationReminderInterval: users.hydrationReminderInterval,
+  beveragePreferences: users.beveragePreferences,
+  dailyStepGoal: users.dailyStepGoal,
+  healthKitEnabled: users.healthKitEnabled,
+  addStepsToCalories: users.addStepsToCalories,
   dailyCalories: users.dailyCalories,
   proteinGrams: users.proteinGrams,
   carbsGrams: users.carbsGrams,
@@ -93,6 +99,12 @@ export class UserService {
         targetWeightKg: data.targetWeightKg !== undefined ? String(data.targetWeightKg) : null,
         allergies: data.allergies,
         whyReasons: data.whyReasons,
+        waterGoalMl: data.waterGoalMl ?? 2000,
+        hydrationReminderInterval: data.hydrationReminderInterval ?? '2h',
+        beveragePreferences: data.beveragePreferences ?? null,
+        dailyStepGoal: data.dailyStepGoal ?? 10000,
+        healthKitEnabled: data.healthKitEnabled ?? false,
+        addStepsToCalories: data.addStepsToCalories ?? false,
         dailyCalories: data.dailyCalories,
         proteinGrams: String(data.proteinGrams),
         carbsGrams: String(data.carbsGrams),
@@ -104,5 +116,40 @@ export class UserService {
       .returning(profileColumns);
 
     return rows[0]!;
+  }
+
+  /** R6.AC2 + R6.AC3 + R6.AC5: Upsert daily step count */
+  async syncSteps(userId: string, data: StepSyncInput) {
+    // R6.AC5: Validate date is today or yesterday (UTC)
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setUTCDate(yesterday.getUTCDate() - 1);
+
+    const todayStr = today.toISOString().slice(0, 10);
+    const yesterdayStr = yesterday.toISOString().slice(0, 10);
+
+    if (data.date !== todayStr && data.date !== yesterdayStr) {
+      throw new AppError('Date must be today or yesterday', 'INVALID_DATE', 422);
+    }
+
+    // R6.AC3: Upsert — insert or update on conflict
+    const [row] = await this.db
+      .insert(dailySteps)
+      .values({
+        userId,
+        date: data.date,
+        steps: data.steps,
+        syncedAt: new Date(),
+      })
+      .onConflictDoUpdate({
+        target: [dailySteps.userId, dailySteps.date],
+        set: {
+          steps: sql`EXCLUDED.steps`,
+          syncedAt: sql`now()`,
+        },
+      })
+      .returning();
+
+    return row!;
   }
 }
