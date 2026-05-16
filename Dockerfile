@@ -9,8 +9,9 @@ RUN npm ci --ignore-scripts
 COPY tsconfig.json ./
 COPY src/ ./src/
 
-# Build
-RUN npx tsc
+# Build (tsconfig.build.json: noEmit=false, rootDir=src, excludes tests)
+COPY tsconfig.build.json ./
+RUN npx tsc -p tsconfig.build.json
 
 # Production stage
 FROM node:20-alpine AS production
