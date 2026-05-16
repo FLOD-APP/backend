@@ -7,7 +7,7 @@ import { WhyMatrixService } from '../services/why-matrix.service.js';
 import { requireAuth } from '../middleware/auth.middleware.js';
 import { validate } from '../middleware/validate.middleware.js';
 import { AppError } from '../utils/errors.js';
-import { onboardingSchema, whyMatrixQuerySchema } from '../validators/user.validators.js';
+import { onboardingSchema, stepSyncSchema, whyMatrixQuerySchema } from '../validators/user.validators.js';
 
 type Db = PostgresJsDatabase<typeof schemaTypes>;
 
@@ -70,6 +70,21 @@ export function createUserRouter(db: Db): Router {
       try {
         const profile = await userService.saveOnboarding(req.user!.userId, req.body);
         res.json(profile);
+      } catch (err) {
+        next(err);
+      }
+    },
+  );
+
+  // PUT /api/v1/users/me/steps — R6.AC1: sync daily step count
+  router.put(
+    '/me/steps',
+    requireAuth,
+    validate(stepSyncSchema),
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const result = await userService.syncSteps(req.user!.userId, req.body);
+        res.json(result);
       } catch (err) {
         next(err);
       }
