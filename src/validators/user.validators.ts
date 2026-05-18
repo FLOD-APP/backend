@@ -26,6 +26,10 @@ export const onboardingSchema = z.object({
   waterGoalMl: z.number().int().min(1500).max(4000).optional(),
   hydrationReminderInterval: hydrationIntervalEnum.optional(),
   beveragePreferences: beveragePreferencesSchema.optional(),
+  // Steps onboarding fields
+  dailyStepGoal: z.number().int().min(3000).max(25000).optional(),
+  healthKitEnabled: z.boolean().optional(),
+  addStepsToCalories: z.boolean().optional(),
   dailyCalories: z.number().int().positive(),
   proteinGrams: z.number().positive(),
   carbsGrams: z.number().positive(),
@@ -33,6 +37,13 @@ export const onboardingSchema = z.object({
 });
 
 export type OnboardingInput = z.infer<typeof onboardingSchema>;
+
+export const stepSyncSchema = z.object({
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'date must be YYYY-MM-DD format'),
+  steps: z.number().int().min(0, 'steps must be non-negative'),
+});
+
+export type StepSyncInput = z.infer<typeof stepSyncSchema>;
 
 export const whyMatrixQuerySchema = z.object({
   goal: goalEnum,

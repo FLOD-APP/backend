@@ -15,6 +15,7 @@ import { createUserRouter } from './routes/user.routes.js';
 import { createPricingRouter } from './routes/pricing.routes.js';
 import { createSubscriptionRouter } from './routes/subscription.routes.js';
 import { createCheckInRouters } from './routes/checkin.routes.js';
+import { createAddressRouter } from './routes/address.routes.js';
 
 interface AppDeps {
   checkDb: () => Promise<boolean>;
@@ -48,6 +49,7 @@ export function createApp(deps: AppDeps) {
       app.use(`${prefix}/users`, createUserRouter(deps.db!));
       app.use(`${prefix}/pricing`, createPricingRouter(deps.db!));
       app.use(`${prefix}/subscriptions`, createSubscriptionRouter(deps.db!));
+      app.use(`${prefix}/addresses`, createAddressRouter(deps.db!));
 
       const { subscriptionCheckInRouter, branchQueueRouter, checkInRouter } = createCheckInRouters(deps.db!);
       app.use(`${prefix}/subscriptions/:id/check-in`, subscriptionCheckInRouter);

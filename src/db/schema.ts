@@ -331,6 +331,10 @@ export const users = pgTable('users', {
   waterGoalMl: integer('water_goal_ml').default(2000),
   hydrationReminderInterval: text('hydration_reminder_interval').default('2h'),
   beveragePreferences: jsonb('beverage_preferences'),
+  // Steps onboarding fields
+  dailyStepGoal: integer('daily_step_goal').notNull().default(10000),
+  healthKitEnabled: boolean('health_kit_enabled').notNull().default(false),
+  addStepsToCalories: boolean('add_steps_to_calories').notNull().default(false),
   dailyCalories: integer('daily_calories'),
   proteinGrams: numeric('protein_grams', { precision: 5, scale: 1 }),
   carbsGrams: numeric('carbs_grams', { precision: 5, scale: 1 }),
@@ -339,6 +343,20 @@ export const users = pgTable('users', {
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
 });
+
+export const dailySteps = pgTable(
+  'daily_steps',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    date: date('date').notNull(),
+    steps: integer('steps').notNull().default(0),
+    syncedAt: timestamp('synced_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [unique('daily_steps_user_date_unique').on(table.userId, table.date)],
+);
 
 export const otpCodes = pgTable('otp_codes', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -387,6 +405,41 @@ export const goalWhyMatrix = pgTable('goal_why_matrix', {
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
 });
+
+// ============================================
+// FOODICS SYNC LOG
+// ============================================
+
+// ============================================
+// USER ADDRESSES
+// ============================================
+
+export const userAddresses = pgTable(
+  'user_addresses',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id),
+    label: text('label').notNull(), // 'home' | 'work'
+    streetEn: text('street_en').notNull(),
+    streetAr: text('street_ar').notNull(),
+    districtEn: text('district_en').notNull(),
+    districtAr: text('district_ar').notNull(),
+    cityEn: text('city_en').notNull(),
+    cityAr: text('city_ar').notNull(),
+    postalCode: text('postal_code'),
+    lat: numeric('lat', { precision: 10, scale: 7 }).notNull(),
+    lng: numeric('lng', { precision: 10, scale: 7 }).notNull(),
+    isDefault: boolean('is_default').notNull().default(false),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    unique('user_addresses_user_label_unique').on(table.userId, table.label),
+    index('user_addresses_user_id_idx').on(table.userId),
+  ],
+);
 
 // ============================================
 // FOODICS SYNC LOG

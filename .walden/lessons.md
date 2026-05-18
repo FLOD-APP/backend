@@ -91,3 +91,8 @@ Review this file before non-trivial work. Scan the category matching your curren
 - Trigger: Frontend `usePlanPricing` hook was calling `calculateVAT(subtotal)` where `subtotal` came from a VAT-inclusive `basePrice` with discounts applied directly. This added 15% VAT on top of an already-VAT-inclusive amount, causing double-VAT.
 - Lesson: When prices are VAT-inclusive, always extract VAT first (`price / 1.15`), apply discount to the ex-VAT amount, then recalculate VAT on the discounted amount. Never add VAT to a VAT-inclusive price.
 - Guardrail: Use `calculatePricing(priceInclVat, discountPercent)` which handles the full chain. Never call `calculateVAT()` on a price that already includes VAT.
+### 2026-05-18T15:05:40Z | address-crud | execute
+- Trigger: Address integration tests failed when run with full suite due to shared test phone numbers (+966500000099/98) used by auth.test.ts, pricing.test.ts, and hydration.test.ts
+- Lesson: Test phone numbers must be unique per test file to avoid race conditions when Jest runs files in parallel. Shared phone numbers cause concurrent INSERT/DELETE conflicts on user rows.
+- Guardrail: Always use unique phone numbers per test file. Check existing phone usage with: grep -r '96650000009' tests/ before choosing.
+
