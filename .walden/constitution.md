@@ -49,7 +49,7 @@ These corrections override anything in older documents:
 |------|-------------|---------------|--------|
 | Branch count | 24 | **14** | Amjad |
 | Payment gateway | Moyasar | **Gediea** | Abu Talin |
-| Delivery status | "Future feature" | **Already exists** (Ishtirak Tawseel, 220/morning) | Amjad |
+| Delivery status | "Future feature" | **Already exists** (FLOD's own subscriber delivery, 220/morning) | Amjad |
 | Allergen data owner | Chef Badr | **Odai** (Marketing) | Chef Badr |
 | Subscription cancel | In-app | **Call centre ONLY** (deliberate) | Abu Mazen |
 | ZATCA provider | Build from scratch | **Foodics** (already integrated) | Abu Talin |
