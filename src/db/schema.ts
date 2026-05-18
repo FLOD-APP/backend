@@ -410,6 +410,41 @@ export const goalWhyMatrix = pgTable('goal_why_matrix', {
 // FOODICS SYNC LOG
 // ============================================
 
+// ============================================
+// USER ADDRESSES
+// ============================================
+
+export const userAddresses = pgTable(
+  'user_addresses',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id),
+    label: text('label').notNull(), // 'home' | 'work'
+    streetEn: text('street_en').notNull(),
+    streetAr: text('street_ar').notNull(),
+    districtEn: text('district_en').notNull(),
+    districtAr: text('district_ar').notNull(),
+    cityEn: text('city_en').notNull(),
+    cityAr: text('city_ar').notNull(),
+    postalCode: text('postal_code'),
+    lat: numeric('lat', { precision: 10, scale: 7 }).notNull(),
+    lng: numeric('lng', { precision: 10, scale: 7 }).notNull(),
+    isDefault: boolean('is_default').notNull().default(false),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    unique('user_addresses_user_label_unique').on(table.userId, table.label),
+    index('user_addresses_user_id_idx').on(table.userId),
+  ],
+);
+
+// ============================================
+// FOODICS SYNC LOG
+// ============================================
+
 export const foodicsSyncLog = pgTable(
   'foodics_sync_log',
   {
