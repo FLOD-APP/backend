@@ -407,6 +407,31 @@ export const goalWhyMatrix = pgTable('goal_why_matrix', {
 });
 
 // ============================================
+// PLAN SELECTIONS (draft before payment)
+// ============================================
+
+export const planSelections = pgTable('plan_selections', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id')
+    .notNull()
+    .unique()
+    .references(() => users.id),
+  packageId: uuid('package_id')
+    .notNull()
+    .references(() => packages.id),
+  duration: integer('duration').notNull(),
+  mealsPerDay: integer('meals_per_day').notNull(),
+  branchId: uuid('branch_id').references(() => branches.id),
+  fulfilment: fulfilmentModeEnum('fulfilment').notNull().default('pickup'),
+  deliveryAddressId: uuid('delivery_address_id'),
+  startDate: date('start_date'),
+  slot: text('slot').notNull().default('morning'),
+  addOns: jsonb('add_ons').notNull().default({}),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
+// ============================================
 // FOODICS SYNC LOG
 // ============================================
 
